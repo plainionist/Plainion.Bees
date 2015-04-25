@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Script xmlns="http://Plainion.codeplex.com/shell/" 
+        xmlns:s="clr-namespace:Plainion.Scripts.TestRunner;assembly=Plainion.Scripts" 
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Script.Option>-TestIt</Script.Option>
+    <Script.Description>Executes the specified tests</Script.Description>
+    <s:TestRunner NUnitGui="\Extern\NUnit\bin\nunit.exe" NUnitConsole="\Extern\NUnit\bin\nunit-console.exe"/>
+</Script>
+    

@@ -1,0 +1,142 @@
+﻿<#@ template language="C#"#>
+<#@ Import namespace="Plainion.WhiteRabbit" #>
+<#@ Import namespace="System" #>
+<#@ Import namespace="System.Collections.Generic" #>
+
+<html>
+<head>
+    <title>WhiteRabbit</title>
+</head>
+<body>
+    <center>
+        <h2>
+            WhiteRabbit</h2>
+    </center>
+    <center>
+        <h4>
+            <#= Begin.Date.ToShortDateString() #> - <#= End.Date.ToShortDateString() #>
+        </h4>
+    </center>
+    <table border="0" cellpadding="4" cellspacing="0">
+        <tr>
+            <th>
+                Category
+            </th>
+            <th>
+                Time
+            </th>
+        </tr>
+        <# 
+TimeSpan sum = new TimeSpan();
+foreach ( string cat in Overview.Keys )
+{
+    if ( cat == "unknown" )
+    {
+        continue;
+    }
+        #>
+        <tr>
+            <td>
+                <#= cat #>
+            </td>
+            <td>
+                <#= Overview[cat].ToReportString() #>
+            </td>
+        </tr>
+        <# 
+        sum += Overview[cat];
+        }
+        #>
+        
+        <# if ( Overview["unknown"] != TimeSpan.Zero ) 
+        {
+        #>
+        <tr>
+            <td>
+                <b>Unassigned</b>
+            </td>
+            <td>
+                <#= Overview["unknown"].ToReportString() #>
+            </td>
+        </tr>
+        <# }#>
+        <tr>
+            <td style="border-top:solid 2px #060">
+                <b>Sum</b>
+            </td>
+            <td style="border-top:solid 2px #060">
+                <#= sum.ToReportString() #>
+            </td>
+        </tr>
+    </table>
+    
+    <br />
+    
+    <table cellpadding="4" cellspacing="0">
+        <tr>
+            <th>Category</th>
+            <#
+            var sums = new Dictionary<DateTime, TimeSpan>();
+            for ( var date = Begin; date <= End; date = date.AddDays( 1 ) )
+            {
+                sums[ date ] = TimeSpan.Zero;
+            #>
+            <th><#= date.Day #>.<#= date.Month #>.</th>
+            <# }#>
+        </tr>
+        <# 
+        foreach ( var cat in Overview.Keys ) 
+        { 
+        #>
+            <tr>
+                <td><#= cat #></td>
+        <# for ( var date = Begin; date <= End; date = date.AddDays( 1 ) ) 
+           { 
+               if ( Details[ date ].ContainsKey( cat ) )
+               {
+                    sums[ date ] += Details[ date ][ cat ];
+        #>
+                <td align="center"><#= Details[ date ][ cat ].ToReportString() #></td>
+        <#
+               }
+               else
+               {
+        #>
+               <td align="center">-</td>
+        <#
+               }
+        #>
+                    
+        <# } #>
+            </tr>
+        <# } #>
+        
+        <tr>
+            <td style="border-top:solid 2px #060">
+                <b>Sum</b>
+            </td>
+        <# for ( var date = Begin; date <= End; date = date.AddDays( 1 ) ) { #>
+            <td align="center" style="border-top:solid 2px #060">
+                <#= sums[ date ].ToReportString() #>
+            </td>
+        <#} #>
+        </tr>
+    </table>
+    
+    <br />
+    
+    <# if ( !IsComplete ) 
+{
+    #>
+    <font color="red">The report is not complete because the data of the day is not complete.</font>
+    <# }#>
+</body>
+</html>
+
+<#+ 
+public DateTime Begin { get; set; }
+public DateTime End { get; set; }
+public Dictionary<string, TimeSpan> Overview { get; set; }
+public Dictionary<DateTime, Dictionary<string, TimeSpan>> Details { get; set; }
+public bool IsComplete { get; set; }
+#>

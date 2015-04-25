@@ -1,0 +1,114 @@
+﻿<#@ template language="C#"#>
+<#@ Import namespace="Plainion.WhiteRabbit" #>
+<#@ Import namespace="System" #>
+<#@ Import namespace="System.Collections.Generic" #>
+
+
+
+<html>
+<head>
+    <title>WhiteRabbit</title>
+</head>
+<body>
+    <center>
+        <h2>
+            WhiteRabbit</h2>
+    </center>
+    <center>
+        <h4>
+            <#= Day.Date.ToShortDateString() #></h4>
+    </center>
+    <table border="0" cellpadding="4" cellspacing="0">
+        <tr>
+            <th>
+                Category/Task
+            </th>
+            <th style="width:75px;">Time</th>
+        </tr>
+        <# 
+TimeSpan sum = new TimeSpan();
+foreach ( string cat in Data.Keys )
+{
+    if ( cat == "unknown" )
+    {
+        continue;
+    }
+    
+    var catSum = new TimeSpan();
+    foreach( string task in Data[ cat ].Keys )
+    {
+        catSum += Data[ cat ][ task ];  
+    }
+    sum += catSum;
+    
+        #>
+        <tr>
+            <td><#= cat #></td>
+            <td align="right"><#= catSum.ToReportString() #></td>
+        </tr>
+        <#
+    foreach( string task in Data[ cat ].Keys )
+    {
+        #>
+        <tr>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#= task #></td>
+            <td align="right"><#= Data[ cat ][ task ].ToReportString() #></td>
+        </tr>
+        <# 
+    }
+}
+        #>
+        
+        <# 
+if ( Data["unknown"].Keys.Count > 0 ) 
+{
+    var catSum = new TimeSpan();
+    foreach( string task in Data[ "unknown" ].Keys )
+    {
+        catSum += Data[ "unknown" ][ task ];  
+    }
+    sum += catSum;
+    
+        #>
+        <tr>
+            <td>unknown</td>
+            <td align="right"><#= catSum.ToReportString() #></td>
+        </tr>
+        <#
+    foreach( string task in Data[ "unknown" ].Keys )
+    {
+        #>
+        <tr>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#= task #></td>
+            <td align="right"><#= Data[ "unknown" ][ task ].ToReportString() #></td>
+        </tr>
+        <# 
+    }
+        #>
+<# }#>
+        <tr>
+            <td style="border-top:solid 2px #060">
+                <b>Sum</b>
+            </td>
+            <td  align="right" style="border-top:solid 2px #060">
+                <#= sum.ToReportString() #>
+            </td>
+        </tr>
+    </table>
+    
+    <br />
+    
+    <# 
+if ( !IsComplete ) 
+{
+    #>
+    <font color="red">The report is not complete because the data of the day is not complete.</font>
+<# }#>
+</body>
+</html>
+
+<#+ 
+public DateTime Day { get; set; }
+public Dictionary<string, Dictionary<string, TimeSpan>> Data { get; set; }
+public bool IsComplete { get; set; }
+#>

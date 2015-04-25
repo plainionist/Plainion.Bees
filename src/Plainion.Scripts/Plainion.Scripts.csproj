@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\..\build\Globals.msbuild" />
+  <PropertyGroup>
+    <ProjectGuid>{99C54F80-3CBB-4990-8F9B-0904F3F2FA18}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Plainion.Scripts</RootNamespace>
+    <AssemblyName>Plainion.Scripts</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Plainion.AppFw.Shell, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Plainion.AppFw.Shell.1.0.0.0\lib\NET45\Plainion.AppFw.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Plainion.AppFw.Shell.Hosting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Plainion.AppFw.Shell.1.0.0.0\lib\NET45\Plainion.AppFw.Shell.Hosting.dll</HintPath>
+    </Reference>
+    <Reference Include="Plainion.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Plainion.Core.2.1.0.0\lib\NET45\Plainion.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Loc\CollectedStats.cs" />
+    <Compile Include="Loc\DirStats.cs" />
+    <Compile Include="Loc\FileStats.cs" />
+    <Compile Include="Loc\LinesOfCode.cs" />
+    <Compile Include="Loc\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Loc\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TestRunner\TestRunner.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="XamlEdit\Exclude.cs" />
+    <Compile Include="XamlEdit\Include.cs" />
+    <Compile Include="XamlEdit\IPattern.cs" />
+    <Compile Include="XamlEdit\XamlEditor.cs" />
+    <Compile Include="XamlEdit\VsCSharpProject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Starter\Scripts\XamlEdit.xaml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Starter\Scripts\TestRunner.xaml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Loc\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Starter\Scripts\Loc.xaml">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>
