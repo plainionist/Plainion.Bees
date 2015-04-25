@@ -1,7 +1,7 @@
 <Project DefaultTargets="All" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
 
   <PropertyGroup>
-    <ProjectName>Plainion.Net</ProjectName>
+    <ProjectName>Plainion.Bees</ProjectName>
 
     <BuildMode>Release</BuildMode>
     <BuildPlatform>Any CPU</BuildPlatform>
@@ -29,7 +29,6 @@
   
   <ItemGroup Label="Redist">
     <Redist Include="$(ExternRoot)\license.*"/>
-    <Redist Include="$(ProjectRoot)\build\ngen.cmd"/>
   </ItemGroup>
 
   <Target Name="CheckEnvironment">
@@ -51,19 +50,9 @@
     <Exec Command="$(PackageRoot)\Plainion.Starter.exe -TestIt -a $(TestAssemblyPattern)"
           WorkingDirectory="$(PackageRoot)"
           CustomErrorRegularExpression="^\s*\d+\) Test Failure : .*$"/>
-
-    <!--
-    <Exec Command="$(PackageRoot)\Plainion.Flames.Viewer.exe" />
-    <Exec Command="$(PackageRoot)\Plainion.Forest.exe"/>
-    <Exec Command="$(PackageRoot)\Plainion.Graphviz.Viewer.exe"/>
-    <Exec Command="$(PackageRoot)\Plainion.Notebook.exe"/>
-    <Exec Command="$(PackageRoot)\Plainion.Notes.exe"/>
-    <Exec Command="$(PackageRoot)\Plainion.WhiteBoard.exe"/>
-    <Exec Command="$(PackageRoot)\Plainion.WhiteRabbit.exe"/>
-    -->
   </Target>
 
-  <Target Name="All" DependsOnTargets="CheckEnvironment;Clean;Build;Tests">
+  <Target Name="All" DependsOnTargets="CheckEnvironment;Clean;Build">
     <Copy SourceFiles="@(Redist)" DestinationFolder="$(PackageRoot)"/>
 
     <Delete Files="@(TestFile)"/>
