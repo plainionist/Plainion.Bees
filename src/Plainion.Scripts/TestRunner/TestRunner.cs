@@ -6,9 +6,8 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
-using Plainion.Logging;
-using Plainion;
 using Plainion.AppFw.Shell.Forms;
+using Plainion.Logging;
 
 namespace Plainion.Scripts.TestRunner
 {

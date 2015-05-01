@@ -7,6 +7,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plainion.Scripts", "src\Pla
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plainion.WhiteRabbit", "src\Plainion.WhiteRabbit\Plainion.WhiteRabbit.csproj", "{17326B5F-B907-479D-BDDA-8D2736C7328D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "@Solution Items", "@Solution Items", "{EC1701D9-D349-4B12-BCAE-B0C7B66B5FAE}"
+	ProjectSection(SolutionItems) = preProject
+		build\create-package.cmd = build\create-package.cmd
+		build\GlobalAssemblyInfo.cs = build\GlobalAssemblyInfo.cs
+		build\packager.msbuild = build\packager.msbuild
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

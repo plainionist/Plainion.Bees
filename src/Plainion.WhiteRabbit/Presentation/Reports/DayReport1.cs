@@ -17,7 +17,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+    #line 1 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "12.0.0.0")]
     public partial class DayReport : DayReportBase
     {
@@ -27,11 +27,11 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
         /// </summary>
         public virtual string TransformText()
         {
-            this.Write("\r\n\r\n\r\n<html>\r\n<head>\r\n    <title>WhiteRabbit</title>\r\n</head>\r\n<body>\r\n    <cente" +
-                    "r>\r\n        <h2>\r\n            WhiteRabbit</h2>\r\n    </center>\r\n    <center>\r\n   " +
-                    "     <h4>\r\n            ");
+            this.Write("\r\n\r\n<html>\r\n<head>\r\n    <title>WhiteRabbit</title>\r\n</head>\r\n<body>\r\n    <center>" +
+                    "\r\n        <h2>\r\n            WhiteRabbit</h2>\r\n    </center>\r\n    <center>\r\n     " +
+                    "   <h4>\r\n            ");
             
-            #line 19 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 18 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Day.Date.ToShortDateString()));
             
             #line default
@@ -40,7 +40,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                     "     <tr>\r\n            <th>\r\n                Category/Task\r\n            </th>\r\n " +
                     "           <th style=\"width:75px;\">Time</th>\r\n        </tr>\r\n        ");
             
-            #line 28 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 27 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
 TimeSpan sum = new TimeSpan();
 foreach ( string cat in Data.Keys )
@@ -63,21 +63,21 @@ foreach ( string cat in Data.Keys )
             #line hidden
             this.Write("        <tr>\r\n            <td>");
             
-            #line 46 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 45 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(cat));
             
             #line default
             #line hidden
             this.Write("</td>\r\n            <td align=\"right\">");
             
-            #line 47 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 46 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(catSum.ToReportString()));
             
             #line default
             #line hidden
             this.Write("</td>\r\n        </tr>\r\n        ");
             
-            #line 49 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 48 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
 
     foreach( string task in Data[ cat ].Keys )
     {
@@ -87,21 +87,21 @@ foreach ( string cat in Data.Keys )
             #line hidden
             this.Write("        <tr>\r\n            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
             
-            #line 54 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 53 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(task));
             
             #line default
             #line hidden
             this.Write("</td>\r\n            <td align=\"right\">");
             
-            #line 55 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 54 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Data[ cat ][ task ].ToReportString()));
             
             #line default
             #line hidden
             this.Write("</td>\r\n        </tr>\r\n        ");
             
-            #line 57 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 56 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
     }
 }
@@ -111,7 +111,7 @@ foreach ( string cat in Data.Keys )
             #line hidden
             this.Write("        \r\n        ");
             
-            #line 62 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 61 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
 if ( Data["unknown"].Keys.Count > 0 ) 
 {
@@ -128,14 +128,14 @@ if ( Data["unknown"].Keys.Count > 0 )
             #line hidden
             this.Write("        <tr>\r\n            <td>unknown</td>\r\n            <td align=\"right\">");
             
-            #line 75 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 74 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(catSum.ToReportString()));
             
             #line default
             #line hidden
             this.Write("</td>\r\n        </tr>\r\n        ");
             
-            #line 77 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 76 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
 
     foreach( string task in Data[ "unknown" ].Keys )
     {
@@ -145,21 +145,21 @@ if ( Data["unknown"].Keys.Count > 0 )
             #line hidden
             this.Write("        <tr>\r\n            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
             
-            #line 82 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 81 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(task));
             
             #line default
             #line hidden
             this.Write("</td>\r\n            <td align=\"right\">");
             
-            #line 83 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 82 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(Data[ "unknown" ][ task ].ToReportString()));
             
             #line default
             #line hidden
             this.Write("</td>\r\n        </tr>\r\n        ");
             
-            #line 85 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 84 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
     }
         
@@ -167,7 +167,7 @@ if ( Data["unknown"].Keys.Count > 0 )
             #line default
             #line hidden
             
-            #line 88 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 87 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  }
             
             #line default
@@ -176,14 +176,14 @@ if ( Data["unknown"].Keys.Count > 0 )
                     " <b>Sum</b>\r\n            </td>\r\n            <td  align=\"right\" style=\"border-top" +
                     ":solid 2px #060\">\r\n                ");
             
-            #line 94 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 93 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(sum.ToReportString()));
             
             #line default
             #line hidden
             this.Write("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    \r\n    <br />\r\n    \r\n    ");
             
-            #line 101 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 100 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
 if ( !IsComplete ) 
 {
@@ -194,7 +194,7 @@ if ( !IsComplete )
             this.Write("    <font color=\"red\">The report is not complete because the data of the day is n" +
                     "ot complete.</font>\r\n");
             
-            #line 106 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            #line 105 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  }
             
             #line default
@@ -203,7 +203,7 @@ if ( !IsComplete )
             return this.GenerationEnvironment.ToString();
         }
         
-        #line 110 "H:\Plainion.Net.Public\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+        #line 109 "D:\Workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
 public DateTime Day { get; set; }
 public Dictionary<string, Dictionary<string, TimeSpan>> Data { get; set; }

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Script xmlns="http://Plainion.codeplex.com/shell/" 
+<Script xmlns="http://github.com/ronin4net/plainion/appfw/shell" 
         xmlns:s="clr-namespace:Plainion.Scripts.Loc;assembly=Plainion.Scripts" 
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Script.Option>-Loc</Script.Option>

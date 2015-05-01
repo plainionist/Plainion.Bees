@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.Xml;
 using Plainion.AppFw.Shell.Forms;
+using Plainion.AppFw.Shell;
 
 namespace Plainion.Scripts.Loc
 {
