@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using Plainion.WhiteRabbit.Presentation;
 using System.Security;
+using Plainion.WhiteRabbit.Model;
 
 namespace Plainion.WhiteRabbit.View
 {
