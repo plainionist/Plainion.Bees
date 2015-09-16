@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Plainion.GatedCheckIn.Services;
+using Plainion.Windows;
 
 namespace Plainion.GatedCheckIn
 {
@@ -30,7 +32,7 @@ namespace Plainion.GatedCheckIn
             var args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
-                Solution = args[1];
+                Solution = Path.GetFullPath(args[1]);
             }
         }
 
@@ -65,6 +67,7 @@ namespace Plainion.GatedCheckIn
             var progress = new Progress<string>(p => Messages.Add(p));
 
             myWorkflowService.ExecuteAsync(Solution, RunTests, CheckIn, progress)
+                .RethrowExceptionsInUIThread()
                 .ContinueWith(t =>
                     {
                         Succeeded = t.Result;
