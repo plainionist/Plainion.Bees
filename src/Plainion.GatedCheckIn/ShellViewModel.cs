@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using System.IO;
@@ -20,6 +22,8 @@ namespace Plainion.GatedCheckIn
         private bool myCheckIn;
         private bool myIsBusy;
         private bool? mySucceeded;
+        private string myConfiguration;
+        private string myPlatform;
 
         [ImportingConstructor]
         public ShellViewModel(WorkflowService workflowService)
@@ -34,6 +38,12 @@ namespace Plainion.GatedCheckIn
             {
                 Solution = Path.GetFullPath(args[1]);
             }
+
+            Configurations = new[] { "Debug", "Release" };
+            Configuration = Configurations.First();
+
+            Platforms = new[] { "Any CPU", "x86", "x64" };
+            Platform = Platforms.First();
         }
 
         public string Solution
@@ -66,7 +76,16 @@ namespace Plainion.GatedCheckIn
 
             var progress = new Progress<string>(p => Messages.Add(p));
 
-            myWorkflowService.ExecuteAsync(Solution, RunTests, CheckIn, progress)
+            var settings = new Settings
+            {
+                Solution = Solution,
+                RunTests = RunTests,
+                CheckIn = CheckIn,
+                Configuration = Configuration,
+                Platform = Platform
+            };
+
+            myWorkflowService.ExecuteAsync(settings, progress)
                 .RethrowExceptionsInUIThread()
                 .ContinueWith(t =>
                     {
@@ -83,6 +102,22 @@ namespace Plainion.GatedCheckIn
         {
             get { return mySucceeded; }
             set { SetProperty(ref mySucceeded, value); }
+        }
+
+        public IEnumerable<string> Configurations { get; private set; }
+
+        public string Configuration
+        {
+            get { return myConfiguration; }
+            set { SetProperty(ref myConfiguration, value); }
+        }
+
+        public IEnumerable<string> Platforms { get; private set; }
+
+        public string Platform
+        {
+            get { return myPlatform; }
+            set { SetProperty(ref myPlatform, value); }
         }
     }
 }

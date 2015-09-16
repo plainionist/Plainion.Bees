@@ -55,6 +55,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ListBoxExtenders.cs" />
+    <Compile Include="Services\Settings.cs" />
     <Compile Include="Services\WorkflowService.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Page Include="Shell.xaml">
