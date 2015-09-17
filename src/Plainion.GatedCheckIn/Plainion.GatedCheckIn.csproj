@@ -25,6 +25,14 @@
     <Reference Include="Microsoft.Practices.Prism.SharedInterfaces">
       <HintPath>..\..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.SharedInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Plainion.AppFw.Shell, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Plainion.AppFw.Shell.1.2.0.0\lib\NET45\Plainion.AppFw.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="Plainion.AppFw.Shell.Hosting, Version=1.2.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Plainion.AppFw.Shell.1.2.0.0\lib\NET45\Plainion.AppFw.Shell.Hosting.dll</HintPath>
+    </Reference>
     <Reference Include="Plainion.Core, Version=2.4.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Plainion.Core.2.4.0.0\lib\NET45\Plainion.Core.dll</HintPath>
@@ -83,6 +91,12 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Plainion.Scripts\Plainion.Scripts.csproj">
+      <Project>{99c54f80-3cbb-4990-8f9b-0904f3f2fa18}</Project>
+      <Name>Plainion.Scripts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

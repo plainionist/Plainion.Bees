@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Plainion.IO;
+using Plainion.Scripts.TestRunner;
 
 namespace Plainion.GatedCheckIn.Services
 {
@@ -15,44 +16,97 @@ namespace Plainion.GatedCheckIn.Services
         {
             return Task<bool>.Run(() =>
                 {
-                    BuildSolution(settings.Solution, settings.Configuration, settings.Platform, progress);
-                    return false;
+                    return BuildSolution(settings, progress)
+                        && RunTests(settings, progress);
                 });
         }
 
-        private void BuildSolution(string solution, string configuration, string platform, IProgress<string> progress)
+        private bool BuildSolution(Settings settings, IProgress<string> progress)
         {
-            var stream = new MemoryStream();
-            var writer = new StreamWriter(stream);
-            var reader = new StreamReader(stream);
+            return ExecuteWithOutputRedirection(writer =>
+            {
+                var info = new ProcessStartInfo(@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe",
+                   "/m /p:Configuration=" + settings.Configuration +
+                   " /p:Platform=\"" + settings.Platform + "\" " +
+                   " /p:OutputPath=\"" + GetWorkingDirectory(settings) + "\"" +
+                   " " + settings.Solution);
 
-            var cts = new CancellationTokenSource();
-            var task = Task.Run(() =>
+                info.CreateNoWindow = true;
+
+                var ret = Processes.Execute(info, writer, writer);
+                return ret == 0;
+            }, progress);
+        }
+
+        private string GetWorkingDirectory(Settings settings)
+        {
+            return Path.Combine(Path.GetDirectoryName(settings.Solution), "bin", "gc");
+        }
+
+        private bool ExecuteWithOutputRedirection(Func<TextWriter, bool> Executor, IProgress<string> progress)
+        {
+            using (var stream = new MemoryStream())
+            {
+                using (var reader = StreamReader.Synchronized(new StreamReader(stream)))
                 {
-                    while (!cts.Token.IsCancellationRequested)
+                    using (var writer = StreamWriter.Synchronized(new StreamWriter(stream)))
                     {
-                        var line = reader.ReadLine();
-                        if (line != null)
+                        var cts = new CancellationTokenSource();
+                        var task = Task.Run(() =>
                         {
-                            progress.Report(line);
+                            while (!cts.Token.IsCancellationRequested)
+                            {
+                                var line = reader.ReadLine();
+                                if (line != null)
+                                {
+                                    progress.Report(line);
+                                }
+                            }
+                        }, cts.Token);
+
+                        try
+                        {
+                            return Executor(writer);
+                        }
+                        catch (Exception ex)
+                        {
+                            cts.Cancel();
+
+                            throw new Exception("Failed to build solution", ex);
+                        }
+                        finally
+                        {
+                            writer.Flush();
+                            stream.Flush();
                         }
                     }
-                }, cts.Token);
-
-            var info = new ProcessStartInfo(@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe",
-                "/m /p:Configuration=" + configuration + " /p:Platform=\"" + platform + "\" " + solution);
-            info.CreateNoWindow = true;
-
-            try
-            {
-                Processes.Execute(info, writer, writer);
+                }
             }
-            catch (Exception ex)
-            {
-                cts.Cancel();
+        }
 
-                throw new Exception("Failed to build solution", ex);
+        private bool RunTests(Settings settings, IProgress<string> progress)
+        {
+            if (!settings.RunTests)
+            {
+                return true;
             }
+
+            return ExecuteWithOutputRedirection(writer =>
+                {
+                    var runner = new TestRunner
+                    {
+                        NUnitConsole = settings.TestRunnerExecutable,
+                        WithGui = false,
+                        Assemblies = settings.TestAssemblyPattern,
+                    };
+
+                    var stdOut = Console.Out;
+                    Console.SetOut(writer);
+                    runner.ExecuteEmbedded(GetWorkingDirectory(settings), writer, writer);
+                    Console.SetOut(stdOut);
+
+                    return runner.Succeeded;
+                }, progress);
         }
     }
 }

@@ -7,132 +7,153 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Plainion.AppFw.Shell.Forms;
+using Plainion.IO;
 using Plainion.Logging;
 
 namespace Plainion.Scripts.TestRunner
 {
     public class TestRunner : FormsAppBase
     {
-        private static readonly ILogger myLogger = LoggerFactory.GetLogger( typeof( TestRunner ) );
+        private static readonly ILogger myLogger = LoggerFactory.GetLogger(typeof(TestRunner));
 
-        [Argument( Short = "-g", Long = "-gui", Description = "Use the GUI runner" )]
-        public bool WithGui
+        private string myWorkingDirectory;
+
+        public TestRunner()
         {
-            get;
-            set;
+            myWorkingDirectory = ".";
         }
+
+        [Argument(Short = "-g", Long = "-gui", Description = "Use the GUI runner")]
+        public bool WithGui { get; set; }
 
         [Required]
-        [Argument( Short = "-a", Long = "-assembly", Description = "Test assemblies to execute" )]
-        public string Assemblies
-        {
-            get;
-            set;
-        }
+        [Argument(Short = "-a", Long = "-assembly", Description = "Test assemblies to execute")]
+        public string Assemblies { get; set; }
 
-        public string NUnitGui
-        {
-            get;
-            set;
-        }
+        public string NUnitGui { get; set; }
 
-        public string NUnitConsole
-        {
-            get;
-            set;
-        }
+        public string NUnitConsole { get; set; }
+
+        public bool Succeeded { get; private set; }
 
         protected override void Run()
         {
             var nunitProject = GenerateProject();
-            if( nunitProject == null )
+            if (nunitProject == null)
             {
                 return;
             }
 
-            if( WithGui )
+            if (WithGui)
             {
-                Contract.Requires( File.Exists( NUnitGui ), "Runner executable not found: {0}", NUnitGui );
+                Contract.Requires(File.Exists(NUnitGui), "Runner executable not found: {0}", NUnitGui);
 
-                Process.Start( NUnitGui, string.Format( "{0} /run", nunitProject ) ).WaitForExit();
+                var process = Process.Start(NUnitGui, string.Format("{0} /run", nunitProject));
+                process.WaitForExit();
+                Succeeded = process.ExitCode == 0;
             }
             else
             {
-                Contract.Requires( File.Exists( NUnitConsole ), "Runner executable not found: {0}", NUnitConsole );
+                Contract.Requires(File.Exists(NUnitConsole), "Runner executable not found: {0}", NUnitConsole);
 
-                var info = new ProcessStartInfo( NUnitConsole, nunitProject );
+                var info = new ProcessStartInfo(NUnitConsole, nunitProject);
                 info.UseShellExecute = false;
-                Process.Start( info ).WaitForExit();
+
+                var process = Process.Start(info);
+                process.WaitForExit();
+
+                Succeeded = process.ExitCode == 0;
             }
 
             //File.Delete( nunitProject );
+        }
+
+        public void ExecuteEmbedded(string workingDirectory, TextWriter stdOut, TextWriter stdErr)
+        {
+            myWorkingDirectory = workingDirectory;
+
+            var nunitProject = GenerateProject();
+            if (nunitProject == null)
+            {
+                return;
+            }
+
+            Contract.Requires(File.Exists(NUnitConsole), "Runner executable not found: {0}", NUnitConsole);
+
+            var info = new ProcessStartInfo(NUnitConsole, nunitProject);
+            info.CreateNoWindow = true;
+            //info.WorkingDirectory = workingDirectory;
+
+            var ret = Processes.Execute(info, stdOut, stdErr);
+
+            Succeeded = ret == 0;
         }
 
         private string GenerateProject()
         {
             var testAssemblies = ResolveTestAssemblies();
 
-            if( !testAssemblies.Any() )
+            if (!testAssemblies.Any())
             {
-                myLogger.Error( "No test assemblies found" );
+                myLogger.Error("No test assemblies found");
                 return null;
             }
 
             // assume shortest folder is the root folder
             var testFolder = testAssemblies
-                .Select( path => Path.GetDirectoryName( path ) )
-                .OrderBy( dir => dir.Length )
+                .Select(path => Path.GetDirectoryName(path))
+                .OrderBy(dir => dir.Length)
                 .First();
 
-            var project = new XElement( "NUnitProject",
-                new XElement( "Settings",
-                    new XAttribute( "activeconfig", "default" ),
-                    new XAttribute( "appbase", testFolder ) ),
-                new XElement( "Config", new XAttribute( "name", "default" ),
+            var project = new XElement("NUnitProject",
+                new XElement("Settings",
+                    new XAttribute("activeconfig", "default"),
+                    new XAttribute("appbase", testFolder)),
+                new XElement("Config", new XAttribute("name", "default"),
                     testAssemblies
-                        .Select( assembly => new XElement( "assembly", new XAttribute( "path", assembly ) ) )
-                    ) );
+                        .Select(assembly => new XElement("assembly", new XAttribute("path", assembly)))
+                    ));
 
-            var projectFile = Path.Combine( testFolder, "Plainion.gen.nunit" );
-            using( var writer = XmlWriter.Create( projectFile ) )
+            var projectFile = Path.Combine(testFolder, "Plainion.gen.nunit");
+            using (var writer = XmlWriter.Create(projectFile))
             {
-                project.WriteTo( writer );
+                project.WriteTo(writer);
             }
 
-            myLogger.Info( "NUnit project written to: {0}", projectFile );
+            myLogger.Info("NUnit project written to: {0}", projectFile);
 
             return projectFile;
         }
 
         private IEnumerable<string> ResolveTestAssemblies()
         {
-            var assemblyPatterns = Assemblies.Split( new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries );
+            var assemblyPatterns = Assemblies.Split(new[] { ',', ';' }, StringSplitOptions.RemoveEmptyEntries);
 
             return assemblyPatterns
-                .SelectMany( pattern => ResolveFilePattern( pattern ) )
+                .SelectMany(pattern => ResolveFilePattern(pattern))
                 .Distinct()
                 .ToList();
         }
 
-        private IEnumerable<string> ResolveFilePattern( string pattern )
+        private IEnumerable<string> ResolveFilePattern(string pattern)
         {
-            var directory = Path.GetDirectoryName( pattern );
-            if( string.IsNullOrWhiteSpace( directory ) )
+            var directory = Path.GetDirectoryName(pattern);
+            if (string.IsNullOrWhiteSpace(directory))
             {
-                directory = Path.GetFullPath( "." );
+                directory = Path.GetFullPath(myWorkingDirectory);
             }
 
-            var filePattern = Path.GetFileName( pattern );
+            var filePattern = Path.GetFileName(pattern);
 
-            myLogger.Notice( "Searching in {0} for {1}", directory, filePattern );
+            myLogger.Notice("Searching in {0} for {1}", directory, filePattern);
 
-            var testAssemblies = Directory.GetFiles( directory, filePattern )
-                .Where( file => Path.GetExtension( file ).Equals( ".dll", StringComparison.OrdinalIgnoreCase ) )
+            var testAssemblies = Directory.GetFiles(directory, filePattern)
+                .Where(file => Path.GetExtension(file).Equals(".dll", StringComparison.OrdinalIgnoreCase))
                 .ToList();
 
-            foreach( var file in testAssemblies )
+            foreach (var file in testAssemblies)
             {
-                myLogger.Notice( "  -> {0}", file );
+                myLogger.Notice("  -> {0}", file);
             }
 
             return testAssemblies;

@@ -30,7 +30,13 @@
             <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Platforms}" SelectedItem="{Binding Platform}" Width="100"/>
         </StackPanel>
         
-        <CheckBox Grid.Row="2" Content="Tests" IsChecked="{Binding RunTests}" Margin="0,5,0,0"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
+            <CheckBox Content="Tests" IsChecked="{Binding RunTests}" VerticalAlignment="Center"/>
+            <TextBlock Margin="5,0,0,0" Text="Test assembly pattern" VerticalAlignment="Center"/>
+            <TextBox Margin="5,0,0,0" Text="{Binding TestAssemblyPattern}" Width="100"/>
+            <TextBlock Margin="5,0,0,0" Text="Runner executable" VerticalAlignment="Center"/>
+            <TextBox Margin="5,0,0,0" Text="{Binding TestRunnerExecutable}" Width="300"/>
+        </StackPanel>
 
         <CheckBox Grid.Row="3" Content="Check In" IsChecked="{Binding CheckIn}" Margin="0,5,0,0"/>
 

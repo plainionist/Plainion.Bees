@@ -24,6 +24,8 @@ namespace Plainion.GatedCheckIn
         private bool? mySucceeded;
         private string myConfiguration;
         private string myPlatform;
+        private string myTestRunnerExecutable;
+        private string myTestAssemblyPattern;
 
         [ImportingConstructor]
         public ShellViewModel(WorkflowService workflowService)
@@ -44,6 +46,12 @@ namespace Plainion.GatedCheckIn
 
             Platforms = new[] { "Any CPU", "x86", "x64" };
             Platform = Platforms.First();
+
+            RunTests = true;
+            CheckIn = true;
+
+            TestAssemblyPattern = "*Tests.dll";
+            TestRunnerExecutable = @"\Extern\NUnit\bin\nunit-console.exe";
         }
 
         public string Solution
@@ -82,7 +90,9 @@ namespace Plainion.GatedCheckIn
                 RunTests = RunTests,
                 CheckIn = CheckIn,
                 Configuration = Configuration,
-                Platform = Platform
+                Platform = Platform,
+                TestRunnerExecutable = TestRunnerExecutable,
+                TestAssemblyPattern = TestAssemblyPattern
             };
 
             myWorkflowService.ExecuteAsync(settings, progress)
@@ -113,11 +123,23 @@ namespace Plainion.GatedCheckIn
         }
 
         public IEnumerable<string> Platforms { get; private set; }
-
+        
         public string Platform
         {
             get { return myPlatform; }
             set { SetProperty(ref myPlatform, value); }
+        }
+
+        public string TestRunnerExecutable
+        {
+            get { return myTestRunnerExecutable; }
+            set { SetProperty(ref myTestRunnerExecutable, value); }
+        }
+
+        public string TestAssemblyPattern
+        {
+            get { return myTestAssemblyPattern; }
+            set { SetProperty(ref myTestAssemblyPattern, value); }
         }
     }
 }
