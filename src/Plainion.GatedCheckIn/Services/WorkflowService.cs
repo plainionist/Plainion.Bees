@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+
 using Plainion.IO;
 using Plainion.Scripts.TestRunner;
 
@@ -45,51 +46,132 @@ namespace Plainion.GatedCheckIn.Services
 
         private bool ExecuteWithOutputRedirection(Func<TextWriter, bool> Executor, IProgress<string> progress)
         {
-            using (var stream = new MemoryStream())
+            using (var stream = new ProducerConsumerStream())
             {
-                using (var reader = StreamReader.Synchronized(new StreamReader(stream)))
+                using (var reader = new StreamReader(stream))
                 {
-                    using (var writer = StreamWriter.Synchronized(new StreamWriter(stream)))
+                    using (var writer = new StreamWriter(stream))
                     {
-                        bool writeFinished=false;
+                        var finishedToken = Guid.NewGuid().ToString();
 
                         var cts = new CancellationTokenSource();
                         var task = Task.Run(() =>
                         {
-                            while (!writeFinished)
+                            while (!cts.Token.IsCancellationRequested)
                             {
                                 var line = reader.ReadLine();
-                                if (line != null)
+                                if (line == null)
                                 {
-                                    progress.Report(line);
+                                    continue;
                                 }
+                                if (line == finishedToken)
+                                {
+                                    break;
+                                }
+                                progress.Report(line);
                             }
                         }, cts.Token);
 
                         try
                         {
-                            return Executor(writer);
-                        }
-                        catch (Exception ex)
-                        {
-                            throw new Exception("Failed to build solution", ex);
-                        }
-                        finally
-                        {
+                            var ret = Executor(writer);
+
+                            writer.WriteLine();
+                            writer.WriteLine(finishedToken);
+
                             writer.Flush();
                             stream.Flush();
 
-                            Thread.Sleep(100);
-
-                            writeFinished = true;
-
                             task.Wait();
+
+                            return ret;
+                        }
+                        catch (Exception ex)
+                        {
+                            cts.Cancel();
+
+                            throw new Exception("Failed to build solution", ex);
                         }
                     }
                 }
             }
         }
 
+        class ProducerConsumerStream : Stream
+        {
+            private readonly MemoryStream myInnerStream;
+            private long myReadPosition;
+            private long myWritePosition;
+
+            public ProducerConsumerStream()
+            {
+                myInnerStream = new MemoryStream();
+            }
+
+            public override bool CanRead { get { return true; } }
+
+            public override bool CanSeek { get { return false; } }
+
+            public override bool CanWrite { get { return true; } }
+
+            public override void Flush()
+            {
+                lock (myInnerStream)
+                {
+                    myInnerStream.Flush();
+                }
+            }
+
+            public override long Length
+            {
+                get
+                {
+                    lock (myInnerStream)
+                    {
+                        return myInnerStream.Length;
+                    }
+                }
+            }
+
+            public override long Position
+            {
+                get { throw new NotSupportedException(); }
+                set { throw new NotSupportedException(); }
+            }
+
+            public override int Read(byte[] buffer, int offset, int count)
+            {
+                lock (myInnerStream)
+                {
+                    myInnerStream.Position = myReadPosition;
+                    int red = myInnerStream.Read(buffer, offset, count);
+                    myReadPosition = myInnerStream.Position;
+
+                    return red;
+                }
+            }
+
+            public override long Seek(long offset, SeekOrigin origin)
+            {
+                throw new NotSupportedException();
+            }
+
+            public override void SetLength(long value)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override void Write(byte[] buffer, int offset, int count)
+            {
+                lock (myInnerStream)
+                {
+                    myInnerStream.Position = myWritePosition;
+                    myInnerStream.Write(buffer, offset, count);
+                    myWritePosition = myInnerStream.Position;
+                }
+            }
+        }
+        
         private bool RunTests(Settings settings, IProgress<string> progress)
         {
             if (!settings.RunTests)
