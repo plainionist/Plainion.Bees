@@ -51,10 +51,12 @@ namespace Plainion.GatedCheckIn.Services
                 {
                     using (var writer = StreamWriter.Synchronized(new StreamWriter(stream)))
                     {
+                        bool writeFinished=false;
+
                         var cts = new CancellationTokenSource();
                         var task = Task.Run(() =>
                         {
-                            while (!cts.Token.IsCancellationRequested)
+                            while (!writeFinished)
                             {
                                 var line = reader.ReadLine();
                                 if (line != null)
@@ -70,14 +72,18 @@ namespace Plainion.GatedCheckIn.Services
                         }
                         catch (Exception ex)
                         {
-                            cts.Cancel();
-
                             throw new Exception("Failed to build solution", ex);
                         }
                         finally
                         {
                             writer.Flush();
                             stream.Flush();
+
+                            Thread.Sleep(100);
+
+                            writeFinished = true;
+
+                            task.Wait();
                         }
                     }
                 }
