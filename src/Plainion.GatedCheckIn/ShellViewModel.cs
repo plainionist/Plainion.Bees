@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+
+using Plainion.Collections;
 using Plainion.GatedCheckIn.Services;
 using Plainion.Windows;
 
@@ -17,6 +19,8 @@ namespace Plainion.GatedCheckIn
     class ShellViewModel : BindableBase
     {
         private WorkflowService myWorkflowService;
+        private GitService myGitService;
+        private string myRepositoryRoot;
         private string mySolution;
         private bool myRunTests;
         private bool myCheckIn;
@@ -28,18 +32,15 @@ namespace Plainion.GatedCheckIn
         private string myTestAssemblyPattern;
 
         [ImportingConstructor]
-        public ShellViewModel(WorkflowService workflowService)
+        public ShellViewModel(WorkflowService workflowService, GitService gitService)
         {
             myWorkflowService = workflowService;
+            myGitService = gitService;
 
             GoCommand = new DelegateCommand(OnGo, CanGo);
             Messages = new ObservableCollection<string>();
 
-            var args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
-            {
-                Solution = Path.GetFullPath(args[1]);
-            }
+            Files = new ObservableCollection<RepositoryEntry>();
 
             Configurations = new[] { "Debug", "Release" };
             Configuration = Configurations.First();
@@ -52,7 +53,48 @@ namespace Plainion.GatedCheckIn
 
             TestAssemblyPattern = "*Tests.dll";
             TestRunnerExecutable = @"\Extern\NUnit\bin\nunit-console.exe";
+
+            var args = Environment.GetCommandLineArgs();
+            if (args.Length > 1)
+            {
+                RepositoryRoot = Path.GetFullPath(args[1]);
+            }
         }
+
+        public string RepositoryRoot
+        {
+            get { return myRepositoryRoot; }
+            set
+            {
+                if (SetProperty(ref myRepositoryRoot, value))
+                {
+                    if (string.IsNullOrEmpty(myRepositoryRoot) || !Directory.Exists(myRepositoryRoot))
+                    {
+                        return;
+                    }
+
+                    var solutionPath = Directory.GetFiles(myRepositoryRoot, "*.sln", SearchOption.TopDirectoryOnly)
+                            .FirstOrDefault();
+                    if (solutionPath != null)
+                    {
+                        Solution = Path.GetFileName(solutionPath);
+                    }
+
+                    UpdateFiles();
+                }
+            }
+        }
+
+        private async void UpdateFiles()
+        {
+            Files.Clear();
+
+            var files = await myGitService.GetChangedAndNewFilesAsync(myRepositoryRoot);
+
+            Files.AddRange(files.Select(f => new RepositoryEntry(f) { IsChecked = true }));
+        }
+
+        public ObservableCollection<RepositoryEntry> Files { get; private set; }
 
         public string Solution
         {
@@ -86,7 +128,7 @@ namespace Plainion.GatedCheckIn
 
             var settings = new Settings
             {
-                Solution = Solution,
+                Solution = Path.Combine(RepositoryRoot, Solution),
                 RunTests = RunTests,
                 CheckIn = CheckIn,
                 Configuration = Configuration,
@@ -123,7 +165,7 @@ namespace Plainion.GatedCheckIn
         }
 
         public IEnumerable<string> Platforms { get; private set; }
-        
+
         public string Platform
         {
             get { return myPlatform; }
