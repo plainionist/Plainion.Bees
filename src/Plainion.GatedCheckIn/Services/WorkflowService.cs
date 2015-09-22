@@ -13,16 +13,25 @@ namespace Plainion.GatedCheckIn.Services
     [Export]
     class WorkflowService
     {
-        public Task<bool> ExecuteAsync(Settings settings, IProgress<string> progress)
+        private GitService myGitService;
+
+        [ImportingConstructor]
+        public WorkflowService(GitService gitService)
         {
-            return Task<bool>.Run(() =>
-                {
-                    return BuildSolution(settings, progress)
-                        && RunTests(settings, progress);
-                });
+            myGitService = gitService;
         }
 
-        private bool BuildSolution(Settings settings, IProgress<string> progress)
+        public Task<bool> ExecuteAsync(CheckInRequest settings, IProgress<string> progress)
+        {
+            return Task<bool>.Run(() =>
+            {
+                return BuildSolution(settings, progress)
+                       && RunTests(settings, progress)
+                       && CheckIn(settings, progress);
+            });
+        }
+
+        private bool BuildSolution(CheckInRequest settings, IProgress<string> progress)
         {
             return ExecuteWithOutputRedirection(writer =>
             {
@@ -39,7 +48,7 @@ namespace Plainion.GatedCheckIn.Services
             }, progress);
         }
 
-        private string GetWorkingDirectory(Settings settings)
+        private string GetWorkingDirectory(CheckInRequest settings)
         {
             return Path.Combine(Path.GetDirectoryName(settings.Solution), "bin", "gc");
         }
@@ -171,8 +180,8 @@ namespace Plainion.GatedCheckIn.Services
                 }
             }
         }
-        
-        private bool RunTests(Settings settings, IProgress<string> progress)
+
+        private bool RunTests(CheckInRequest settings, IProgress<string> progress)
         {
             if (!settings.RunTests)
             {
@@ -196,5 +205,22 @@ namespace Plainion.GatedCheckIn.Services
                     return runner.Succeeded;
                 }, progress);
         }
+
+        private bool CheckIn(CheckInRequest settings, IProgress<string> progress)
+        {
+            if (!settings.CheckIn)
+            {
+                return true;
+            }
+
+            if (string.IsNullOrEmpty(settings.CheckInComment))
+            {
+                progress.Report("!! NO CHECKIN COMMENT PROVIDED !!");
+                return false;
+            }
+
+            return myGitService.Commit(settings.Files);
+        }
+
     }
 }

@@ -6,6 +6,7 @@ using System.ComponentModel.Composition;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
+
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 
@@ -30,6 +31,7 @@ namespace Plainion.GatedCheckIn
         private string myPlatform;
         private string myTestRunnerExecutable;
         private string myTestAssemblyPattern;
+        private string myCheckInComment;
 
         [ImportingConstructor]
         public ShellViewModel(WorkflowService workflowService, GitService gitService)
@@ -132,11 +134,16 @@ namespace Plainion.GatedCheckIn
 
             var progress = new Progress<string>(p => Messages.Add(p));
 
-            var settings = new Settings
+            var settings = new CheckInRequest
             {
                 Solution = Path.Combine(RepositoryRoot, Solution),
                 RunTests = RunTests,
                 CheckIn = CheckIn,
+                CheckInComment = CheckInComment,
+                Files = Files
+                    .Where(e=>e.IsChecked)
+                    .Select(e=>e.File)
+                    .ToList(),
                 Configuration = Configuration,
                 Platform = Platform,
                 TestRunnerExecutable = TestRunnerExecutable,
@@ -188,6 +195,12 @@ namespace Plainion.GatedCheckIn
         {
             get { return myTestAssemblyPattern; }
             set { SetProperty(ref myTestAssemblyPattern, value); }
+        }
+
+        public string CheckInComment
+        {
+            get { return myCheckInComment; }
+            set { SetProperty(ref myCheckInComment, value); }
         }
 
         public ICommand RefreshCommand { get; private set; }

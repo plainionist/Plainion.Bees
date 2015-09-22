@@ -72,7 +72,7 @@
     <Compile Include="ListBoxExtenders.cs" />
     <Compile Include="RepositoryEntry.cs" />
     <Compile Include="Services\GitService.cs" />
-    <Compile Include="Services\Settings.cs" />
+    <Compile Include="Services\CheckInRequest.cs" />
     <Compile Include="Services\WorkflowService.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Page Include="Shell.xaml">

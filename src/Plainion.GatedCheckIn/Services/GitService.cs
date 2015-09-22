@@ -21,5 +21,28 @@ namespace Plainion.GatedCheckIn.Services
                 }
             });
         }
+
+        internal bool Commit(IEnumerable<string> files)
+        {
+            /*
+            using (var repo = new Repository("path/to/your/repo"))
+            {
+                // Write content to file system
+                var content = "Commit this!";
+                File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "fileToCommit.txt"), content);
+
+                // Stage the file
+                repo.Stage("fileToCommit.txt");
+
+                // Create the committer's signature and commit
+                Signature author = new Signature("James", "@jugglingnutcase", DateTime.Now);
+                Signature committer = author;
+
+                // Commit to the repository
+                Commit commit = repo.Commit("Here's a commit i made!", author, committer);
+            }
+             * */
+            return false;
+        }
     }
 }
