@@ -32,6 +32,7 @@ namespace Plainion.GatedCheckIn
         private string myTestRunnerExecutable;
         private string myTestAssemblyPattern;
         private string myCheckInComment;
+        private string myLog;
 
         [ImportingConstructor]
         public ShellViewModel(WorkflowService workflowService, GitService gitService)
@@ -40,7 +41,6 @@ namespace Plainion.GatedCheckIn
             myGitService = gitService;
 
             GoCommand = new DelegateCommand(OnGo, CanGo);
-            Messages = new ObservableCollection<string>();
 
             Files = new ObservableCollection<RepositoryEntry>();
 
@@ -128,11 +128,12 @@ namespace Plainion.GatedCheckIn
 
         private void OnGo()
         {
-            Messages.Clear();
+            Log = null;
             myIsBusy = true;
+            Succeeded = null;
             GoCommand.RaiseCanExecuteChanged();
 
-            var progress = new Progress<string>(p => Messages.Add(p));
+            var progress = new Progress<string>(p => Log += p + Environment.NewLine);
 
             var settings = new CheckInRequest
             {
@@ -141,8 +142,8 @@ namespace Plainion.GatedCheckIn
                 CheckIn = CheckIn,
                 CheckInComment = CheckInComment,
                 Files = Files
-                    .Where(e=>e.IsChecked)
-                    .Select(e=>e.File)
+                    .Where(e => e.IsChecked)
+                    .Select(e => e.File)
                     .ToList(),
                 Configuration = Configuration,
                 Platform = Platform,
@@ -158,10 +159,16 @@ namespace Plainion.GatedCheckIn
 
                         myIsBusy = false;
                         GoCommand.RaiseCanExecuteChanged();
+
+                        UpdateFiles();
                     }, TaskScheduler.FromCurrentSynchronizationContext());
         }
 
-        public ObservableCollection<string> Messages { get; private set; }
+        public string Log
+        {
+            get { return myLog; }
+            set { SetProperty(ref myLog, value); }
+        }
 
         public bool? Succeeded
         {

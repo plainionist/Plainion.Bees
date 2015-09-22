@@ -69,12 +69,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ListBoxExtenders.cs" />
     <Compile Include="RepositoryEntry.cs" />
     <Compile Include="Services\GitService.cs" />
     <Compile Include="Services\CheckInRequest.cs" />
     <Compile Include="Services\WorkflowService.cs" />
     <Compile Include="ShellViewModel.cs" />
+    <Compile Include="TextBoxBehaviour.cs" />
     <Page Include="Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

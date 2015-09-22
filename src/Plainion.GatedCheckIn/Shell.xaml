@@ -90,9 +90,9 @@
                 
         <Button Grid.Row="5" Content="GO !" HorizontalAlignment="Center" Margin="0,8,0,8" Command="{Binding GoCommand}" Width="75" Height="30"/>
 
-        <ListBox Grid.Row="6" ItemsSource="{Binding Messages}" l:ListBoxExtenders.AutoScrollToEnd="True">
-            <ListBox.Style>
-                <Style TargetType="{x:Type ListBox}">
+        <TextBox Grid.Row="6" Text="{Binding Log}" l:TextBoxBehaviour.ScrollOnTextChanged="True" IsReadOnly="True">
+            <TextBox.Style>
+                <Style TargetType="{x:Type TextBox}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Succeeded}" Value="True">
                             <Setter Property="BorderBrush" Value="Green"/>
@@ -108,7 +108,7 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </ListBox.Style>
-        </ListBox>
+            </TextBox.Style>
+        </TextBox>
     </Grid>
 </Window>
