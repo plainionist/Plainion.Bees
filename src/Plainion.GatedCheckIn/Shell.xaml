@@ -4,6 +4,7 @@
         xmlns:l="clr-namespace:Plainion.GatedCheckIn"
         xmlns:pn="http://github.com/ronin4net/plainion"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:git="clr-namespace:LibGit2Sharp;assembly=LibGit2Sharp"
         Title="Plainion - Gated CheckIn" 
         Width="1000" Height="700">
     <Grid Margin="5">
@@ -14,13 +15,14 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="300"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0" Text="Repository root" VerticalAlignment="Center"/>
@@ -29,24 +31,44 @@
                     <pn:TextBoxUpdateModelOnEnterBehavior/>
                 </i:Interaction.Behaviors>
             </TextBox>
+            <Button Grid.Column="2" Content="Refresh" Command="{Binding RefreshCommand}" Margin="5,0,0,0"/>
         </Grid>
-        
-        <ListBox Grid.Row="1" MinHeight="200" ItemsSource="{Binding Files}">
+
+        <ListBox Grid.Row="1" ItemsSource="{Binding Files}" Margin="0,3,0,0">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <CheckBox Content="{Binding File}" IsChecked="{Binding IsChecked}"/>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsChecked}"  VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding File}" Margin="5,0,0,0" VerticalAlignment="Center">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Foreground" Value="Black" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static git:FileStatus.Missing}">
+                                            <Setter Property="Foreground" Value="Red" />
+                                            <Setter Property="ToolTip" Value="Removed"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static git:FileStatus.Untracked}">
+                                            <Setter Property="Foreground" Value="Green" />
+                                            <Setter Property="ToolTip" Value="Added"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,3,0,0">
             <CheckBox Content="Build solution" IsEnabled="False" IsChecked="True" VerticalAlignment="Center"/>
             <TextBox Text="{Binding Solution}" Margin="5,0,0,0" Width="200"/>
             <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Configurations}" SelectedItem="{Binding Configuration}" Width="100"/>
             <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Platforms}" SelectedItem="{Binding Platform}" Width="100"/>
         </StackPanel>
-        
-        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,5,0,0">
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,3,0,0">
             <CheckBox Content="Tests" IsChecked="{Binding RunTests}" VerticalAlignment="Center"/>
             <TextBlock Margin="5,0,0,0" Text="Test assembly pattern" VerticalAlignment="Center"/>
             <TextBox Margin="5,0,0,0" Text="{Binding TestAssemblyPattern}" Width="100"/>
@@ -54,9 +76,19 @@
             <TextBox Margin="5,0,0,0" Text="{Binding TestRunnerExecutable}" Width="300"/>
         </StackPanel>
 
-        <CheckBox Grid.Row="4" Content="Check In" IsChecked="{Binding CheckIn}" Margin="0,5,0,0"/>
+        <Grid Grid.Row="4" Margin="0,3,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <Button Grid.Row="5" Content="GO !" HorizontalAlignment="Center" Margin="0,10,0,10" Command="{Binding GoCommand}" Width="75" Height="30"/>
+            <CheckBox Grid.Column="0" Content="Check In" IsChecked="{Binding CheckIn}" VerticalAlignment="Top" Margin="0,2,0,0"/>
+            <TextBlock Grid.Column="1" Margin="5,2,0,0" Text="Comment" VerticalAlignment="Top"/>
+            <TextBox  Grid.Column="2" Margin="5,0,0,0" Text="{Binding CheckInComment}" AcceptsReturn="True" Height="50"/>
+        </Grid>
+                
+        <Button Grid.Row="5" Content="GO !" HorizontalAlignment="Center" Margin="0,8,0,8" Command="{Binding GoCommand}" Width="75" Height="30"/>
 
         <ListBox Grid.Row="6" ItemsSource="{Binding Messages}" l:ListBoxExtenders.AutoScrollToEnd="True">
             <ListBox.Style>

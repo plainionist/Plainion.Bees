@@ -54,6 +54,8 @@ namespace Plainion.GatedCheckIn
             TestAssemblyPattern = "*Tests.dll";
             TestRunnerExecutable = @"\Extern\NUnit\bin\nunit-console.exe";
 
+            RefreshCommand = new DelegateCommand(OnRefresh);
+
             var args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
@@ -89,9 +91,13 @@ namespace Plainion.GatedCheckIn
         {
             Files.Clear();
 
-            var files = await myGitService.GetChangedAndNewFilesAsync(myRepositoryRoot);
+            var entries = await myGitService.GetChangedAndNewFilesAsync(myRepositoryRoot);
 
-            Files.AddRange(files.Select(f => new RepositoryEntry(f) { IsChecked = true }));
+            var files = entries
+                .Select(e => new RepositoryEntry(e) { IsChecked = true })
+                .OrderBy(e => e.File);
+
+            Files.AddRange(files);
         }
 
         public ObservableCollection<RepositoryEntry> Files { get; private set; }
@@ -182,6 +188,13 @@ namespace Plainion.GatedCheckIn
         {
             get { return myTestAssemblyPattern; }
             set { SetProperty(ref myTestAssemblyPattern, value); }
+        }
+
+        public ICommand RefreshCommand { get; private set; }
+
+        public void OnRefresh()
+        {
+            UpdateFiles();
         }
     }
 }

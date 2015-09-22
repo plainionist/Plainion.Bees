@@ -9,15 +9,14 @@ namespace Plainion.GatedCheckIn.Services
     [Export]
     class GitService
     {
-        public Task<IEnumerable<string>> GetChangedAndNewFilesAsync(string repositoryRoot)
+        public Task<IEnumerable<StatusEntry>> GetChangedAndNewFilesAsync(string repositoryRoot)
         {
-            return Task<IEnumerable<string>>.Run(() =>
+            return Task<IEnumerable<StatusEntry>>.Run(() =>
             {
                 using (var repo = new Repository(repositoryRoot))
                 {
-                    return (IEnumerable<string>)repo.RetrieveStatus()
+                    return (IEnumerable<StatusEntry>)repo.RetrieveStatus()
                         .Where(e => (e.State & FileStatus.Ignored) == 0)
-                        .Select(e => e.FilePath)
                         .ToList();
                 }
             });
