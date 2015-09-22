@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,27 +23,16 @@ namespace Plainion.GatedCheckIn.Services
             });
         }
 
-        internal bool Commit(IEnumerable<string> files)
+        public void Commit(string repositoryRoot, IEnumerable<string> files, string comment, string name, string email)
         {
-            /*
-            using (var repo = new Repository("path/to/your/repo"))
+            using (var repo = new Repository(repositoryRoot))
             {
-                // Write content to file system
-                var content = "Commit this!";
-                File.WriteAllText(Path.Combine(repo.Info.WorkingDirectory, "fileToCommit.txt"), content);
+                //repo.Stage("fileToCommit.txt");
 
-                // Stage the file
-                repo.Stage("fileToCommit.txt");
+                var author = new Signature(name, email, DateTime.Now);
 
-                // Create the committer's signature and commit
-                Signature author = new Signature("James", "@jugglingnutcase", DateTime.Now);
-                Signature committer = author;
-
-                // Commit to the repository
-                Commit commit = repo.Commit("Here's a commit i made!", author, committer);
+                repo.Commit(comment, author, author);
             }
-             * */
-            return false;
         }
     }
 }

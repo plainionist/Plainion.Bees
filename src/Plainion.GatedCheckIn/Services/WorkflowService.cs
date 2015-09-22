@@ -219,7 +219,16 @@ namespace Plainion.GatedCheckIn.Services
                 return false;
             }
 
-            return myGitService.Commit(settings.Files);
+            try
+            {
+                myGitService.Commit(settings.RepositoryRoot, settings.Files, settings.CheckInComment);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                progress.Report("CHECKIN FAILED: " + ex.Message);
+                return false;
+            }
         }
 
     }

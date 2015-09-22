@@ -32,6 +32,8 @@ namespace Plainion.GatedCheckIn
         private string myTestRunnerExecutable;
         private string myTestAssemblyPattern;
         private string myCheckInComment;
+        private string myUserName;
+        private string myUserEMail;
         private string myLog;
 
         [ImportingConstructor]
@@ -137,10 +139,13 @@ namespace Plainion.GatedCheckIn
 
             var settings = new CheckInRequest
             {
+                RepositoryRoot = RepositoryRoot,
                 Solution = Path.Combine(RepositoryRoot, Solution),
                 RunTests = RunTests,
                 CheckIn = CheckIn,
                 CheckInComment = CheckInComment,
+                UserName = UserName,
+                UserEMail = UserEMail,
                 Files = Files
                     .Where(e => e.IsChecked)
                     .Select(e => e.File)
@@ -208,6 +213,18 @@ namespace Plainion.GatedCheckIn
         {
             get { return myCheckInComment; }
             set { SetProperty(ref myCheckInComment, value); }
+        }
+
+        public string UserName
+        {
+            get { return myUserName; }
+            set { SetProperty(ref myUserName, value); }
+        }
+
+        public string UserEMail
+        {
+            get { return myUserEMail; }
+            set { SetProperty(ref myUserEMail, value); }
         }
 
         public ICommand RefreshCommand { get; private set; }
