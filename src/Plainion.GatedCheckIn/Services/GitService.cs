@@ -27,7 +27,10 @@ namespace Plainion.GatedCheckIn.Services
         {
             using (var repo = new Repository(repositoryRoot))
             {
-                //repo.Stage("fileToCommit.txt");
+                foreach (var file in files)
+                {
+                    repo.Stage(file);
+                }
 
                 var author = new Signature(name, email, DateTime.Now);
 

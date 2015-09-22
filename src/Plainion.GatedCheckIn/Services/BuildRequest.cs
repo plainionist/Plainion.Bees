@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 namespace Plainion.GatedCheckIn.Services
 {
-    class CheckInRequest
+    class BuildRequest
     {
         public string RepositoryRoot { get; set; }
         public string Solution { get; set; }

@@ -19,7 +19,7 @@ namespace Plainion.GatedCheckIn
     [Export]
     class ShellViewModel : BindableBase
     {
-        private WorkflowService myWorkflowService;
+        private BuildService myWorkflowService;
         private GitService myGitService;
         private string myRepositoryRoot;
         private string mySolution;
@@ -37,7 +37,7 @@ namespace Plainion.GatedCheckIn
         private string myLog;
 
         [ImportingConstructor]
-        public ShellViewModel(WorkflowService workflowService, GitService gitService)
+        public ShellViewModel(BuildService workflowService, GitService gitService)
         {
             myWorkflowService = workflowService;
             myGitService = gitService;
@@ -137,7 +137,7 @@ namespace Plainion.GatedCheckIn
 
             var progress = new Progress<string>(p => Log += p + Environment.NewLine);
 
-            var settings = new CheckInRequest
+            var settings = new BuildRequest
             {
                 RepositoryRoot = RepositoryRoot,
                 Solution = Path.Combine(RepositoryRoot, Solution),
