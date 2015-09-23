@@ -49,6 +49,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Expression.Blend.Sdk.1.0.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
     </Reference>
@@ -71,11 +72,15 @@
     </ApplicationDefinition>
     <Compile Include="RepositoryEntry.cs" />
     <Compile Include="Services\GitService.cs" />
-    <Compile Include="Services\BuildRequest.cs" />
+    <Compile Include="Model\BuildDefinition.cs" />
     <Compile Include="Services\ProducerConsumerStream.cs" />
     <Compile Include="Services\BuildService.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="TextBoxBehaviour.cs" />
+    <Compile Include="ViewModels\BuildDefinitionViewModel.cs" />
+    <Compile Include="Views\BuildDefinitionView.xaml.cs">
+      <DependentUpon>BuildDefinitionView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -88,6 +93,10 @@
       <DependentUpon>Shell.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\BuildDefinitionView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

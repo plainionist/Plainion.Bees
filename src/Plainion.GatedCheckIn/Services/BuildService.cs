@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Plainion.GatedCheckIn.Model;
 using Plainion.IO;
 using Plainion.Scripts.TestRunner;
 
@@ -20,14 +21,14 @@ namespace Plainion.GatedCheckIn.Services
             myGitService = gitService;
         }
 
-        public Task<bool> ExecuteAsync(BuildRequest settings, IProgress<string> progress)
+        public Task<bool> ExecuteAsync(BuildDefinition settings, IProgress<string> progress)
         {
             return Task<bool>.Run(() => BuildSolution(settings, progress)
                                         && RunTests(settings, progress)
                                         && CheckIn(settings, progress));
         }
 
-        private bool BuildSolution(BuildRequest settings, IProgress<string> progress)
+        private bool BuildSolution(BuildDefinition settings, IProgress<string> progress)
         {
             return ExecuteWithOutputRedirection(writer =>
             {
@@ -44,7 +45,7 @@ namespace Plainion.GatedCheckIn.Services
             }, progress);
         }
 
-        private string GetWorkingDirectory(BuildRequest settings)
+        private string GetWorkingDirectory(BuildDefinition settings)
         {
             return Path.Combine(Path.GetDirectoryName(settings.Solution), "bin", "gc");
         }
@@ -102,7 +103,7 @@ namespace Plainion.GatedCheckIn.Services
             }
         }
 
-        private bool RunTests(BuildRequest settings, IProgress<string> progress)
+        private bool RunTests(BuildDefinition settings, IProgress<string> progress)
         {
             if (!settings.RunTests)
             {
@@ -127,7 +128,7 @@ namespace Plainion.GatedCheckIn.Services
                 }, progress);
         }
 
-        private bool CheckIn(BuildRequest settings, IProgress<string> progress)
+        private bool CheckIn(BuildDefinition settings, IProgress<string> progress)
         {
             if (!settings.CheckIn)
             {

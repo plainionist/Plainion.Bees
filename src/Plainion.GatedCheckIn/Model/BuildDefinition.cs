@@ -1,8 +1,10 @@
-﻿
-using System.Collections.Generic;
-namespace Plainion.GatedCheckIn.Services
+﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
+
+namespace Plainion.GatedCheckIn.Model
 {
-    class BuildRequest
+    [DataContract(Namespace = "http://github.com/ronin4net/plainion/GatedCheckIn", Name = "BuildDefinition")]
+    class BuildDefinition
     {
         public string RepositoryRoot { get; set; }
         public string Solution { get; set; }
