@@ -53,19 +53,13 @@ namespace Plainion.GatedCheckIn.Services
         {
             return new BuildDefinition
             {
+                CheckIn = true,
+                Configuration = "Debug",
+                Platform = "Any CPU",
+                RunTests = true,
+                TestAssemblyPattern = "*Tests.dll",
+                TestRunnerExecutable = @"\Extern\NUnit\bin\nunit-console.exe"
             };
-            //Configurations = new[] { "Debug", "Release" };
-            //Configuration = Configurations.First();
-
-            //Platforms = new[] { "Any CPU", "x86", "x64" };
-            //Platform = Platforms.First();
-
-            //RunTests = true;
-            //CheckIn = true;
-
-            //TestAssemblyPattern = "*Tests.dll";
-            //TestRunnerExecutable = @"\Extern\NUnit\bin\nunit-console.exe";
-
         }
 
         public Task<bool> ExecuteAsync(BuildDefinition settings, IProgress<string> progress)

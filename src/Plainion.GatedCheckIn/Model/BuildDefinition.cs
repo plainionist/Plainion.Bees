@@ -7,40 +7,101 @@ namespace Plainion.GatedCheckIn.Model
     [DataContract(Namespace = "http://github.com/ronin4net/plainion/GatedCheckIn", Name = "BuildDefinition")]
     class BuildDefinition : SerializableBindableBase
     {
-        [DataMember]
-        public string RepositoryRoot { get; set; }
+        private string myRepositoryRoot;
+        private string mySolution;
+        private bool myRunTests;
+        private bool myCheckIn;
+        private string myConfiguration;
+        private string myPlatform;
+        private string myTestRunnerExecutable;
+        private string myTestAssemblyPattern;
+        private string myCheckInComment;
+        private IReadOnlyCollection<string> myFiles;
+        private string myUserName;
+        private string myUserEMail;
 
         [DataMember]
-        public string Solution { get; set; }
+        public string RepositoryRoot
+        {
+            get { return myRepositoryRoot; }
+            set { SetProperty(ref myRepositoryRoot, value); }
+        }
 
         [DataMember]
-        public bool RunTests { get; set; }
+        public string Solution
+        {
+            get { return mySolution; }
+            set { SetProperty(ref mySolution, value); }
+        }
 
         [DataMember]
-        public bool CheckIn { get; set; }
+        public bool RunTests
+        {
+            get { return myRunTests; }
+            set { SetProperty(ref myRunTests, value); }
+        }
 
         [DataMember]
-        public string Configuration { get; set; }
+        public bool CheckIn
+        {
+            get { return myCheckIn; }
+            set { SetProperty(ref myCheckIn, value); }
+        }
 
         [DataMember]
-        public string Platform { get; set; }
+        public string Configuration
+        {
+            get { return myConfiguration; }
+            set { SetProperty(ref myConfiguration, value); }
+        }
 
         [DataMember]
-        public string TestRunnerExecutable { get; set; }
+        public string Platform
+        {
+            get { return myPlatform; }
+            set { SetProperty(ref myPlatform, value); }
+        }
 
         [DataMember]
-        public string TestAssemblyPattern { get; set; }
+        public string TestRunnerExecutable
+        {
+            get { return myTestRunnerExecutable; }
+            set { SetProperty(ref myTestRunnerExecutable, value); }
+        }
 
         [DataMember]
-        public string CheckInComment { get; set; }
+        public string TestAssemblyPattern
+        {
+            get { return myTestAssemblyPattern; }
+            set { SetProperty(ref myTestAssemblyPattern, value); }
+        }
 
         [DataMember]
-        public IReadOnlyCollection<string> Files { get; set; }
+        public string CheckInComment
+        {
+            get { return myCheckInComment; }
+            set { SetProperty(ref myCheckInComment, value); }
+        }
 
         [DataMember]
-        public string UserName { get; set; }
+        public IReadOnlyCollection<string> Files
+        {
+            get { return myFiles; }
+            set { SetProperty(ref myFiles, value); }
+        }
 
         [DataMember]
-        public string UserEMail { get; set; }
+        public string UserName
+        {
+            get { return myUserName; }
+            set { SetProperty(ref myUserName, value); }
+        }
+
+        [DataMember]
+        public string UserEMail
+        {
+            get { return myUserEMail; }
+            set { SetProperty(ref myUserEMail, value); }
+        }
     }
 }

@@ -1,18 +1,16 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Threading.Tasks;
+using System.Linq;
 using System.Windows.Input;
-
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 
 using Plainion.Collections;
+using Plainion.GatedCheckIn.Model;
 using Plainion.GatedCheckIn.Services;
-using Plainion.Windows;
 
 namespace Plainion.GatedCheckIn.ViewModels
 {
@@ -20,64 +18,32 @@ namespace Plainion.GatedCheckIn.ViewModels
     class BuildDefinitionViewModel : BindableBase
     {
         private GitService myGitService;
-        private string myRepositoryRoot;
-        private string mySolution;
-        private bool myRunTests;
-        private bool myCheckIn;
         private bool? mySucceeded;
-        private string myConfiguration;
-        private string myPlatform;
-        private string myTestRunnerExecutable;
-        private string myTestAssemblyPattern;
-        private string myCheckInComment;
-        private string myUserName;
-        private string myUserEMail;
 
         [ImportingConstructor]
-        public BuildDefinitionViewModel(GitService gitService)
+        public BuildDefinitionViewModel(BuildService buildService, GitService gitService)
         {
             myGitService = gitService;
 
-            Files = new ObservableCollection<RepositoryEntry>();
-
+            BuildDefinition = buildService.BuildDefinition;
+            BuildDefinition.PropertyChanged += BuildDefinition_PropertyChanged;
             Configurations = new[] { "Debug", "Release" };
-            Configuration = Configurations.First();
-
             Platforms = new[] { "Any CPU", "x86", "x64" };
-            Platform = Platforms.First();
-
-            RunTests = true;
-            CheckIn = true;
-
-            TestAssemblyPattern = "*Tests.dll";
-            TestRunnerExecutable = @"\Extern\NUnit\bin\nunit-console.exe";
 
             RefreshCommand = new DelegateCommand(OnRefresh);
-
-            var args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
-            {
-                RepositoryRoot = Path.GetFullPath(args[1]);
-            }
         }
 
-        public string RepositoryRoot
+        private void BuildDefinition_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            get { return myRepositoryRoot; }
-            set
+            if (e.PropertyName == PropertySupport.ExtractPropertyName(() => BuildDefinition.RepositoryRoot))
             {
-                if (SetProperty(ref myRepositoryRoot, value))
+                if (!string.IsNullOrEmpty(BuildDefinition.RepositoryRoot) && Directory.Exists(BuildDefinition.RepositoryRoot))
                 {
-                    if (string.IsNullOrEmpty(myRepositoryRoot) || !Directory.Exists(myRepositoryRoot))
-                    {
-                        return;
-                    }
-
-                    var solutionPath = Directory.GetFiles(myRepositoryRoot, "*.sln", SearchOption.TopDirectoryOnly)
+                    var solutionPath = Directory.GetFiles(BuildDefinition.RepositoryRoot, "*.sln", SearchOption.TopDirectoryOnly)
                         .FirstOrDefault();
                     if (solutionPath != null)
                     {
-                        Solution = Path.GetFileName(solutionPath);
+                        BuildDefinition.Solution = Path.GetFileName(solutionPath);
                     }
 
                     UpdateFiles();
@@ -85,11 +51,13 @@ namespace Plainion.GatedCheckIn.ViewModels
             }
         }
 
+        public BuildDefinition BuildDefinition { get; private set; }
+
         private async void UpdateFiles()
         {
             Files.Clear();
 
-            var entries = await myGitService.GetChangedAndNewFilesAsync(myRepositoryRoot);
+            var entries = await myGitService.GetChangedAndNewFilesAsync(BuildDefinition.RepositoryRoot);
 
             var files = entries
                 .Select(e => new RepositoryEntry(e) { IsChecked = true })
@@ -99,24 +67,6 @@ namespace Plainion.GatedCheckIn.ViewModels
         }
 
         public ObservableCollection<RepositoryEntry> Files { get; private set; }
-
-        public string Solution
-        {
-            get { return mySolution; }
-            set { SetProperty(ref mySolution, value); }
-        }
-
-        public bool RunTests
-        {
-            get { return myRunTests; }
-            set { SetProperty(ref myRunTests, value); }
-        }
-
-        public bool CheckIn
-        {
-            get { return myCheckIn; }
-            set { SetProperty(ref myCheckIn, value); }
-        }
 
         public DelegateCommand GoCommand { get; private set; }
 
@@ -128,49 +78,7 @@ namespace Plainion.GatedCheckIn.ViewModels
 
         public IEnumerable<string> Configurations { get; private set; }
 
-        public string Configuration
-        {
-            get { return myConfiguration; }
-            set { SetProperty(ref myConfiguration, value); }
-        }
-
         public IEnumerable<string> Platforms { get; private set; }
-
-        public string Platform
-        {
-            get { return myPlatform; }
-            set { SetProperty(ref myPlatform, value); }
-        }
-
-        public string TestRunnerExecutable
-        {
-            get { return myTestRunnerExecutable; }
-            set { SetProperty(ref myTestRunnerExecutable, value); }
-        }
-
-        public string TestAssemblyPattern
-        {
-            get { return myTestAssemblyPattern; }
-            set { SetProperty(ref myTestAssemblyPattern, value); }
-        }
-
-        public string CheckInComment
-        {
-            get { return myCheckInComment; }
-            set { SetProperty(ref myCheckInComment, value); }
-        }
-
-        public string UserName
-        {
-            get { return myUserName; }
-            set { SetProperty(ref myUserName, value); }
-        }
-
-        public string UserEMail
-        {
-            get { return myUserEMail; }
-            set { SetProperty(ref myUserEMail, value); }
-        }
 
         public ICommand RefreshCommand { get; private set; }
 
