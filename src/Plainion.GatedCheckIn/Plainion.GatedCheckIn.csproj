@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="RepositoryEntry.cs" />
+    <Compile Include="Services\BuildRequest.cs" />
     <Compile Include="Services\GitService.cs" />
     <Compile Include="Model\BuildDefinition.cs" />
     <Compile Include="Services\ProducerConsumerStream.cs" />

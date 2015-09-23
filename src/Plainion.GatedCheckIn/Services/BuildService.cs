@@ -32,6 +32,7 @@ namespace Plainion.GatedCheckIn.Services
             if (!File.Exists(path))
             {
                 BuildDefinition = CreateDefaultBuildDefinition();
+                BuildDefinition.RepositoryRoot = Path.GetFullPath(Path.GetDirectoryName(path));
 
                 using (var writer = XmlWriter.Create(path))
                 {
@@ -62,24 +63,24 @@ namespace Plainion.GatedCheckIn.Services
             };
         }
 
-        public Task<bool> ExecuteAsync(BuildDefinition settings, IProgress<string> progress)
+        public Task<bool> ExecuteAsync(BuildRequest request, IProgress<string> progress)
         {
             Contract.Invariant(BuildDefinition != null, "BuildDefinition not loaded");
 
-            return Task<bool>.Run(() => BuildSolution(settings, progress)
-                                        && RunTests(settings, progress)
-                                        && CheckIn(settings, progress));
+            return Task<bool>.Run(() => BuildSolution(request, progress)
+                                        && RunTests(request, progress)
+                                        && CheckIn(request, progress));
         }
 
-        private bool BuildSolution(BuildDefinition settings, IProgress<string> progress)
+        private bool BuildSolution(BuildRequest request, IProgress<string> progress)
         {
             return ExecuteWithOutputRedirection(writer =>
             {
                 var info = new ProcessStartInfo(@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe",
-                   "/m /p:Configuration=" + settings.Configuration +
-                   " /p:Platform=\"" + settings.Platform + "\" " +
-                   " /p:OutputPath=\"" + GetWorkingDirectory(settings) + "\"" +
-                   " " + settings.Solution);
+                   "/m /p:Configuration=" + BuildDefinition.Configuration +
+                   " /p:Platform=\"" + BuildDefinition.Platform + "\" " +
+                   " /p:OutputPath=\"" + GetWorkingDirectory() + "\"" +
+                   " " + Path.Combine(BuildDefinition.RepositoryRoot, BuildDefinition.Solution));
 
                 info.CreateNoWindow = true;
 
@@ -88,9 +89,9 @@ namespace Plainion.GatedCheckIn.Services
             }, progress);
         }
 
-        private string GetWorkingDirectory(BuildDefinition settings)
+        private string GetWorkingDirectory()
         {
-            return Path.Combine(Path.GetDirectoryName(settings.Solution), "bin", "gc");
+            return Path.Combine(BuildDefinition.RepositoryRoot, "bin", "gc");
         }
 
         private bool ExecuteWithOutputRedirection(Func<TextWriter, bool> Executor, IProgress<string> progress)
@@ -146,9 +147,9 @@ namespace Plainion.GatedCheckIn.Services
             }
         }
 
-        private bool RunTests(BuildDefinition settings, IProgress<string> progress)
+        private bool RunTests(BuildRequest request, IProgress<string> progress)
         {
-            if (!settings.RunTests)
+            if (!BuildDefinition.RunTests)
             {
                 return true;
             }
@@ -157,28 +158,28 @@ namespace Plainion.GatedCheckIn.Services
                 {
                     var runner = new TestRunner
                     {
-                        NUnitConsole = settings.TestRunnerExecutable,
+                        NUnitConsole = BuildDefinition.TestRunnerExecutable,
                         WithGui = false,
-                        Assemblies = settings.TestAssemblyPattern,
+                        Assemblies = BuildDefinition.TestAssemblyPattern,
                     };
 
                     var stdOut = Console.Out;
                     Console.SetOut(writer);
-                    runner.ExecuteEmbedded(GetWorkingDirectory(settings), writer, writer);
+                    runner.ExecuteEmbedded(GetWorkingDirectory(), writer, writer);
                     Console.SetOut(stdOut);
 
                     return runner.Succeeded;
                 }, progress);
         }
 
-        private bool CheckIn(BuildDefinition settings, IProgress<string> progress)
+        private bool CheckIn(BuildRequest request, IProgress<string> progress)
         {
-            if (!settings.CheckIn)
+            if (!BuildDefinition.CheckIn)
             {
                 return true;
             }
 
-            if (string.IsNullOrEmpty(settings.CheckInComment))
+            if (string.IsNullOrEmpty(request.CheckInComment))
             {
                 progress.Report("!! NO CHECKIN COMMENT PROVIDED !!");
                 return false;
@@ -186,7 +187,7 @@ namespace Plainion.GatedCheckIn.Services
 
             try
             {
-                myGitService.Commit(settings.RepositoryRoot, settings.Files, settings.CheckInComment, settings.UserName, settings.UserEMail);
+                myGitService.Commit(BuildDefinition.RepositoryRoot, request.Files, request.CheckInComment, request.UserName, request.UserEMail);
                 return true;
             }
             catch (Exception ex)

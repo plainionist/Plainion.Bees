@@ -1,21 +1,12 @@
-﻿using System.ComponentModel.Composition;
-using System.Windows;
-using System.Windows.Controls;
-
-using Plainion.GatedCheckIn.ViewModels;
-
+﻿using System.Windows.Controls;
 
 namespace Plainion.GatedCheckIn.Views
 {
-    [Export]
     public partial class BuildDefinitionView : UserControl
     {
-        [ImportingConstructor]
-        internal BuildDefinitionView(BuildDefinitionViewModel viewModel)
+        public BuildDefinitionView()
         {
             InitializeComponent();
-
-            DataContext = viewModel;
         }
     }
 }

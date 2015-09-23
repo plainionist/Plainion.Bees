@@ -15,10 +15,6 @@ namespace Plainion.GatedCheckIn.Model
         private string myPlatform;
         private string myTestRunnerExecutable;
         private string myTestAssemblyPattern;
-        private string myCheckInComment;
-        private IReadOnlyCollection<string> myFiles;
-        private string myUserName;
-        private string myUserEMail;
 
         [DataMember]
         public string RepositoryRoot
@@ -74,34 +70,6 @@ namespace Plainion.GatedCheckIn.Model
         {
             get { return myTestAssemblyPattern; }
             set { SetProperty(ref myTestAssemblyPattern, value); }
-        }
-
-        [DataMember]
-        public string CheckInComment
-        {
-            get { return myCheckInComment; }
-            set { SetProperty(ref myCheckInComment, value); }
-        }
-
-        [DataMember]
-        public IReadOnlyCollection<string> Files
-        {
-            get { return myFiles; }
-            set { SetProperty(ref myFiles, value); }
-        }
-
-        [DataMember]
-        public string UserName
-        {
-            get { return myUserName; }
-            set { SetProperty(ref myUserName, value); }
-        }
-
-        [DataMember]
-        public string UserEMail
-        {
-            get { return myUserEMail; }
-            set { SetProperty(ref myUserEMail, value); }
         }
     }
 }
