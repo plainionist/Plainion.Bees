@@ -2,8 +2,10 @@
 using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using Plainion.GatedCheckIn.Model;
 using Plainion.IO;
 using Plainion.Scripts.TestRunner;
@@ -21,8 +23,55 @@ namespace Plainion.GatedCheckIn.Services
             myGitService = gitService;
         }
 
+        public BuildDefinition BuildDefinition { get; private set; }
+
+        public void InitializeBuildDefinition(string path)
+        {
+            Contract.RequiresNotNull(path, "path");
+
+            if (!File.Exists(path))
+            {
+                BuildDefinition = CreateDefaultBuildDefinition();
+
+                using (var writer = XmlWriter.Create(path))
+                {
+                    var serializer = new DataContractSerializer(typeof(BuildDefinition));
+                    serializer.WriteObject(writer, BuildDefinition);
+                }
+
+                return;
+            }
+
+            using (var reader = XmlReader.Create(path))
+            {
+                var serializer = new DataContractSerializer(typeof(BuildDefinition));
+                BuildDefinition = (BuildDefinition)serializer.ReadObject(reader);
+            }
+        }
+
+        private BuildDefinition CreateDefaultBuildDefinition()
+        {
+            return new BuildDefinition
+            {
+            };
+            //Configurations = new[] { "Debug", "Release" };
+            //Configuration = Configurations.First();
+
+            //Platforms = new[] { "Any CPU", "x86", "x64" };
+            //Platform = Platforms.First();
+
+            //RunTests = true;
+            //CheckIn = true;
+
+            //TestAssemblyPattern = "*Tests.dll";
+            //TestRunnerExecutable = @"\Extern\NUnit\bin\nunit-console.exe";
+
+        }
+
         public Task<bool> ExecuteAsync(BuildDefinition settings, IProgress<string> progress)
         {
+            Contract.Invariant(BuildDefinition != null, "BuildDefinition not loaded");
+
             return Task<bool>.Run(() => BuildSolution(settings, progress)
                                         && RunTests(settings, progress)
                                         && CheckIn(settings, progress));
@@ -152,6 +201,5 @@ namespace Plainion.GatedCheckIn.Services
                 return false;
             }
         }
-
     }
 }

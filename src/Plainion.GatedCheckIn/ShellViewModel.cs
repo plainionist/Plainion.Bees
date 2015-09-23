@@ -11,6 +11,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 
 using Plainion.Collections;
+using Plainion.GatedCheckIn.Model;
 using Plainion.GatedCheckIn.Services;
 using Plainion.Windows;
 
@@ -19,7 +20,7 @@ namespace Plainion.GatedCheckIn
     [Export]
     class ShellViewModel : BindableBase
     {
-        private BuildService myWorkflowService;
+        private BuildService myBuildService;
         private GitService myGitService;
         private string myRepositoryRoot;
         private string mySolution;
@@ -37,9 +38,9 @@ namespace Plainion.GatedCheckIn
         private string myLog;
 
         [ImportingConstructor]
-        public ShellViewModel(BuildService workflowService, GitService gitService)
+        public ShellViewModel(BuildService buildService, GitService gitService)
         {
-            myWorkflowService = workflowService;
+            myBuildService = buildService;
             myGitService = gitService;
 
             GoCommand = new DelegateCommand(OnGo, CanGo);
@@ -64,6 +65,8 @@ namespace Plainion.GatedCheckIn
             if (args.Length > 1)
             {
                 RepositoryRoot = Path.GetFullPath(args[1]);
+
+                myBuildService.InitializeBuildDefinition(Path.Combine(RepositoryRoot, Path.GetFileName(RepositoryRoot) + ".gc"));
             }
         }
 
@@ -137,7 +140,7 @@ namespace Plainion.GatedCheckIn
 
             var progress = new Progress<string>(p => Log += p + Environment.NewLine);
 
-            var settings = new BuildRequest
+            var settings = new BuildDefinition
             {
                 RepositoryRoot = RepositoryRoot,
                 Solution = Path.Combine(RepositoryRoot, Solution),
@@ -156,7 +159,7 @@ namespace Plainion.GatedCheckIn
                 TestAssemblyPattern = TestAssemblyPattern
             };
 
-            myWorkflowService.ExecuteAsync(settings, progress)
+            myBuildService.ExecuteAsync(settings, progress)
                 .RethrowExceptionsInUIThread()
                 .ContinueWith(t =>
                     {
