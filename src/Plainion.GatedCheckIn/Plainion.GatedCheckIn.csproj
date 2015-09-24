@@ -5,6 +5,7 @@
   <Import Project="..\..\build\Globals.msbuild" />
   <PropertyGroup>
     <ProjectGuid>{E81B5CDC-72D9-4DEB-AF55-9BA7409C7CBF}</ProjectGuid>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Plainion.GatedCheckIn</RootNamespace>
@@ -49,6 +50,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Expression.Blend.Sdk.1.0.2\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -70,7 +72,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="RepositoryEntry.cs" />
+    <Compile Include="ViewModels\RepositoryEntry.cs" />
     <Compile Include="Services\BuildRequest.cs" />
     <Compile Include="Services\GitService.cs" />
     <Compile Include="Model\BuildDefinition.cs" />
@@ -79,8 +81,12 @@
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="TextBoxBehaviour.cs" />
     <Compile Include="ViewModels\BuildDefinitionViewModel.cs" />
+    <Compile Include="ViewModels\BuildViewModel.cs" />
     <Compile Include="Views\BuildDefinitionView.xaml.cs">
       <DependentUpon>BuildDefinitionView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BuildView.xaml.cs">
+      <DependentUpon>BuildView.xaml</DependentUpon>
     </Compile>
     <Page Include="Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -97,6 +103,10 @@
     <Page Include="Views\BuildDefinitionView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BuildView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>

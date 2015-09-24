@@ -16,6 +16,7 @@ namespace Plainion.GatedCheckIn.ViewModels
     [Export]
     class BuildDefinitionViewModel : BindableBase
     {
+        private BuildService myBuildService;
         private GitService myGitService;
         private string myCheckInComment;
         private string myUserName;
@@ -24,6 +25,7 @@ namespace Plainion.GatedCheckIn.ViewModels
         [ImportingConstructor]
         public BuildDefinitionViewModel(BuildService buildService, GitService gitService)
         {
+            myBuildService = buildService;
             myGitService = gitService;
 
             Files = new ObservableCollection<RepositoryEntry>();
@@ -33,9 +35,24 @@ namespace Plainion.GatedCheckIn.ViewModels
 
             RefreshCommand = new DelegateCommand(OnRefresh);
 
-            BuildDefinition = buildService.BuildDefinition;
-            BuildDefinition.PropertyChanged += BuildDefinition_PropertyChanged;
-            OnRepositoryRootChanged();
+            buildService.BuildDefinitionChanged += OnBuildDefinitionChanged;
+            OnBuildDefinitionChanged();
+        }
+
+        private void OnBuildDefinitionChanged()
+        {
+            if (BuildDefinition != null)
+            {
+                BuildDefinition.PropertyChanged -= BuildDefinition_PropertyChanged;
+            }
+
+            BuildDefinition = myBuildService.BuildDefinition;
+
+            if (BuildDefinition != null)
+            {
+                BuildDefinition.PropertyChanged += BuildDefinition_PropertyChanged;
+                OnRepositoryRootChanged();
+            }
         }
 
         private void BuildDefinition_PropertyChanged(object sender, PropertyChangedEventArgs e)

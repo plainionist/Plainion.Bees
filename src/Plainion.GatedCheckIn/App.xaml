@@ -1,7 +1,14 @@
 ﻿<Application x:Class="Plainion.GatedCheckIn.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:Plainion.GatedCheckIn.ViewModels"
+             xmlns:views="clr-namespace:Plainion.GatedCheckIn.Views">
     <Application.Resources>
-         
+        <DataTemplate DataType="{x:Type viewModels:BuildViewModel}">
+            <views:BuildView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:BuildDefinitionViewModel}">
+            <views:BuildDefinitionView/>
+        </DataTemplate>
     </Application.Resources>
 </Application>

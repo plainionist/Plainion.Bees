@@ -25,6 +25,8 @@ namespace Plainion.GatedCheckIn.Services
 
         public BuildDefinition BuildDefinition { get; private set; }
 
+        public event Action BuildDefinitionChanged;
+
         public void InitializeBuildDefinition(string path)
         {
             Contract.RequiresNotNull(path, "path");
@@ -39,14 +41,19 @@ namespace Plainion.GatedCheckIn.Services
                     var serializer = new DataContractSerializer(typeof(BuildDefinition));
                     serializer.WriteObject(writer, BuildDefinition);
                 }
-
-                return;
+            }
+            else
+            {
+                using (var reader = XmlReader.Create(path))
+                {
+                    var serializer = new DataContractSerializer(typeof(BuildDefinition));
+                    BuildDefinition = (BuildDefinition)serializer.ReadObject(reader);
+                }
             }
 
-            using (var reader = XmlReader.Create(path))
+            if (BuildDefinitionChanged != null)
             {
-                var serializer = new DataContractSerializer(typeof(BuildDefinition));
-                BuildDefinition = (BuildDefinition)serializer.ReadObject(reader);
+                BuildDefinitionChanged();
             }
         }
 

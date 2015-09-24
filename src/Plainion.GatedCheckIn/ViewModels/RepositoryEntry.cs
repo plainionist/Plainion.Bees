@@ -1,7 +1,7 @@
 ﻿using LibGit2Sharp;
 using Microsoft.Practices.Prism.Mvvm;
 
-namespace Plainion.GatedCheckIn
+namespace Plainion.GatedCheckIn.ViewModels
 {
     class RepositoryEntry : BindableBase
     {
