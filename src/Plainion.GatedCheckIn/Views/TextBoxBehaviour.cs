@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-
-namespace Plainion.GatedCheckIn
+namespace Plainion.GatedCheckIn.Views
 {
     //http://stackoverflow.com/questions/10097417/how-do-i-create-an-autoscrolling-textbox
     public class TextBoxBehaviour

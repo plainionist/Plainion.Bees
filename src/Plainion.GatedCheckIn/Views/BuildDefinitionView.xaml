@@ -3,7 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pn="http://github.com/ronin4net/plainion"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:git="clr-namespace:LibGit2Sharp;assembly=LibGit2Sharp">
+             xmlns:git="clr-namespace:LibGit2Sharp;assembly=LibGit2Sharp"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             mc:Ignorable="d" 
+             d:DesignHeight="400" d:DesignWidth="1000">
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -57,14 +61,14 @@
         </ListBox>
 
         <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,3,0,0">
-            <CheckBox Content="Build solution" IsEnabled="False" IsChecked="True" VerticalAlignment="Center"/>
+            <TextBlock Text="Solution" VerticalAlignment="Center"/>
             <TextBox Text="{Binding BuildDefinition.Solution}" Margin="5,0,0,0" Width="200"/>
             <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Configurations}" SelectedItem="{Binding BuildDefinition.Configuration}" Width="100"/>
             <ComboBox Margin="5,0,0,0" ItemsSource="{Binding Platforms}" SelectedItem="{Binding BuildDefinition.Platform}" Width="100"/>
         </StackPanel>
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" Margin="0,3,0,0">
-            <CheckBox Content="Tests" IsChecked="{Binding BuildDefinition.RunTests}" VerticalAlignment="Center"/>
+            <CheckBox Content="Run tests" IsChecked="{Binding BuildDefinition.RunTests}" VerticalAlignment="Center"/>
             <TextBlock Margin="5,0,0,0" Text="Test assembly pattern" VerticalAlignment="Center"/>
             <TextBox Margin="5,0,0,0" Text="{Binding BuildDefinition.TestAssemblyPattern}" Width="100"/>
             <TextBlock Margin="5,0,0,0" Text="Runner executable" VerticalAlignment="Center"/>
