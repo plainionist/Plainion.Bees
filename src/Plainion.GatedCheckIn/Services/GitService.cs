@@ -37,5 +37,16 @@ namespace Plainion.GatedCheckIn.Services
                 repo.Commit(comment, author, author);
             }
         }
+
+        public void GetLatest(string repositoryRoot, string relativePath)
+        {
+            using (var repo = new Repository(repositoryRoot))
+            {
+                var log = repo.Commits.QueryBy(relativePath);
+                var head = log.First();
+                var treeEntry =head.Commit.Tree.Single(e=> e.Path == relativePath);
+               // treeEntry.Target.
+            }
+        }
     }
 }

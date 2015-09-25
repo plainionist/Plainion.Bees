@@ -18,6 +18,7 @@ namespace Plainion.GatedCheckIn.ViewModels
     {
         private BuildService myBuildService;
         private GitService myGitService;
+        private RepositoryEntry mySelectedFile;
         private string myCheckInComment;
         private string myUserName;
         private string myUserEMail;
@@ -34,6 +35,7 @@ namespace Plainion.GatedCheckIn.ViewModels
             Platforms = new[] { "Any CPU", "x86", "x64" };
 
             RefreshCommand = new DelegateCommand(OnRefresh);
+            DiffToPreviousCommand = new DelegateCommand(OnDiffToPrevious);
 
             buildService.BuildDefinitionChanged += OnBuildDefinitionChanged;
             OnBuildDefinitionChanged();
@@ -97,6 +99,12 @@ namespace Plainion.GatedCheckIn.ViewModels
 
         public ObservableCollection<RepositoryEntry> Files { get; private set; }
 
+        public RepositoryEntry SelectedFile
+        {
+            get { return mySelectedFile; }
+            set { SetProperty(ref mySelectedFile, value); }
+        }
+        
         public IEnumerable<string> Configurations { get; private set; }
 
         public IEnumerable<string> Platforms { get; private set; }
@@ -124,6 +132,13 @@ namespace Plainion.GatedCheckIn.ViewModels
         public void OnRefresh()
         {
             UpdateFiles();
+        }
+
+        public ICommand DiffToPreviousCommand { get; private set; }
+
+        public void OnDiffToPrevious()
+        {
+            myGitService.GetLatest(BuildDefinition.RepositoryRoot, SelectedFile.File);
         }
     }
 }
