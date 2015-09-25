@@ -40,6 +40,7 @@ namespace Plainion.GatedCheckIn.Services
 
         public void GetLatest(string repositoryRoot, string relativePath)
         {
+            // C:\Program Files\TortoiseHg\kdiff3.exe %1 -fname %6 %2 -fname %7
             using (var repo = new Repository(repositoryRoot))
             {
                 var log = repo.Commits.QueryBy(relativePath);
