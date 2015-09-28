@@ -17,8 +17,6 @@ namespace Plainion.GatedCheckIn.ViewModels
     class BuildDefinitionViewModel : BindableBase
     {
         private BuildService myBuildService;
-        private string myUserName;
-        private string myUserEMail;
 
         [ImportingConstructor]
         public BuildDefinitionViewModel(BuildService buildService)
@@ -76,17 +74,5 @@ namespace Plainion.GatedCheckIn.ViewModels
         public IEnumerable<string> Configurations { get; private set; }
 
         public IEnumerable<string> Platforms { get; private set; }
-
-        public string UserName
-        {
-            get { return myUserName; }
-            set { SetProperty(ref myUserName, value); }
-        }
-
-        public string UserEMail
-        {
-            get { return myUserEMail; }
-            set { SetProperty(ref myUserEMail, value); }
-        }
     }
 }

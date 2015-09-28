@@ -15,6 +15,9 @@ namespace Plainion.GatedCheckIn.Model
         private string myPlatform;
         private string myTestRunnerExecutable;
         private string myTestAssemblyPattern;
+        private string myUserName;
+        private string myUserEMail;
+        private string myDiffTool;
 
         [DataMember]
         public string RepositoryRoot
@@ -70,6 +73,27 @@ namespace Plainion.GatedCheckIn.Model
         {
             get { return myTestAssemblyPattern; }
             set { SetProperty(ref myTestAssemblyPattern, value); }
+        }
+
+        [DataMember]
+        public string UserName
+        {
+            get { return myUserName; }
+            set { SetProperty(ref myUserName, value); }
+        }
+
+        [DataMember]
+        public string UserEMail
+        {
+            get { return myUserEMail; }
+            set { SetProperty(ref myUserEMail, value); }
+        }
+
+        [DataMember]
+        public string DiffTool
+        {
+            get { return myDiffTool; }
+            set { SetProperty(ref myDiffTool, value); }
         }
     }
 }
