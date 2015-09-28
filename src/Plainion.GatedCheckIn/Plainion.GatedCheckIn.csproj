@@ -73,6 +73,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IEnumerabe.cs" />
+    <Compile Include="ViewModels\BuildDefinitionViewModel.cs" />
     <Compile Include="ViewModels\RepositoryEntry.cs" />
     <Compile Include="Services\BuildRequest.cs" />
     <Compile Include="Services\GitService.cs" />
@@ -80,14 +82,17 @@
     <Compile Include="Services\ProducerConsumerStream.cs" />
     <Compile Include="Services\BuildService.cs" />
     <Compile Include="ShellViewModel.cs" />
-    <Compile Include="Views\TextBoxBehaviour.cs" />
-    <Compile Include="ViewModels\BuildDefinitionViewModel.cs" />
-    <Compile Include="ViewModels\BuildViewModel.cs" />
     <Compile Include="Views\BuildDefinitionView.xaml.cs">
       <DependentUpon>BuildDefinitionView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\BuildView.xaml.cs">
-      <DependentUpon>BuildView.xaml</DependentUpon>
+    <Compile Include="Views\TextBoxBehaviour.cs" />
+    <Compile Include="ViewModels\CheckInViewModel.cs" />
+    <Compile Include="ViewModels\BuildLogViewModel.cs" />
+    <Compile Include="Views\CheckInView.xaml.cs">
+      <DependentUpon>CheckInView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BuildLogView.xaml.cs">
+      <DependentUpon>BuildLogView.xaml</DependentUpon>
     </Compile>
     <Page Include="Shell.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -105,7 +110,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\BuildView.xaml">
+    <Page Include="Views\CheckInView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\BuildLogView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

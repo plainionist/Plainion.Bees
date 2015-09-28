@@ -14,19 +14,28 @@ using Plainion.GatedCheckIn.Services;
 namespace Plainion.GatedCheckIn.ViewModels
 {
     [Export]
-    class BuildDefinitionViewModel : BindableBase
+    class CheckInViewModel : BindableBase
     {
         private BuildService myBuildService;
+        private GitService myGitService;
+        private RepositoryEntry mySelectedFile;
+        private string myCheckInComment;
         private string myUserName;
         private string myUserEMail;
 
         [ImportingConstructor]
-        public BuildDefinitionViewModel(BuildService buildService)
+        public CheckInViewModel(BuildService buildService, GitService gitService)
         {
             myBuildService = buildService;
+            myGitService = gitService;
+
+            Files = new ObservableCollection<RepositoryEntry>();
 
             Configurations = new[] { "Debug", "Release" };
             Platforms = new[] { "Any CPU", "x86", "x64" };
+
+            RefreshCommand = new DelegateCommand(OnRefresh);
+            DiffToPreviousCommand = new DelegateCommand(OnDiffToPrevious);
 
             buildService.BuildDefinitionChanged += OnBuildDefinitionChanged;
             OnBuildDefinitionChanged();
@@ -68,14 +77,43 @@ namespace Plainion.GatedCheckIn.ViewModels
                 {
                     BuildDefinition.Solution = Path.GetFileName(solutionPath);
                 }
+
+                UpdateFiles();
             }
         }
 
         public BuildDefinition BuildDefinition { get; private set; }
 
+        public async void UpdateFiles()
+        {
+            Files.Clear();
+
+            var entries = await myGitService.GetChangedAndNewFilesAsync(BuildDefinition.RepositoryRoot);
+
+            var files = entries
+                .Select(e => new RepositoryEntry(e) { IsChecked = true })
+                .OrderBy(e => e.File);
+
+            Files.AddRange(files);
+        }
+
+        public ObservableCollection<RepositoryEntry> Files { get; private set; }
+
+        public RepositoryEntry SelectedFile
+        {
+            get { return mySelectedFile; }
+            set { SetProperty(ref mySelectedFile, value); }
+        }
+        
         public IEnumerable<string> Configurations { get; private set; }
 
         public IEnumerable<string> Platforms { get; private set; }
+
+        public string CheckInComment
+        {
+            get { return myCheckInComment; }
+            set { SetProperty(ref myCheckInComment, value); }
+        }
 
         public string UserName
         {
@@ -87,6 +125,20 @@ namespace Plainion.GatedCheckIn.ViewModels
         {
             get { return myUserEMail; }
             set { SetProperty(ref myUserEMail, value); }
+        }
+
+        public ICommand RefreshCommand { get; private set; }
+
+        public void OnRefresh()
+        {
+            UpdateFiles();
+        }
+
+        public ICommand DiffToPreviousCommand { get; private set; }
+
+        public void OnDiffToPrevious()
+        {
+            myGitService.GetLatest(BuildDefinition.RepositoryRoot, SelectedFile.File);
         }
     }
 }

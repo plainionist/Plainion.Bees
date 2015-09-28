@@ -4,8 +4,11 @@
              xmlns:viewModels="clr-namespace:Plainion.GatedCheckIn.ViewModels"
              xmlns:views="clr-namespace:Plainion.GatedCheckIn.Views">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type viewModels:BuildViewModel}">
-            <views:BuildView/>
+        <DataTemplate DataType="{x:Type viewModels:BuildLogViewModel}">
+            <views:BuildLogView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModels:CheckInViewModel}">
+            <views:CheckInView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModels:BuildDefinitionViewModel}">
             <views:BuildDefinitionView/>
