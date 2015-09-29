@@ -91,7 +91,7 @@
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="5,2,0,0" Text="{Binding BuildDefinition.UserEMail}" Width="200" HorizontalAlignment="Left"/>
                 </Grid>
             </GroupBox>
-            
+
             <GroupBox Header="Tools" Grid.Row="4">
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -105,6 +105,8 @@
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="Diff tool" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="5,2,0,0" Text="{Binding BuildDefinition.DiffTool}"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" Margin="5,2,0,0"
+                               Text="Use %base for the base and %mine for the locally modified file"/>
                 </Grid>
             </GroupBox>
         </Grid>

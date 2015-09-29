@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
+using Plainion.GatedCheckIn.Model;
 using Plainion.GatedCheckIn.Services;
 using Plainion.GatedCheckIn.ViewModels;
 using Plainion.Windows;
@@ -70,8 +71,6 @@ namespace Plainion.GatedCheckIn
             var request = new BuildRequest
             {
                 CheckInComment = CheckInViewModel.CheckInComment,
-                UserName = CheckInViewModel.UserName,
-                UserEMail = CheckInViewModel.UserEMail,
                 Files = CheckInViewModel.Files
                     .Where(e => e.IsChecked)
                     .Select(e => e.File)

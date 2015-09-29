@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,6 +8,9 @@ using LibGit2Sharp;
 
 namespace Plainion.GatedCheckIn.Services
 {
+    /// <summary>
+    /// Thread-safe and re-entrent
+    /// </summary>
     [Export]
     class GitService
     {
@@ -40,16 +42,19 @@ namespace Plainion.GatedCheckIn.Services
             }
         }
 
-        public void GetLatest(string repositoryRoot, string relativePath)
+        /// <summary>
+        /// Returns path to a temp file which contains the HEAD version of the given file.
+        /// The caller has to take care to delete the file.
+        /// </summary>
+        public string GetHeadOf(string repositoryRoot, string relativePath)
         {
-            // C:\Program Files\TortoiseHg\kdiff3.exe %1 -fname %6 %2 -fname %7
             using (var repo = new Repository(repositoryRoot))
             {
                 var log = repo.Commits.QueryBy(relativePath);
                 if (log == null || !log.Any())
                 {
                     // file not yet tracked -> ignore
-                    return;
+                    return null;
                 }
 
                 var head = log.First();
@@ -69,7 +74,7 @@ namespace Plainion.GatedCheckIn.Services
                     }
                 }
 
-                Process.Start("kdiff3", file + " " + Path.Combine(repositoryRoot, relativePath));
+                return file;
             }
         }
     }

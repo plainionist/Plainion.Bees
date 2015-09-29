@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Runtime.Serialization;
 using Plainion.Serialization;
 
 namespace Plainion.GatedCheckIn.Model
 {
+    [Serializable]
     [DataContract(Namespace = "http://github.com/ronin4net/plainion/GatedCheckIn", Name = "BuildDefinition")]
     class BuildDefinition : SerializableBindableBase
     {

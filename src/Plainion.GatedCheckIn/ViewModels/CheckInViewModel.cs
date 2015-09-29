@@ -2,8 +2,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
@@ -20,8 +22,6 @@ namespace Plainion.GatedCheckIn.ViewModels
         private GitService myGitService;
         private RepositoryEntry mySelectedFile;
         private string myCheckInComment;
-        private string myUserName;
-        private string myUserEMail;
 
         [ImportingConstructor]
         public CheckInViewModel(BuildService buildService, GitService gitService)
@@ -31,11 +31,8 @@ namespace Plainion.GatedCheckIn.ViewModels
 
             Files = new ObservableCollection<RepositoryEntry>();
 
-            Configurations = new[] { "Debug", "Release" };
-            Platforms = new[] { "Any CPU", "x86", "x64" };
-
             RefreshCommand = new DelegateCommand(OnRefresh);
-            DiffToPreviousCommand = new DelegateCommand(OnDiffToPrevious);
+            DiffToPreviousCommand = new DelegateCommand(OnDiffToPrevious, CanDiffToPrevious);
 
             buildService.BuildDefinitionChanged += OnBuildDefinitionChanged;
             OnBuildDefinitionChanged();
@@ -55,6 +52,8 @@ namespace Plainion.GatedCheckIn.ViewModels
                 BuildDefinition.PropertyChanged += BuildDefinition_PropertyChanged;
                 OnRepositoryRootChanged();
             }
+
+            DiffToPreviousCommand.RaiseCanExecuteChanged();
         }
 
         private void BuildDefinition_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -62,6 +61,10 @@ namespace Plainion.GatedCheckIn.ViewModels
             if (e.PropertyName == PropertySupport.ExtractPropertyName(() => BuildDefinition.RepositoryRoot))
             {
                 OnRepositoryRootChanged();
+            }
+            else if (e.PropertyName == PropertySupport.ExtractPropertyName(() => BuildDefinition.DiffTool))
+            {
+                DiffToPreviousCommand.RaiseCanExecuteChanged();
             }
 
             OnPropertyChanged(e.PropertyName);
@@ -104,27 +107,11 @@ namespace Plainion.GatedCheckIn.ViewModels
             get { return mySelectedFile; }
             set { SetProperty(ref mySelectedFile, value); }
         }
-        
-        public IEnumerable<string> Configurations { get; private set; }
-
-        public IEnumerable<string> Platforms { get; private set; }
 
         public string CheckInComment
         {
             get { return myCheckInComment; }
             set { SetProperty(ref myCheckInComment, value); }
-        }
-
-        public string UserName
-        {
-            get { return myUserName; }
-            set { SetProperty(ref myUserName, value); }
-        }
-
-        public string UserEMail
-        {
-            get { return myUserEMail; }
-            set { SetProperty(ref myUserEMail, value); }
         }
 
         public ICommand RefreshCommand { get; private set; }
@@ -134,11 +121,29 @@ namespace Plainion.GatedCheckIn.ViewModels
             UpdateFiles();
         }
 
-        public ICommand DiffToPreviousCommand { get; private set; }
+        public DelegateCommand DiffToPreviousCommand { get; private set; }
+
+        private bool CanDiffToPrevious()
+        {
+            return BuildDefinition != null && !string.IsNullOrEmpty(BuildDefinition.DiffTool);
+        }
 
         public void OnDiffToPrevious()
         {
-            myGitService.GetLatest(BuildDefinition.RepositoryRoot, SelectedFile.File);
+            var headFile = myGitService.GetHeadOf(BuildDefinition.RepositoryRoot, SelectedFile.File);
+
+            var parts = Regex.Matches(BuildDefinition.DiffTool, @"[\""].+?[\""]|[^ ]+")
+                            .Cast<Match>()
+                            .Select(m => m.Value)
+                            .ToList();
+
+            var executable = parts.First().Trim('"');
+            var args = string.Join(" ", parts.Skip(1))
+                .Replace("%base", headFile)
+                .Replace("%mine", Path.Combine(BuildDefinition.RepositoryRoot, SelectedFile.File));
+
+            // "C:\Program Files\TortoiseHg\kdiff3.exe" %base %mine
+            Process.Start(executable, args );
         }
     }
 }
