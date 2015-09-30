@@ -12,7 +12,6 @@ namespace Plainion.GatedCheckIn.Services
     class BuildService : IDisposable
     {
         private GitService myGitService;
-        private string myBuildDefinitionLocation;
 
         [ImportingConstructor]
         public BuildService(GitService gitService)
@@ -22,33 +21,22 @@ namespace Plainion.GatedCheckIn.Services
 
         public void Dispose()
         {
-            if (myBuildDefinitionLocation != null)
-            {
-                SaveBuildDefinition();
-                myBuildDefinitionLocation = null;
-            }
+            SaveBuildDefinitionOnDemand();
         }
 
         public BuildDefinition BuildDefinition { get; private set; }
 
         public event Action BuildDefinitionChanged;
 
-        public void InitializeBuildDefinition(string path)
+        public void InitializeBuildDefinition(string repositoryRoot)
         {
-            Contract.RequiresNotNull(path, "path");
-
-            myBuildDefinitionLocation = path;
-
-            if (!File.Exists(myBuildDefinitionLocation))
+            if (string.IsNullOrEmpty(repositoryRoot) || !File.Exists(repositoryRoot))
             {
                 BuildDefinition = CreateDefaultBuildDefinition();
-                BuildDefinition.RepositoryRoot = Path.GetFullPath(Path.GetDirectoryName(myBuildDefinitionLocation));
-
-                SaveBuildDefinition();
             }
             else
             {
-                using (var reader = XmlReader.Create(myBuildDefinitionLocation))
+                using (var reader = XmlReader.Create(repositoryRoot))
                 {
                     var serializer = new DataContractSerializer(typeof(BuildDefinition));
                     BuildDefinition = (BuildDefinition)serializer.ReadObject(reader);
@@ -61,9 +49,15 @@ namespace Plainion.GatedCheckIn.Services
             }
         }
 
-        private void SaveBuildDefinition()
+        private void SaveBuildDefinitionOnDemand()
         {
-            using (var writer = XmlWriter.Create(myBuildDefinitionLocation))
+            if (BuildDefinition == null || BuildDefinition.RepositoryRoot == null)
+            {
+                return;
+            }
+
+            var file = Path.Combine(BuildDefinition.RepositoryRoot, Path.GetFileName(BuildDefinition.RepositoryRoot) + ".gc");
+            using (var writer = XmlWriter.Create(file))
             {
                 var serializer = new DataContractSerializer(typeof(BuildDefinition));
                 serializer.WriteObject(writer, BuildDefinition);

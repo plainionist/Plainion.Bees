@@ -29,7 +29,11 @@ namespace Plainion.GatedCheckIn
             var args = Environment.GetCommandLineArgs();
             if (args.Length > 1)
             {
-                myBuildService.InitializeBuildDefinition(Path.Combine(args[1], Path.GetFileName(args[1]) + ".gc"));
+                myBuildService.InitializeBuildDefinition(args[1]);
+            }
+            else
+            {
+                myBuildService.InitializeBuildDefinition(null);
             }
         }
 
