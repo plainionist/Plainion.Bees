@@ -20,7 +20,6 @@ namespace Plainion.GatedCheckIn.Model
         private string myUserEMail;
         private string myDiffTool;
 
-        [DataMember]
         public string RepositoryRoot
         {
             get { return myRepositoryRoot; }

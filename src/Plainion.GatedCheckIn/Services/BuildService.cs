@@ -14,7 +14,7 @@ namespace Plainion.GatedCheckIn.Services
         private GitService myGitService;
 
         [ImportingConstructor]
-        public BuildService(GitService gitService)
+        public BuildService( GitService gitService )
         {
             myGitService = gitService;
         }
@@ -28,22 +28,24 @@ namespace Plainion.GatedCheckIn.Services
 
         public event Action BuildDefinitionChanged;
 
-        public void InitializeBuildDefinition(string repositoryRoot)
+        public void InitializeBuildDefinition( string buildDefinitionFile )
         {
-            if (string.IsNullOrEmpty(repositoryRoot) || !File.Exists(repositoryRoot))
+            if( string.IsNullOrEmpty( buildDefinitionFile ) || !File.Exists( buildDefinitionFile ) )
             {
                 BuildDefinition = CreateDefaultBuildDefinition();
             }
             else
             {
-                using (var reader = XmlReader.Create(repositoryRoot))
+                using( var reader = XmlReader.Create( buildDefinitionFile ) )
                 {
-                    var serializer = new DataContractSerializer(typeof(BuildDefinition));
-                    BuildDefinition = (BuildDefinition)serializer.ReadObject(reader);
+                    var serializer = new DataContractSerializer( typeof( BuildDefinition ) );
+                    BuildDefinition = ( BuildDefinition )serializer.ReadObject( reader );
                 }
             }
 
-            if (BuildDefinitionChanged != null)
+            BuildDefinition.RepositoryRoot = Path.GetDirectoryName( buildDefinitionFile );
+
+            if( BuildDefinitionChanged != null )
             {
                 BuildDefinitionChanged();
             }
@@ -51,16 +53,16 @@ namespace Plainion.GatedCheckIn.Services
 
         private void SaveBuildDefinitionOnDemand()
         {
-            if (BuildDefinition == null || BuildDefinition.RepositoryRoot == null)
+            if( BuildDefinition == null || BuildDefinition.RepositoryRoot == null )
             {
                 return;
             }
 
-            var file = Path.Combine(BuildDefinition.RepositoryRoot, Path.GetFileName(BuildDefinition.RepositoryRoot) + ".gc");
-            using (var writer = XmlWriter.Create(file))
+            var file = Path.Combine( BuildDefinition.RepositoryRoot, Path.GetFileName( BuildDefinition.RepositoryRoot ) + ".gc" );
+            using( var writer = XmlWriter.Create( file ) )
             {
-                var serializer = new DataContractSerializer(typeof(BuildDefinition));
-                serializer.WriteObject(writer, BuildDefinition);
+                var serializer = new DataContractSerializer( typeof( BuildDefinition ) );
+                serializer.WriteObject( writer, BuildDefinition );
             }
         }
 
@@ -77,12 +79,12 @@ namespace Plainion.GatedCheckIn.Services
             };
         }
 
-        public Task<bool> ExecuteAsync(BuildRequest request, IProgress<string> progress)
+        public Task<bool> ExecuteAsync( BuildRequest request, IProgress<string> progress )
         {
-            Contract.Invariant(BuildDefinition != null, "BuildDefinition not loaded");
+            Contract.Invariant( BuildDefinition != null, "BuildDefinition not loaded" );
 
-            return new BuildWorkflow(myGitService, BuildDefinition, request)
-                .ExecuteAsync(progress);
+            return new BuildWorkflow( myGitService, BuildDefinition, request )
+                .ExecuteAsync( progress );
         }
     }
 }
