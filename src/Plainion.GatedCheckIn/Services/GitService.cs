@@ -58,7 +58,7 @@ namespace Plainion.GatedCheckIn.Services
                 }
 
                 var head = log.First();
-                var treeEntry = head.Commit.Tree.Single(e => e.Path == relativePath);
+                var treeEntry = head.Commit.Tree[relativePath];
                 var blob = (Blob)treeEntry.Target;
 
                 var file = Path.Combine(Path.GetTempPath(), Path.GetFileName(relativePath) + ".head");

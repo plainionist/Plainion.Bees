@@ -16,12 +16,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Plainion.AppFw.Shell, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Plainion.AppFw.Shell.1.0.0.0\lib\NET45\Plainion.AppFw.Shell.dll</HintPath>
+      <HintPath>..\..\packages\Plainion.AppFw.Shell.1.2.0.0\lib\NET45\Plainion.AppFw.Shell.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Plainion.AppFw.Shell.Hosting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Plainion.AppFw.Shell.1.0.0.0\lib\NET45\Plainion.AppFw.Shell.Hosting.dll</HintPath>
+    <Reference Include="Plainion.AppFw.Shell.Hosting, Version=1.2.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plainion.AppFw.Shell.1.2.0.0\lib\NET45\Plainion.AppFw.Shell.Hosting.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Plainion.Core, Version=2.8.0.0, Culture=neutral, PublicKeyToken=11fdbc7b87b9a0de, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
