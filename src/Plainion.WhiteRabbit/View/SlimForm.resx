@@ -112,12 +112,12 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="myStartRecordBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk3mAQAAAAAAADYAAAAoAAAADAAAAAwAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAAyNDUyNDU
@@ -144,10 +144,10 @@
   <data name="myPauseRecordBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk0OAQAAAAAAADYAAAAoAAAABwAAAAkAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAA35t1gDAA
-        gDAAyNDU35t1gDAAgDAAqO0H4Jhw8MCggDAAyNDU4Jhw8MCggDAAqO0H4Jhw/8iwgDAQyNDU4Jhw/8iw
-        gDAQqO0H8KCA/9DAkDgQyNDU8KCA/9DAkDgQqO0H8KCA/9jQkEAQyNDU8KCA/9jQkEAQqO0H8KiA/+DQ
-        oEggyNDU8KiA/+DQoEggqO0H8LCA/+jgoFAgyNDU8LCA/+jgoFAgqO0H/7CQ/+DQsFgwyNDU/7CQ/+DQ
-        sFgwqO0H/7CQ/7CQ4Jx2yNDU/7CQ/7CQ4Jx2qO0H
+        gDAAyNDU35t1gDAAgDAAAAAA4Jhw8MCggDAAyNDU4Jhw8MCggDAAAAAA4Jhw/8iwgDAQyNDU4Jhw/8iw
+        gDAQAAAA8KCA/9DAkDgQyNDU8KCA/9DAkDgQAAAA8KCA/9jQkEAQyNDU8KCA/9jQkEAQAAAA8KiA/+DQ
+        oEggyNDU8KiA/+DQoEggAAAA8LCA/+jgoFAgyNDU8LCA/+jgoFAgAAAA/7CQ/+DQsFgwyNDU/7CQ/+DQ
+        sFgwAAAA/7CQ/7CQ4Jx2yNDU/7CQ/7CQ4Jx2AAAA
 </value>
   </data>
 </root>
