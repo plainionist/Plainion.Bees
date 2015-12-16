@@ -134,33 +134,6 @@ namespace Plainion.WhiteRabbit
             myController.StartTimeMeasurement();
         }
 
-        private void myPauseRecordBtn_Click( object sender, EventArgs e )
-        {
-            /*
-            myController.PauseTimeMeasurement();
-
-            myStartRecordBtn.Enabled = true;
-            myPauseRecordBtn.Enabled = false;
-            myStopRecordBtn.Enabled = true;
-             */
-        }
-
-
-        private void myStopRecordBtn_Click( object sender, EventArgs e )
-        {
-            /*
-            myRecordPanel.Visible = false;
-            Height = myRememberedHeight;
-            Width = myRememberedWidth;
-
-            myStartRecordBtn.Enabled = true;
-            myPauseRecordBtn.Enabled = false;
-            myStopRecordBtn.Enabled = false;
-
-            myController.StopTimeMeasurement( myCategoryList.SelectedIndex, myTaskTxt.Text );
-             */
-        }
-
         private void myTableView_KeyUp( object sender, KeyEventArgs e )
         {
             if( e.Control && e.KeyCode == Keys.C )
@@ -176,21 +149,6 @@ namespace Plainion.WhiteRabbit
             else if( e.KeyCode == Keys.Delete )
             {
                 myTableView.CurrentCell.Value = string.Empty;
-            }
-        }
-
-        private string SelectedCatagory
-        {
-            get
-            {
-                if( -1 != myCategoryList.SelectedIndex )
-                {
-                    return myController.Categories.Rows[myCategoryList.SelectedIndex][0] as string;
-                }
-                else
-                {
-                    return String.Empty;
-                }
             }
         }
 
@@ -213,48 +171,8 @@ namespace Plainion.WhiteRabbit
 
             // reload categories
             myController.LoadCategories();
-            myCategoryList.DataSource = myController.Categories;
             myCategoryCol.DataSource = myController.Categories;
         }
-
-        /*
-        private void MainUI_Resize( object sender, EventArgs e )
-        {
-            if( FormWindowState.Minimized == WindowState )
-            {
-                myNotifyIcon.Visible = true;
-
-                string tooltip = "White Rabbit";
-                if( !string.IsNullOrEmpty( SelectedCatagory ) ||
-                    !string.IsNullOrEmpty( myTaskTxt.Text ) )
-                {
-                    tooltip += ": ";
-                    if( !string.IsNullOrEmpty( SelectedCatagory ) )
-                    {
-                        tooltip += SelectedCatagory;
-                        if( !string.IsNullOrEmpty( myTaskTxt.Text ) )
-                        {
-                            tooltip += " / ";
-                        }
-                    }
-                    if( !string.IsNullOrEmpty( myTaskTxt.Text ) )
-                    {
-                        tooltip += myTaskTxt.Text;
-                    }
-                }
-
-                // max 64 chars allowed
-                myNotifyIcon.Text = tooltip.Substring( 0, (tooltip.Length < 63 ? tooltip.Length : 63) );
-
-                //myNotifyIcon.ShowBalloonTip( 500 );
-                Hide();
-            }
-            else if( FormWindowState.Normal == this.WindowState )
-            {
-                myNotifyIcon.Visible = false;
-            }
-        }
-        */
 
         private void myNotifyIcon_DoubleClick( object sender, EventArgs e )
         {
@@ -263,7 +181,6 @@ namespace Plainion.WhiteRabbit
             WindowState = FormWindowState.Normal;
             myNotifyIcon.Visible = false;
         }
-
 
         private void myTableView_MouseDown( object sender, MouseEventArgs e )
         {

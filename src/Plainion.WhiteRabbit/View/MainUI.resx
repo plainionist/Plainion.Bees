@@ -112,65 +112,33 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="myStartRecordBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        Qk3mAQAAAAAAADYAAAAoAAAADAAAAAwAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAAwMDAwMDA
-        wMDAEGAQvsjAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAEGggAGAQwMrCwMDAwMDAwMDAwMDA
-        wMDAwMDAwMDAwMDAwMDAIHAgIHAwAGAQxtrGwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAIHgwMIBAIHAw
-        AGAQxc/HwMDAwMDAwMDAwMDAwMDAwMDAwMDAMIAwUKBgMIBAIHAwAGAQx9HJwMDAwMDAwMDAwMDAwMDA
-        wMDAQIBAYLBwUKBgMIBAIHAwEGggx9HJwMDAwMDAwMDAwMDAwMDAQIhQcMBwcMBwUKBgMHhAxNjEwMDA
-        wMDAwMDAwMDAwMDAwMDAUJBQcMBwoNiwMHhAxtrGwMDAwMDAwMDAwMDAwMDAwMDAwMDAUJhgoNiwMHhA
-        xtrGwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAYJhgMHhAyNzIwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDA
-        wMDAYJhgyd3JwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAyt7KwMDAwMDAwMDAwMDAwMDAwMDA
-        wMDAwMDA
-</value>
-  </data>
-  <data name="myStopRecordBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        Qk0yAQAAAAAAADYAAAAoAAAACQAAAAkAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAA35t1sGBA
-        sGAwoFAwoEggkEAQkDgQgDAAgDAAAOCYcPDAoNCggNCQcMCAYLBoUKBgQKBYMIAwAADgmHD/yLDwuJDw
-        oIDgmHDgiGDQeFCwaECAMBAA8KCA/9DA/8Cg8LCQ8KCA4JBw4IhgsGhQkDgQAPCggP/Y0P/IsPC4oPCo
-        kPCggOCYcMB4UJBAEADwqID/4ND/0MD/wKDwsJDwqIDwoIDQkHCgSCAA8LCA/+jg/9jQ/8iw/8Cw8Lig
-        8LCQ4KCAoFAgAP+wkP/g0P/g0P/YwP/QwP/IsP/IsPC4oLBYMAD/sJD/sJDwsIDwqIDwoIDwoIDgmHDg
-        mHDgnHYA
-</value>
-  </data>
-  <metadata name="myBeginCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="myBeginCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="myEndCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="myEndCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="myJitterCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="myJitterCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="myCategoryCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="myCategoryCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="myTaskCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="myTaskCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
-  <metadata name="myTableContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="myTableContextMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>173, 17</value>
   </metadata>
-  <metadata name="myPreferencesMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="myPreferencesMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <data name="myPauseRecordBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        Qk0OAQAAAAAAADYAAAAoAAAABwAAAAkAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAA35t1gDAA
-        gDAAwMDA35t1gDAAgDAAAAAA4Jhw8MCggDAAwMDA4Jhw8MCggDAAAAAA4Jhw/8iwgDAQwMDA4Jhw/8iw
-        gDAQAAAA8KCA/9DAkDgQwMDA8KCA/9DAkDgQAAAA8KCA/9jQkEAQwMDA8KCA/9jQkEAQAAAA8KiA/+DQ
-        oEggwMDA8KiA/+DQoEggAAAA8LCA/+jgoFAgwMDA8LCA/+jgoFAgAAAA/7CQ/+DQsFgwwMDA/7CQ/+DQ
-        sFgwAAAA/7CQ/7CQ4Jx2wMDA/7CQ/7CQ4Jx2AAAA
-</value>
-  </data>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="myRecordInitBtn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         Qk3mAQAAAAAAADYAAAAoAAAADAAAAAwAAAABABgAAAAAAAAAAADEDgAAxA4AAAAAAAAAAAAAyNDUyNDU
@@ -184,10 +152,10 @@
         yNDUyNDU
 </value>
   </data>
-  <metadata name="myToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="myToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>450, 17</value>
   </metadata>
-  <metadata name="myNotifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="myNotifyIcon.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>332, 17</value>
   </metadata>
   <data name="myNotifyIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -369,7 +337,7 @@
         hr6OYrZu
 </value>
   </data>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>69</value>
   </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
