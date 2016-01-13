@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel.Composition;
 using Microsoft.Practices.Prism.Mvvm;
 
@@ -8,23 +9,18 @@ namespace Plainion.GatedCheckIn.ViewModels
     class BuildLogViewModel : BindableBase
     {
         private bool? mySucceeded;
-        private string myLog;
 
-        public string Log
+        public BuildLogViewModel()
         {
-            get { return myLog; }
-            set { SetProperty(ref myLog, value); }
+            Log = new ObservableCollection<string>();
         }
+
+        public ObservableCollection<string> Log { get; private set; }
 
         public bool? Succeeded
         {
             get { return mySucceeded; }
             set { SetProperty(ref mySucceeded, value); }
-        }
-
-        internal void Writeline(string line)
-        {
-            Log += line + Environment.NewLine;
         }
     }
 }

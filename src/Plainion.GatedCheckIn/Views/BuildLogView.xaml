@@ -7,10 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <TextBox Text="{Binding Log}" views:TextBoxBehaviour.ScrollOnTextChanged="True" IsReadOnly="True" IsReadOnlyCaretVisible="True"
+        <ListBox ItemsSource="{Binding Log}" views:TextBoxBehaviour.ScrollOnTextChanged="True" views:ListBoxExtensions.AutoScrollToEnd="True"
                  ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto">
-            <TextBox.Style>
-                <Style TargetType="{x:Type TextBox}">
+            <ListBox.Style>
+                <Style TargetType="{x:Type ListBox}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding Succeeded, Mode=OneWay}" Value="True">
                             <Setter Property="BorderBrush" Value="Green"/>
@@ -26,7 +26,7 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </TextBox.Style>
-        </TextBox>
+            </ListBox.Style>
+        </ListBox>
     </Grid>
 </UserControl>

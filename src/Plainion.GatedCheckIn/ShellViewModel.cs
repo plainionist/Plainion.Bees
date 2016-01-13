@@ -63,14 +63,14 @@ namespace Plainion.GatedCheckIn
 
         private void OnGo()
         {
-            BuildLogViewModel.Log = null;
+            BuildLogViewModel.Log.Clear();
             myIsBusy = true;
             BuildLogViewModel.Succeeded = null;
             GoCommand.RaiseCanExecuteChanged();
 
             SelectedTab = 2;
 
-            var progress = new Progress<string>(p => BuildLogViewModel.Writeline(p));
+            var progress = new Progress<string>(p => BuildLogViewModel.Log.Add(p));
 
             var request = new BuildRequest
             {
