@@ -16,11 +16,9 @@ namespace Plainion.Scripts.TestRunner
     {
         private static readonly ILogger myLogger = LoggerFactory.GetLogger(typeof(TestRunner));
 
-        private string myWorkingDirectory;
-
         public TestRunner()
         {
-            myWorkingDirectory = ".";
+            WorkingDirectory = ".";
         }
 
         [Argument(Short = "-g", Long = "-gui", Description = "Use the GUI runner")]
@@ -33,6 +31,8 @@ namespace Plainion.Scripts.TestRunner
         public string NUnitGui { get; set; }
 
         public string NUnitConsole { get; set; }
+
+        public string WorkingDirectory { get; set; }
 
         public bool Succeeded { get; private set; }
 
@@ -68,28 +68,7 @@ namespace Plainion.Scripts.TestRunner
             //File.Delete( nunitProject );
         }
 
-        public void ExecuteEmbedded(string workingDirectory, TextWriter stdOut, TextWriter stdErr)
-        {
-            myWorkingDirectory = workingDirectory;
-
-            var nunitProject = GenerateProject();
-            if (nunitProject == null)
-            {
-                return;
-            }
-
-            Contract.Requires(File.Exists(NUnitConsole), "Runner executable not found: {0}", NUnitConsole);
-
-            var info = new ProcessStartInfo(NUnitConsole, nunitProject);
-            info.CreateNoWindow = true;
-            //info.WorkingDirectory = workingDirectory;
-
-            var ret = Processes.Execute(info, stdOut, stdErr);
-
-            Succeeded = ret == 0;
-        }
-
-        private string GenerateProject()
+        public string GenerateProject()
         {
             var testAssemblies = ResolveTestAssemblies();
 
@@ -140,7 +119,7 @@ namespace Plainion.Scripts.TestRunner
             var directory = Path.GetDirectoryName(pattern);
             if (string.IsNullOrWhiteSpace(directory))
             {
-                directory = Path.GetFullPath(myWorkingDirectory);
+                directory = Path.GetFullPath(WorkingDirectory);
             }
 
             var filePattern = Path.GetFileName(pattern);

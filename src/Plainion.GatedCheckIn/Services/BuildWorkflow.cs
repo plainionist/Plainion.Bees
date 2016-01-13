@@ -28,26 +28,23 @@ namespace Plainion.GatedCheckIn.Services
             myDefinition = Objects.Clone(myDefinition);
             myRequest = Objects.Clone(myRequest);
 
-            return Task<bool>.Run(() => BuildSolution( progress)
-                                        && RunTests( progress)
-                                        && CheckIn( progress));
+            return Task<bool>.Run(() => BuildSolution(progress)
+                                        && RunTests(progress)
+                                        && CheckIn(progress));
         }
 
-        private bool BuildSolution( IProgress<string> progress)
+        private bool BuildSolution(IProgress<string> progress)
         {
-            return ExecuteWithOutputRedirection(writer =>
-            {
-                var info = new ProcessStartInfo(@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe",
-                   "/m /p:Configuration=" + myDefinition.Configuration +
-                   " /p:Platform=\"" + myDefinition.Platform + "\" " +
-                   " /p:OutputPath=\"" + GetWorkingDirectory() + "\"" +
-                   " " + Path.Combine(myDefinition.RepositoryRoot, myDefinition.Solution));
+            var process = new UiShellCommand(@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe", progress);
 
-                info.CreateNoWindow = true;
+            process.Execute(
+                "/m",
+                "/p:Configuration=" + myDefinition.Configuration,
+                "/p:Platform=\"" + myDefinition.Platform + "\"",
+                "/p:OutputPath=\"" + GetWorkingDirectory() + "\"",
+                Path.Combine(myDefinition.RepositoryRoot, myDefinition.Solution));
 
-                var ret = Processes.Execute(info, writer, writer);
-                return ret == 0;
-            }, progress);
+            return process.ExitCode == 0;
         }
 
         private string GetWorkingDirectory()
@@ -55,85 +52,33 @@ namespace Plainion.GatedCheckIn.Services
             return Path.Combine(myDefinition.RepositoryRoot, "bin", "gc");
         }
 
-        private bool ExecuteWithOutputRedirection(Func<TextWriter, bool> Executor, IProgress<string> progress)
-        {
-            using (var stream = new ProducerConsumerStream())
-            {
-                using (var reader = new StreamReader(stream))
-                {
-                    using (var writer = new StreamWriter(stream))
-                    {
-                        var finishedToken = Guid.NewGuid().ToString();
-
-                        var cts = new CancellationTokenSource();
-                        var task = Task.Run(() =>
-                        {
-                            while (!cts.Token.IsCancellationRequested)
-                            {
-                                var line = reader.ReadLine();
-                                if (line == null)
-                                {
-                                    continue;
-                                }
-                                if (line == finishedToken)
-                                {
-                                    break;
-                                }
-                                progress.Report(line);
-                            }
-                        }, cts.Token);
-
-                        try
-                        {
-                            var ret = Executor(writer);
-
-                            writer.WriteLine();
-                            writer.WriteLine(finishedToken);
-
-                            writer.Flush();
-                            stream.Flush();
-
-                            task.Wait();
-
-                            return ret;
-                        }
-                        catch (Exception ex)
-                        {
-                            cts.Cancel();
-
-                            throw new Exception("Failed to build solution", ex);
-                        }
-                    }
-                }
-            }
-        }
-
-        private bool RunTests( IProgress<string> progress)
+        private bool RunTests(IProgress<string> progress)
         {
             if (!myDefinition.RunTests)
             {
                 return true;
             }
 
-            return ExecuteWithOutputRedirection(writer =>
+            Contract.Requires(File.Exists(myDefinition.TestRunnerExecutable), "Runner executable not found: {0}", myDefinition.TestRunnerExecutable);
+
+            var runner = new TestRunner
             {
-                var runner = new TestRunner
-                {
-                    NUnitConsole = myDefinition.TestRunnerExecutable,
-                    WithGui = false,
-                    Assemblies = myDefinition.TestAssemblyPattern,
-                };
+                Assemblies = myDefinition.TestAssemblyPattern,
+                WorkingDirectory = GetWorkingDirectory()
+            };
 
-                var stdOut = Console.Out;
-                Console.SetOut(writer);
-                runner.ExecuteEmbedded(GetWorkingDirectory(), writer, writer);
-                Console.SetOut(stdOut);
+            var nunitProject = runner.GenerateProject();
 
-                return runner.Succeeded;
-            }, progress);
+            Contract.Invariant(nunitProject != null, "Failed to generate nunit project");
+
+            var process = new UiShellCommand(myDefinition.TestRunnerExecutable, progress);
+
+            process.Execute(nunitProject);
+
+            return process.ExitCode == 0;
         }
 
-        private bool CheckIn( IProgress<string> progress)
+        private bool CheckIn(IProgress<string> progress)
         {
             if (!myDefinition.CheckIn)
             {
@@ -149,7 +94,7 @@ namespace Plainion.GatedCheckIn.Services
             try
             {
                 myGitService.Commit(myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.UserName, myDefinition.UserEMail);
-                
+
                 progress.Report("--- CHECKIN SUCCEEDED ---");
 
                 return true;

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using Microsoft.Practices.Prism.Mvvm;
 
 namespace Plainion.GatedCheckIn.ViewModels
@@ -19,6 +20,11 @@ namespace Plainion.GatedCheckIn.ViewModels
         {
             get { return mySucceeded; }
             set { SetProperty(ref mySucceeded, value); }
+        }
+
+        internal void Writeline(string line)
+        {
+            Log += line + Environment.NewLine;
         }
     }
 }

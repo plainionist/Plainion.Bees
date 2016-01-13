@@ -70,7 +70,7 @@ namespace Plainion.GatedCheckIn
 
             SelectedTab = 2;
 
-            var progress = new Progress<string>(p => BuildLogViewModel.Log += p + Environment.NewLine);
+            var progress = new Progress<string>(p => BuildLogViewModel.Writeline(p));
 
             var request = new BuildRequest
             {
