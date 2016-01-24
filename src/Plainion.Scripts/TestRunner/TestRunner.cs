@@ -56,7 +56,8 @@ namespace Plainion.Scripts.TestRunner
             {
                 Contract.Requires(File.Exists(NUnitConsole), "Runner executable not found: {0}", NUnitConsole);
 
-                var info = new ProcessStartInfo(NUnitConsole, nunitProject);
+                // shadowcopy is an issue if we load files during UT according to assembly location
+                var info = new ProcessStartInfo(NUnitConsole, "/noshadow "+ nunitProject);
                 info.UseShellExecute = false;
 
                 var process = Process.Start(info);
