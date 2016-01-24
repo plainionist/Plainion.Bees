@@ -73,7 +73,8 @@ namespace Plainion.GatedCheckIn.Services
 
             var process = new UiShellCommand(myDefinition.TestRunnerExecutable, progress);
 
-            process.Execute(nunitProject);
+            // shadowcopy is an issue if we load files during UT according to assembly location
+            process.Execute( "/noshadow " + nunitProject );
 
             return process.ExitCode == 0;
         }
