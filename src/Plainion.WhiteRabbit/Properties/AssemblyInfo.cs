@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Security;
 
 [assembly: AssemblyTitle( "Plainion.WhiteRabbit" )]
 [assembly: CLSCompliant( true )]
@@ -17,3 +16,4 @@ using System.Security;
 // The following GUID is for the ID of the typelib if this project is exposed to COM
 [assembly: Guid( "eddc2f4b-6d7e-4436-b792-cbaf0926204a" )]
 
+[assembly: AssemblyVersion("1.11.0.0")]
