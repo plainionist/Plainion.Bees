@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyDescription( "Plainion.Bees" )]
 [assembly: AssemblyCopyright( "Copyright © 2016" )]
 [assembly: AssemblyProduct( "Plainion.Bees" )]
-[assembly: AssemblyVersion( "1.1.0.0" )]
+[assembly: AssemblyVersion( "1.2.0.0" )]
 
 [assembly: AssemblyTitle("Plainion.IronDoc")]
 [assembly: ComVisible( false )]

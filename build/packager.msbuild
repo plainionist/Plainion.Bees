@@ -40,6 +40,10 @@
         <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.exe.config"/>
         <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.pdb"/>
 
+        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.FSharp.dll"/>
+        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.FSharp.Xml"/>
+        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.FSharp.pdb"/>
+
         <NugetBuild Include="$(PackageRoot)\Plainion.IronDoc.targets"/>
     </ItemGroup>
 
