@@ -14,4 +14,3 @@ using System.Windows;
     // app, or any theme specific resource dictionaries)
 )]
 
-[assembly: AssemblyVersion("1.11.0.0")]

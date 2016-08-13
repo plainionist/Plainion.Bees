@@ -6,12 +6,12 @@ module AssemblyInfo =
     open System.Reflection
     open System.Runtime.InteropServices
 
-    [<assembly: AssemblyDescription( "Plainion.Anvil" )>]
+    [<assembly: AssemblyDescription( "Plainion.Bees" )>]
     [<assembly: AssemblyCopyright( "Copyright © 2016" )>]
-    [<assembly: AssemblyProduct( "Plainion.Anvil" )>]
+    [<assembly: AssemblyProduct( "Plainion.Bees" )>]
 
-    [<assembly: AssemblyTitle("Plainion.Anvil")>]
-    [<assembly: AssemblyVersion( "1.1.0.0" )>]
+    [<assembly: AssemblyTitle("Plainion.IronDoc.FSharp")>]
+    [<assembly: AssemblyVersion( "1.12.0.0" )>]
     [<assembly: ComVisible( false )>]
 
     do()
