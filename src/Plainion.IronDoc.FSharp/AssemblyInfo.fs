@@ -11,7 +11,7 @@ module AssemblyInfo =
     [<assembly: AssemblyProduct( "Plainion.Bees" )>]
 
     [<assembly: AssemblyTitle("Plainion.IronDoc.FSharp")>]
-    [<assembly: AssemblyVersion( "1.12.0.0" )>]
+    [<assembly: AssemblyVersion( "1.1.0.0" )>]
     [<assembly: ComVisible( false )>]
 
     do()

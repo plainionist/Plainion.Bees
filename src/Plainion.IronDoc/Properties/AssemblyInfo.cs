@@ -2,7 +2,12 @@
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Plainion.Anvil")]
+[assembly: AssemblyDescription( "Plainion.Bees" )]
+[assembly: AssemblyCopyright( "Copyright © 2016" )]
+[assembly: AssemblyProduct( "Plainion.Bees" )]
+[assembly: AssemblyVersion( "1.1.0.0" )]
+
+[assembly: AssemblyTitle("Plainion.IronDoc")]
 [assembly: ComVisible( false )]
 [assembly: Guid("6ADE5118-04E8-459A-9470-14C6B748E22C")]
 

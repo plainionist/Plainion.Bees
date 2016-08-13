@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "@Solution Items", "@Solutio
 		build\GlobalAssemblyInfo.cs = build\GlobalAssemblyInfo.cs
 		build\Globals.Shared.msbuild = build\Globals.Shared.msbuild
 		build\packager.msbuild = build\packager.msbuild
+		build\Plainion.IronDoc.nuspec = build\Plainion.IronDoc.nuspec
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Plainion.WpfBrushes", "src\Plainion.WpfBrushes\Plainion.WpfBrushes.csproj", "{22065133-3553-481C-AEC7-F823167E35B3}"
