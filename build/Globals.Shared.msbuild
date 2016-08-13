@@ -11,7 +11,7 @@
     <AssemblyOriginatorKeyFile>..\..\build\Plainion.Bees.snk</AssemblyOriginatorKeyFile>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591,618</NoWarn>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
