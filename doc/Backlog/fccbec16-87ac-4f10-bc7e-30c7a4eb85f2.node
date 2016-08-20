@@ -1,5 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Node Id="fccbec16-87ac-4f10-bc7e-30c7a4eb85f2" Created="635974271003860825" LastModified="635974271222823349">
-  <Caption><![CDATA[split files]]></Caption>
-  <Content><![CDATA[should we split the one MD file into one per type and then build to "doc" folder]]></Content>
-</Node>

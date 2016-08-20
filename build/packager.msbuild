@@ -35,18 +35,6 @@
         <Redist Include="$(ExternRoot)\license.*"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.exe"/>
-        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.exe.config"/>
-        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.pdb"/>
-
-        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.FSharp.dll"/>
-        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.FSharp.Xml"/>
-        <NugetLib Include="$(PackageRoot)\Plainion.IronDoc.FSharp.pdb"/>
-
-        <NugetBuild Include="$(PackageRoot)\Plainion.IronDoc.targets"/>
-    </ItemGroup>
-
     <Target Name="Clean">
         <RemoveDir Directories="$(PackageRoot)"/>
         <MakeDir Directories="$(PackageRoot)"/>
@@ -74,22 +62,7 @@
     <Target Name="All" DependsOnTargets="Clean;Build">
         <Copy SourceFiles="@(Redist)" DestinationFolder="$(PackageRoot)"/>
 
-        <MSBuild Projects="$(MSBuildProjectFullPath)" Properties="Package=IronDoc" Targets="_CreatePackage" />
-
-        <Delete Files="@(NugetLib)"/>
-        <Delete Files="@(NugetBuild)"/>
         <Delete Files="@(TestFile)"/>
         <RemoveDir Directories="@(TestFolder)"/>
-    </Target>
-
-    <Target Name="_CreatePackage">
-        <MakeDir Directories="$(NugetPackageRoot)\$(Package)\lib\NET45"/>
-
-        <Copy SourceFiles="$(BuildRoot)\Plainion.$(Package).nuspec" DestinationFolder="$(NugetPackageRoot)\$(Package)"/>
-
-        <Copy SourceFiles="@(NugetLib)" DestinationFolder="$(NugetPackageRoot)\$(Package)\build"/>
-        <Copy SourceFiles="@(NugetBuild)" DestinationFolder="$(NugetPackageRoot)\$(Package)\build"/>
-
-        <Exec Command="$(NuGet) pack $(NugetPackageRoot)\$(Package)\Plainion.$(Package).nuspec -OutputDirectory $(NugetPackageRoot)\$(Package)"/>
     </Target>
 </Project>
