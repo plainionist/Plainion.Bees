@@ -8,9 +8,9 @@ namespace Plainion.GatedCheckIn.ViewModels
         private StatusEntry myEntry;
         private bool myIsChecked;
 
-        public RepositoryEntry(StatusEntry entry)
+        public RepositoryEntry( StatusEntry entry )
         {
-            Contract.RequiresNotNull(entry, "entry");
+            Contract.RequiresNotNull( entry, "entry" );
 
             myEntry = entry;
         }
@@ -22,7 +22,7 @@ namespace Plainion.GatedCheckIn.ViewModels
         public bool IsChecked
         {
             get { return myIsChecked; }
-            set { SetProperty(ref myIsChecked, value); }
+            set { SetProperty( ref myIsChecked, value ); }
         }
     }
 }

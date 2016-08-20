@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
@@ -6,7 +6,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Plainion.Collections;
@@ -22,32 +24,67 @@ namespace Plainion.GatedCheckIn.ViewModels
         private GitService myGitService;
         private RepositoryEntry mySelectedFile;
         private string myCheckInComment;
+        private FileSystemWatcher myPendingChangesWatcher;
 
         [ImportingConstructor]
-        public CheckInViewModel(BuildService buildService, GitService gitService)
+        public CheckInViewModel( BuildService buildService, GitService gitService )
         {
             myBuildService = buildService;
             myGitService = gitService;
 
             Files = new ObservableCollection<RepositoryEntry>();
 
-            RefreshCommand = new DelegateCommand(OnRefresh);
-            DiffToPreviousCommand = new DelegateCommand(OnDiffToPrevious, CanDiffToPrevious);
+            RefreshCommand = new DelegateCommand( OnRefresh );
+            DiffToPreviousCommand = new DelegateCommand( OnDiffToPrevious, CanDiffToPrevious );
 
             buildService.BuildDefinitionChanged += OnBuildDefinitionChanged;
             OnBuildDefinitionChanged();
         }
 
+        private void StartPendingChangesWatcher()
+        {
+            Contract.Invariant( myPendingChangesWatcher == null, "Pending changes watcher still running" );
+
+            myPendingChangesWatcher = new FileSystemWatcher();
+            myPendingChangesWatcher.Path = myBuildService.BuildDefinition.RepositoryRoot;
+            myPendingChangesWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.DirectoryName;
+            myPendingChangesWatcher.Filter = "*.*";
+            myPendingChangesWatcher.IncludeSubdirectories = true;
+            myPendingChangesWatcher.Created += OnChanged;
+            myPendingChangesWatcher.Changed += OnChanged;
+            myPendingChangesWatcher.Deleted += OnChanged;
+            myPendingChangesWatcher.Renamed += OnChanged;
+
+            myPendingChangesWatcher.EnableRaisingEvents = true;
+        }
+
+        private void OnChanged( object source, FileSystemEventArgs e )
+        {
+            Debug.WriteLine( "Workspace change detected" );
+
+            Application.Current.Dispatcher.BeginInvoke( new Action( () => UpdateFiles() ) );
+        }
+
+        private void StopPendingChangesWatcher()
+        {
+            if( myPendingChangesWatcher != null )
+            {
+                myPendingChangesWatcher.Dispose();
+            }
+        }
+
         private void OnBuildDefinitionChanged()
         {
-            if (BuildDefinition != null)
+            if( BuildDefinition != null )
             {
                 BuildDefinition.PropertyChanged -= BuildDefinition_PropertyChanged;
             }
 
+            StopPendingChangesWatcher();
+
             BuildDefinition = myBuildService.BuildDefinition;
 
-            if (BuildDefinition != null)
+            if( BuildDefinition != null )
             {
                 BuildDefinition.PropertyChanged += BuildDefinition_PropertyChanged;
                 OnRepositoryRootChanged();
@@ -56,31 +93,27 @@ namespace Plainion.GatedCheckIn.ViewModels
             DiffToPreviousCommand.RaiseCanExecuteChanged();
         }
 
-        private void BuildDefinition_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void BuildDefinition_PropertyChanged( object sender, PropertyChangedEventArgs e )
         {
-            if (e.PropertyName == PropertySupport.ExtractPropertyName(() => BuildDefinition.RepositoryRoot))
+            if( e.PropertyName == PropertySupport.ExtractPropertyName( () => BuildDefinition.RepositoryRoot ) )
             {
                 OnRepositoryRootChanged();
             }
-            else if (e.PropertyName == PropertySupport.ExtractPropertyName(() => BuildDefinition.DiffTool))
+            else if( e.PropertyName == PropertySupport.ExtractPropertyName( () => BuildDefinition.DiffTool ) )
             {
                 DiffToPreviousCommand.RaiseCanExecuteChanged();
             }
 
-            OnPropertyChanged(e.PropertyName);
+            OnPropertyChanged( e.PropertyName );
         }
 
         private void OnRepositoryRootChanged()
         {
-            if (!string.IsNullOrEmpty(BuildDefinition.RepositoryRoot) && Directory.Exists(BuildDefinition.RepositoryRoot))
-            {
-                var solutionPath = Directory.GetFiles(BuildDefinition.RepositoryRoot, "*.sln", SearchOption.TopDirectoryOnly)
-                    .FirstOrDefault();
-                if (solutionPath != null)
-                {
-                    BuildDefinition.Solution = Path.GetFileName(solutionPath);
-                }
+            StopPendingChangesWatcher();
 
+            if( !string.IsNullOrEmpty( BuildDefinition.RepositoryRoot ) && Directory.Exists( BuildDefinition.RepositoryRoot ) )
+            {
+                StartPendingChangesWatcher();
                 UpdateFiles();
             }
         }
@@ -89,15 +122,21 @@ namespace Plainion.GatedCheckIn.ViewModels
 
         public async void UpdateFiles()
         {
+            Debug.WriteLine( "Updating pending changes" );
+
             Files.Clear();
 
-            var entries = await myGitService.GetChangedAndNewFilesAsync(BuildDefinition.RepositoryRoot);
+            var entries = await myGitService.GetChangedAndNewFilesAsync( BuildDefinition.RepositoryRoot );
+
+            // workaround: FileSystemWatcher may trigger this method here several times before first task returned
+            // this has to be fixed to lower load on the system
+            Files.Clear();
 
             var files = entries
-                .Select(e => new RepositoryEntry(e) { IsChecked = true })
-                .OrderBy(e => e.File);
+                .Select( e => new RepositoryEntry( e ) { IsChecked = true } )
+                .OrderBy( e => e.File );
 
-            Files.AddRange(files);
+            Files.AddRange( files );
         }
 
         public ObservableCollection<RepositoryEntry> Files { get; private set; }
@@ -105,13 +144,13 @@ namespace Plainion.GatedCheckIn.ViewModels
         public RepositoryEntry SelectedFile
         {
             get { return mySelectedFile; }
-            set { SetProperty(ref mySelectedFile, value); }
+            set { SetProperty( ref mySelectedFile, value ); }
         }
 
         public string CheckInComment
         {
             get { return myCheckInComment; }
-            set { SetProperty(ref myCheckInComment, value); }
+            set { SetProperty( ref myCheckInComment, value ); }
         }
 
         public ICommand RefreshCommand { get; private set; }
@@ -125,25 +164,25 @@ namespace Plainion.GatedCheckIn.ViewModels
 
         private bool CanDiffToPrevious()
         {
-            return BuildDefinition != null && !string.IsNullOrEmpty(BuildDefinition.DiffTool);
+            return BuildDefinition != null && !string.IsNullOrEmpty( BuildDefinition.DiffTool );
         }
 
         public void OnDiffToPrevious()
         {
-            var headFile = myGitService.GetHeadOf(BuildDefinition.RepositoryRoot, SelectedFile.File);
+            var headFile = myGitService.GetHeadOf( BuildDefinition.RepositoryRoot, SelectedFile.File );
 
-            var parts = Regex.Matches(BuildDefinition.DiffTool, @"[\""].+?[\""]|[^ ]+")
+            var parts = Regex.Matches( BuildDefinition.DiffTool, @"[\""].+?[\""]|[^ ]+" )
                             .Cast<Match>()
-                            .Select(m => m.Value)
+                            .Select( m => m.Value )
                             .ToList();
 
-            var executable = parts.First().Trim('"');
-            var args = string.Join(" ", parts.Skip(1))
-                .Replace("%base", headFile)
-                .Replace("%mine", Path.Combine(BuildDefinition.RepositoryRoot, SelectedFile.File));
+            var executable = parts.First().Trim( '"' );
+            var args = string.Join( " ", parts.Skip( 1 ) )
+                .Replace( "%base", headFile )
+                .Replace( "%mine", Path.Combine( BuildDefinition.RepositoryRoot, SelectedFile.File ) );
 
             // "C:\Program Files\TortoiseHg\kdiff3.exe" %base %mine
-            Process.Start(executable, args );
+            Process.Start( executable, args );
         }
     }
 }

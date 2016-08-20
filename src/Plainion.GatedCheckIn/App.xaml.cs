@@ -8,30 +8,30 @@ namespace Plainion.GatedCheckIn
     {
         private CompositionContainer myContainer;
 
-        protected override void OnStartup(StartupEventArgs e)
+        protected override void OnStartup( StartupEventArgs e )
         {
-            base.OnStartup(e);
+            base.OnStartup( e );
 
             Application.Current.Exit += OnShutdown;
             Application.Current.DispatcherUnhandledException += OnDispatcherUnhandledException;
 
-            var catalog = new AssemblyCatalog(GetType().Assembly);
-            myContainer = new CompositionContainer(catalog, CompositionOptions.DisableSilentRejection);
+            var catalog = new AssemblyCatalog( GetType().Assembly );
+            myContainer = new CompositionContainer( catalog, CompositionOptions.DisableSilentRejection );
 
-            myContainer.Compose(new CompositionBatch());
+            myContainer.Compose( new CompositionBatch() );
 
             Application.Current.MainWindow = myContainer.GetExportedValue<Shell>();
             Application.Current.MainWindow.Show();
         }
 
-        private void OnDispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
+        private void OnDispatcherUnhandledException( object sender, DispatcherUnhandledExceptionEventArgs e )
         {
-            MessageBox.Show(e.Exception.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show( e.Exception.ToString(), "Unhandled exception", MessageBoxButton.OK, MessageBoxImage.Error );
 
             e.Handled = true;
         }
 
-        private void OnShutdown(object sender, ExitEventArgs e)
+        private void OnShutdown( object sender, ExitEventArgs e )
         {
             myContainer.Dispose();
         }

@@ -30,7 +30,7 @@
     <OutputPath>..\..\bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup> 
     <Compile Include="..\..\build\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
