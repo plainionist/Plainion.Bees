@@ -13,7 +13,7 @@ namespace Plainion.GatedCheckIn.Services
         void Push( string workspaceRoot, string name, string password );
         
         void Revert( string workspaceRoot, string file );
-        
-        string GetHeadOf( string workspaceRoot, string relativePath );
+
+        void DiffToPrevious( string workspaceRoot, string file, string diffTool );
     }
 }

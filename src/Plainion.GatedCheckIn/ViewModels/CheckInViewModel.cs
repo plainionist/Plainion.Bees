@@ -151,20 +151,7 @@ namespace Plainion.GatedCheckIn.ViewModels
 
         public void OnDiffToPrevious()
         {
-            var headFile = myGitService.GetHeadOf( BuildDefinition.RepositoryRoot, SelectedFile.File );
-
-            var parts = Regex.Matches( BuildDefinition.DiffTool, @"[\""].+?[\""]|[^ ]+" )
-                            .Cast<Match>()
-                            .Select( m => m.Value )
-                            .ToList();
-
-            var executable = parts.First().Trim( '"' );
-            var args = string.Join( " ", parts.Skip( 1 ) )
-                .Replace( "%base", headFile )
-                .Replace( "%mine", Path.Combine( BuildDefinition.RepositoryRoot, SelectedFile.File ) );
-
-            // "C:\Program Files\TortoiseHg\kdiff3.exe" %base %mine
-            Process.Start( executable, args );
+            myGitService.DiffToPrevious( BuildDefinition.RepositoryRoot, SelectedFile.File, BuildDefinition.DiffTool );
         }
     }
 }
