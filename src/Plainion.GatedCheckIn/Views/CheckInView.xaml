@@ -15,6 +15,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Grid Grid.Row="0">
@@ -69,6 +70,19 @@
 
             <TextBlock Grid.Row="1" Grid.Column="0" Margin="0,3,0,0" Text="Comment" VerticalAlignment="Top"/>
             <TextBox Grid.Row="1" Grid.Column="1" Margin="5,3,0,0" Text="{Binding CheckInComment}" AcceptsReturn="True" Height="50"/>
+        </Grid>
+        
+        <Grid Grid.Row="5" Margin="0,3,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <CheckBox Grid.Column="0" Content="Push" IsChecked="{Binding BuildDefinition.Push}" VerticalAlignment="Center"/>
+
+            <TextBlock Grid.Column="1" Text="Password" VerticalAlignment="Center" Margin="25,0,0,0"/>
+            <PasswordBox  Grid.Column="2" Width="200" PasswordChanged="PasswordBox_PasswordChanged" Margin="5,0,0,0"/>
         </Grid>
     </Grid>
 </UserControl>

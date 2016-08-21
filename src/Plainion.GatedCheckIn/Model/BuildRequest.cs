@@ -7,6 +7,9 @@ namespace Plainion.GatedCheckIn.Model
     class BuildRequest
     {
         public string CheckInComment { get; set; }
+
         public IReadOnlyCollection<string> Files { get; set; }
+
+        public string Password { get; set; }
     }
 }

@@ -27,7 +27,8 @@ namespace Plainion.GatedCheckIn.Services
 
             return Task<bool>.Run( () => BuildSolution( progress )
                                         && RunTests( progress )
-                                        && CheckIn( progress ) );
+                                        && CheckIn( progress )
+                                        && Push( progress ) );
         }
 
         private bool BuildSolution( IProgress<string> progress )
@@ -105,6 +106,34 @@ namespace Plainion.GatedCheckIn.Services
             catch( Exception ex )
             {
                 progress.Report( "CHECKIN FAILED: " + ex.Message );
+                return false;
+            }
+        }
+
+        private bool Push( IProgress<string> progress )
+        {
+            if( !myDefinition.Push )
+            {
+                return true;
+            }
+
+            if( string.IsNullOrEmpty( myRequest.Password ) )
+            {
+                progress.Report( "!! NO PASSWORD PROVIDED !!" );
+                return false;
+            }
+
+            try
+            {
+                myGitService.Push( myDefinition.RepositoryRoot, myDefinition.UserName, myRequest.Password );
+
+                progress.Report( "--- PUSH SUCCEEDED ---" );
+
+                return true;
+            }
+            catch( Exception ex )
+            {
+                progress.Report( "PUSH FAILED: " + ex.Message );
                 return false;
             }
         }

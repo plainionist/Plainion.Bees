@@ -14,31 +14,42 @@ namespace Plainion.GatedCheckIn.Services
     [Export]
     class GitService
     {
-        public Task<IEnumerable<StatusEntry>> GetChangedAndNewFilesAsync(string repositoryRoot)
+        public Task<IEnumerable<StatusEntry>> GetChangedAndNewFilesAsync( string repositoryRoot )
         {
-            return Task<IEnumerable<StatusEntry>>.Run(() =>
+            return Task<IEnumerable<StatusEntry>>.Run( () =>
             {
-                using (var repo = new Repository(repositoryRoot))
+                using( var repo = new Repository( repositoryRoot ) )
                 {
-                    return (IEnumerable<StatusEntry>)repo.RetrieveStatus()
-                        .Where(e => (e.State & FileStatus.Ignored) == 0)
+                    return ( IEnumerable<StatusEntry> )repo.RetrieveStatus()
+                        .Where( e => ( e.State & FileStatus.Ignored ) == 0 )
                         .ToList();
                 }
-            });
+            } );
         }
 
-        public void Commit(string repositoryRoot, IEnumerable<string> files, string comment, string name, string email)
+        public void Commit( string repositoryRoot, IEnumerable<string> files, string comment, string name, string email )
         {
-            using (var repo = new Repository(repositoryRoot))
+            using( var repo = new Repository( repositoryRoot ) )
             {
-                foreach (var file in files)
+                foreach( var file in files )
                 {
-                    repo.Stage(file);
+                    repo.Stage( file );
                 }
 
-                var author = new Signature(name, email, DateTime.Now);
+                var author = new Signature( name, email, DateTime.Now );
 
-                repo.Commit(comment, author, author);
+                repo.Commit( comment, author, author );
+            }
+        }
+
+        public void Push( string repositoryRoot, string name, string password )
+        {
+            using( var repo = new Repository( repositoryRoot ) )
+            {
+                var options = new PushOptions();
+                options.CredentialsProvider = ( url, usernameFromUrl, types ) => new UsernamePasswordCredentials { Username = name, Password = password };
+
+                repo.Network.Push( repo.Network.Remotes[ "origin" ], @"refs/heads/master", options );
             }
         }
 
@@ -46,30 +57,30 @@ namespace Plainion.GatedCheckIn.Services
         /// Returns path to a temp file which contains the HEAD version of the given file.
         /// The caller has to take care to delete the file.
         /// </summary>
-        public string GetHeadOf(string repositoryRoot, string relativePath)
+        public string GetHeadOf( string repositoryRoot, string relativePath )
         {
-            using (var repo = new Repository(repositoryRoot))
+            using( var repo = new Repository( repositoryRoot ) )
             {
-                var log = repo.Commits.QueryBy(relativePath);
-                if (log == null || !log.Any())
+                var log = repo.Commits.QueryBy( relativePath );
+                if( log == null || !log.Any() )
                 {
                     // file not yet tracked -> ignore
                     return null;
                 }
 
                 var head = log.First();
-                var treeEntry = head.Commit.Tree[relativePath];
-                var blob = (Blob)treeEntry.Target;
+                var treeEntry = head.Commit.Tree[ relativePath ];
+                var blob = ( Blob )treeEntry.Target;
 
-                var file = Path.Combine(Path.GetTempPath(), Path.GetFileName(relativePath) + ".head");
+                var file = Path.Combine( Path.GetTempPath(), Path.GetFileName( relativePath ) + ".head" );
 
-                using (var reader = new StreamReader(blob.GetContentStream()))
+                using( var reader = new StreamReader( blob.GetContentStream() ) )
                 {
-                    using (var writer = new StreamWriter(file))
+                    using( var writer = new StreamWriter( file ) )
                     {
-                        while (!reader.EndOfStream)
+                        while( !reader.EndOfStream )
                         {
-                            writer.WriteLine(reader.ReadLine());
+                            writer.WriteLine( reader.ReadLine() );
                         }
                     }
                 }

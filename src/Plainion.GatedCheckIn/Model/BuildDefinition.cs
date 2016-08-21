@@ -12,6 +12,7 @@ namespace Plainion.GatedCheckIn.Model
         private string mySolution;
         private bool myRunTests;
         private bool myCheckIn;
+        private bool myPush;
         private string myConfiguration;
         private string myPlatform;
         private string myTestRunnerExecutable;
@@ -44,7 +45,14 @@ namespace Plainion.GatedCheckIn.Model
         public bool CheckIn
         {
             get { return myCheckIn; }
-            set { SetProperty(ref myCheckIn, value); }
+            set { SetProperty( ref myCheckIn, value ); }
+        }
+
+        [DataMember]
+        public bool Push
+        {
+            get { return myPush; }
+            set { SetProperty( ref myPush, value ); }
         }
 
         [DataMember]

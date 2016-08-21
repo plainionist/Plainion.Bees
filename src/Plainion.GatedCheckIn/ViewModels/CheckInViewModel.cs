@@ -5,6 +5,7 @@ using System.ComponentModel.Composition;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Text.RegularExpressions;
 using System.Windows.Input;
 using LibGit2Sharp;
@@ -114,6 +115,8 @@ namespace Plainion.GatedCheckIn.ViewModels
             get { return myCheckInComment; }
             set { SetProperty( ref myCheckInComment, value ); }
         }
+
+        public SecureString SecurePassword { get; set; }
 
         public ICommand RefreshCommand { get; private set; }
 
