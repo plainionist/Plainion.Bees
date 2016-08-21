@@ -76,7 +76,7 @@ namespace Plainion.GatedCheckIn.Services
                 Platform = "Any CPU",
                 RunTests = true,
                 TestAssemblyPattern = "*Tests.dll",
-                TestRunnerExecutable = @"\Extern\NUnit\bin\nunit-console.exe"
+                TestRunnerExecutable = @"\bin\NUnit\bin\nunit-console.exe"
             };
         }
 
