@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.Composition;
@@ -6,9 +6,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
+using LibGit2Sharp;
 using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Plainion.Collections;
@@ -24,7 +23,7 @@ namespace Plainion.GatedCheckIn.ViewModels
         private GitService myGitService;
         private RepositoryEntry mySelectedFile;
         private string myCheckInComment;
-        private FileSystemWatcher myPendingChangesWatcher;
+        private PendingChangesObserver myPendingChangesObserver;
 
         [ImportingConstructor]
         public CheckInViewModel( BuildService buildService, GitService gitService )
@@ -34,43 +33,26 @@ namespace Plainion.GatedCheckIn.ViewModels
 
             Files = new ObservableCollection<RepositoryEntry>();
 
-            RefreshCommand = new DelegateCommand( OnRefresh );
+            RefreshCommand = new DelegateCommand( RefreshPendingChanges );
             DiffToPreviousCommand = new DelegateCommand( OnDiffToPrevious, CanDiffToPrevious );
+
+            myPendingChangesObserver = new PendingChangesObserver( myGitService, OnPendingChangesChanged );
 
             buildService.BuildDefinitionChanged += OnBuildDefinitionChanged;
             OnBuildDefinitionChanged();
         }
 
-        private void StartPendingChangesWatcher()
+        private void OnPendingChangesChanged( IEnumerable<StatusEntry> pendingChanges )
         {
-            Contract.Invariant( myPendingChangesWatcher == null, "Pending changes watcher still running" );
+            Debug.WriteLine( "Updating pending changes" );
 
-            myPendingChangesWatcher = new FileSystemWatcher();
-            myPendingChangesWatcher.Path = myBuildService.BuildDefinition.RepositoryRoot;
-            myPendingChangesWatcher.NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size | NotifyFilters.DirectoryName;
-            myPendingChangesWatcher.Filter = "*.*";
-            myPendingChangesWatcher.IncludeSubdirectories = true;
-            myPendingChangesWatcher.Created += OnChanged;
-            myPendingChangesWatcher.Changed += OnChanged;
-            myPendingChangesWatcher.Deleted += OnChanged;
-            myPendingChangesWatcher.Renamed += OnChanged;
+            Files.Clear();
 
-            myPendingChangesWatcher.EnableRaisingEvents = true;
-        }
+            var files = pendingChanges
+                .Select( e => new RepositoryEntry( e ) { IsChecked = true } )
+                .OrderBy( e => e.File );
 
-        private void OnChanged( object source, FileSystemEventArgs e )
-        {
-            Debug.WriteLine( "Workspace change detected" );
-
-            Application.Current.Dispatcher.BeginInvoke( new Action( () => UpdateFiles() ) );
-        }
-
-        private void StopPendingChangesWatcher()
-        {
-            if( myPendingChangesWatcher != null )
-            {
-                myPendingChangesWatcher.Dispose();
-            }
+            Files.AddRange( files );
         }
 
         private void OnBuildDefinitionChanged()
@@ -80,7 +62,7 @@ namespace Plainion.GatedCheckIn.ViewModels
                 BuildDefinition.PropertyChanged -= BuildDefinition_PropertyChanged;
             }
 
-            StopPendingChangesWatcher();
+            myPendingChangesObserver.Stop();
 
             BuildDefinition = myBuildService.BuildDefinition;
 
@@ -109,35 +91,15 @@ namespace Plainion.GatedCheckIn.ViewModels
 
         private void OnRepositoryRootChanged()
         {
-            StopPendingChangesWatcher();
+            myPendingChangesObserver.Stop();
 
             if( !string.IsNullOrEmpty( BuildDefinition.RepositoryRoot ) && Directory.Exists( BuildDefinition.RepositoryRoot ) )
             {
-                StartPendingChangesWatcher();
-                UpdateFiles();
+                myPendingChangesObserver.Start( myBuildService.BuildDefinition.RepositoryRoot );
             }
         }
 
         public BuildDefinition BuildDefinition { get; private set; }
-
-        public async void UpdateFiles()
-        {
-            Debug.WriteLine( "Updating pending changes" );
-
-            Files.Clear();
-
-            var entries = await myGitService.GetChangedAndNewFilesAsync( BuildDefinition.RepositoryRoot );
-
-            // workaround: FileSystemWatcher may trigger this method here several times before first task returned
-            // this has to be fixed to lower load on the system
-            Files.Clear();
-
-            var files = entries
-                .Select( e => new RepositoryEntry( e ) { IsChecked = true } )
-                .OrderBy( e => e.File );
-
-            Files.AddRange( files );
-        }
 
         public ObservableCollection<RepositoryEntry> Files { get; private set; }
 
@@ -155,9 +117,16 @@ namespace Plainion.GatedCheckIn.ViewModels
 
         public ICommand RefreshCommand { get; private set; }
 
-        public void OnRefresh()
+        public async void RefreshPendingChanges()
         {
-            UpdateFiles();
+            if( string.IsNullOrEmpty( BuildDefinition.RepositoryRoot ) || !Directory.Exists( BuildDefinition.RepositoryRoot ) )
+            {
+                return;
+            }
+
+            var pendingChanges = await myGitService.GetChangedAndNewFilesAsync( BuildDefinition.RepositoryRoot );
+
+            OnPendingChangesChanged( pendingChanges );
         }
 
         public DelegateCommand DiffToPreviousCommand { get; private set; }

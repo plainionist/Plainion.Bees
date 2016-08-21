@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.Composition;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Practices.Prism.Commands;
@@ -20,20 +19,20 @@ namespace Plainion.GatedCheckIn
         private bool myIsBusy;
 
         [ImportingConstructor]
-        public ShellViewModel(BuildService buildService, GitService gitService)
+        public ShellViewModel( BuildService buildService, GitService gitService )
         {
             myBuildService = buildService;
 
-            GoCommand = new DelegateCommand(OnGo, CanGo);
+            GoCommand = new DelegateCommand( OnGo, CanGo );
 
             var args = Environment.GetCommandLineArgs();
-            if (args.Length > 1)
+            if( args.Length > 1 )
             {
-                myBuildService.InitializeBuildDefinition(args[1]);
+                myBuildService.InitializeBuildDefinition( args[ 1 ] );
             }
             else
             {
-                myBuildService.InitializeBuildDefinition(null);
+                myBuildService.InitializeBuildDefinition( null );
             }
         }
 
@@ -54,7 +53,7 @@ namespace Plainion.GatedCheckIn
         public int SelectedTab
         {
             get { return mySelectedTab; }
-            set { SetProperty(ref mySelectedTab, value); }
+            set { SetProperty( ref mySelectedTab, value ); }
         }
 
         public DelegateCommand GoCommand { get; private set; }
@@ -70,28 +69,28 @@ namespace Plainion.GatedCheckIn
 
             SelectedTab = 2;
 
-            var progress = new Progress<string>(p => BuildLogViewModel.Log.Add(p));
+            var progress = new Progress<string>( p => BuildLogViewModel.Log.Add( p ) );
 
             var request = new BuildRequest
             {
                 CheckInComment = CheckInViewModel.CheckInComment,
                 Files = CheckInViewModel.Files
-                    .Where(e => e.IsChecked)
-                    .Select(e => e.File)
+                    .Where( e => e.IsChecked )
+                    .Select( e => e.File )
                     .ToList(),
             };
 
-            myBuildService.ExecuteAsync(request, progress)
+            myBuildService.ExecuteAsync( request, progress )
                 .RethrowExceptionsInUIThread()
-                .ContinueWith(t =>
+                .ContinueWith( t =>
                     {
                         BuildLogViewModel.Succeeded = t.Result;
 
                         myIsBusy = false;
                         GoCommand.RaiseCanExecuteChanged();
 
-                        CheckInViewModel.UpdateFiles();
-                    }, TaskScheduler.FromCurrentSynchronizationContext());
+                        CheckInViewModel.RefreshPendingChanges();
+                    }, TaskScheduler.FromCurrentSynchronizationContext() );
         }
     }
 }

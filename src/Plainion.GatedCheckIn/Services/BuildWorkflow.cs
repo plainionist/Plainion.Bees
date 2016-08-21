@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
-using System.Threading;
 using System.Threading.Tasks;
 using Plainion.GatedCheckIn.Model;
-using Plainion.IO;
 using Plainion.Scripts.TestRunner;
 
 namespace Plainion.GatedCheckIn.Services
@@ -15,51 +12,51 @@ namespace Plainion.GatedCheckIn.Services
         private BuildDefinition myDefinition;
         private BuildRequest myRequest;
 
-        public BuildWorkflow(GitService gitService, BuildDefinition definition, BuildRequest request)
+        public BuildWorkflow( GitService gitService, BuildDefinition definition, BuildRequest request )
         {
             myGitService = gitService;
             myDefinition = definition;
             myRequest = request;
         }
 
-        internal Task<bool> ExecuteAsync(IProgress<string> progress)
+        internal Task<bool> ExecuteAsync( IProgress<string> progress )
         {
             // clone thread save copy of the relevant paramters;
-            myDefinition = Objects.Clone(myDefinition);
-            myRequest = Objects.Clone(myRequest);
+            myDefinition = Objects.Clone( myDefinition );
+            myRequest = Objects.Clone( myRequest );
 
-            return Task<bool>.Run(() => BuildSolution(progress)
-                                        && RunTests(progress)
-                                        && CheckIn(progress));
+            return Task<bool>.Run( () => BuildSolution( progress )
+                                        && RunTests( progress )
+                                        && CheckIn( progress ) );
         }
 
-        private bool BuildSolution(IProgress<string> progress)
+        private bool BuildSolution( IProgress<string> progress )
         {
-            var process = new UiShellCommand(@"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe", progress);
+            var process = new UiShellCommand( @"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe", progress );
 
             process.Execute(
                 "/m",
                 "/p:Configuration=" + myDefinition.Configuration,
                 "/p:Platform=\"" + myDefinition.Platform + "\"",
                 "/p:OutputPath=\"" + GetWorkingDirectory() + "\"",
-                Path.Combine(myDefinition.RepositoryRoot, myDefinition.Solution));
+                Path.Combine( myDefinition.RepositoryRoot, myDefinition.Solution ) );
 
             return process.ExitCode == 0;
         }
 
         private string GetWorkingDirectory()
         {
-            return Path.Combine(myDefinition.RepositoryRoot, "bin", "gc");
+            return Path.Combine( myDefinition.RepositoryRoot, "bin", "gc" );
         }
 
-        private bool RunTests(IProgress<string> progress)
+        private bool RunTests( IProgress<string> progress )
         {
-            if (!myDefinition.RunTests)
+            if( !myDefinition.RunTests )
             {
                 return true;
             }
 
-            Contract.Requires(File.Exists(myDefinition.TestRunnerExecutable), "Runner executable not found: {0}", myDefinition.TestRunnerExecutable);
+            Contract.Requires( File.Exists( myDefinition.TestRunnerExecutable ), "Runner executable not found: {0}", myDefinition.TestRunnerExecutable );
 
             var runner = new TestRunner
             {
@@ -69,9 +66,14 @@ namespace Plainion.GatedCheckIn.Services
 
             var nunitProject = runner.GenerateProject();
 
-            Contract.Invariant(nunitProject != null, "Failed to generate nunit project");
+            if( nunitProject == null )
+            {
+                progress.Report( ">>> NO TEST ASSEMBLIES FOUND -> test execution skipped" );
 
-            var process = new UiShellCommand(myDefinition.TestRunnerExecutable, progress);
+                return true;
+            }
+
+            var process = new UiShellCommand( myDefinition.TestRunnerExecutable, progress );
 
             // shadowcopy is an issue if we load files during UT according to assembly location
             process.Execute( "/noshadow " + nunitProject );
@@ -79,30 +81,30 @@ namespace Plainion.GatedCheckIn.Services
             return process.ExitCode == 0;
         }
 
-        private bool CheckIn(IProgress<string> progress)
+        private bool CheckIn( IProgress<string> progress )
         {
-            if (!myDefinition.CheckIn)
+            if( !myDefinition.CheckIn )
             {
                 return true;
             }
 
-            if (string.IsNullOrEmpty(myRequest.CheckInComment))
+            if( string.IsNullOrEmpty( myRequest.CheckInComment ) )
             {
-                progress.Report("!! NO CHECKIN COMMENT PROVIDED !!");
+                progress.Report( "!! NO CHECKIN COMMENT PROVIDED !!" );
                 return false;
             }
 
             try
             {
-                myGitService.Commit(myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.UserName, myDefinition.UserEMail);
+                myGitService.Commit( myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.UserName, myDefinition.UserEMail );
 
-                progress.Report("--- CHECKIN SUCCEEDED ---");
+                progress.Report( "--- CHECKIN SUCCEEDED ---" );
 
                 return true;
             }
-            catch (Exception ex)
+            catch( Exception ex )
             {
-                progress.Report("CHECKIN FAILED: " + ex.Message);
+                progress.Report( "CHECKIN FAILED: " + ex.Message );
                 return false;
             }
         }

@@ -69,6 +69,9 @@ namespace Plainion.Scripts.TestRunner
             //File.Delete( nunitProject );
         }
 
+        /// <summary>
+        /// </summary>
+        /// <returns>null if no test assemblies could be found</returns>
         public string GenerateProject()
         {
             var testAssemblies = ResolveTestAssemblies();
