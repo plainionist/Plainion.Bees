@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pn="http://github.com/ronin4net/plainion"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:git="clr-namespace:LibGit2Sharp;assembly=LibGit2Sharp"
+             xmlns:sc="clr-namespace:Plainion.GatedCheckIn.Services.SourceControl"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              mc:Ignorable="d" 
@@ -40,11 +40,11 @@
                                 <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="Foreground" Value="Black" />
                                     <Style.Triggers>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static git:FileStatus.Missing}">
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static sc:ChangeType.Missing}">
                                             <Setter Property="Foreground" Value="Red" />
                                             <Setter Property="ToolTip" Value="Removed"/>
                                         </DataTrigger>
-                                        <DataTrigger Binding="{Binding State}" Value="{x:Static git:FileStatus.Untracked}">
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static sc:ChangeType.Untracked}">
                                             <Setter Property="Foreground" Value="Green" />
                                             <Setter Property="ToolTip" Value="Added"/>
                                         </DataTrigger>

@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
-using LibGit2Sharp;
 using Plainion.GatedCheckIn.Services.SourceControl;
 
 namespace Plainion.GatedCheckIn.Services
@@ -12,13 +11,13 @@ namespace Plainion.GatedCheckIn.Services
     class PendingChangesObserver
     {
         private ISourceControl myGitService;
-        private Action<IEnumerable<StatusEntry>> myOnPendingChangesChanged;
+        private Action<IEnumerable<Change>> myOnPendingChangesChanged;
         private FileSystemWatcher myPendingChangesWatcher;
         private string myWorkspaceRoot;
         private Task myWorkspaceReaderTask;
         private bool myWorkspaceChanged;
 
-        public PendingChangesObserver( ISourceControl gitService, Action<IEnumerable<StatusEntry>> onPendingChangesChanged )
+        public PendingChangesObserver( ISourceControl gitService, Action<IEnumerable<Change>> onPendingChangesChanged )
         {
             myGitService = gitService;
             myOnPendingChangesChanged = onPendingChangesChanged;
@@ -60,7 +59,7 @@ namespace Plainion.GatedCheckIn.Services
 
             myWorkspaceChanged = false;
 
-            myWorkspaceReaderTask = myGitService.GetChangedAndNewFilesAsync( myWorkspaceRoot )
+            myWorkspaceReaderTask = myGitService.GetPendingChangesAsync( myWorkspaceRoot )
                 .ContinueWith( t => 
                     {
                         // intentionally we ignore all exceptions here because if in parallel a checkin or push is running

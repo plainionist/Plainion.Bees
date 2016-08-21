@@ -45,7 +45,7 @@ namespace Plainion.GatedCheckIn.ViewModels
             OnBuildDefinitionChanged();
         }
 
-        private void OnPendingChangesChanged( IEnumerable<StatusEntry> pendingChanges )
+        private void OnPendingChangesChanged( IEnumerable<Change> pendingChanges )
         {
             Debug.WriteLine( "Updating pending changes" );
 
@@ -129,7 +129,7 @@ namespace Plainion.GatedCheckIn.ViewModels
                 return;
             }
 
-            var pendingChanges = await myGitService.GetChangedAndNewFilesAsync( BuildDefinition.RepositoryRoot );
+            var pendingChanges = await myGitService.GetPendingChangesAsync( BuildDefinition.RepositoryRoot );
 
             OnPendingChangesChanged( pendingChanges );
         }

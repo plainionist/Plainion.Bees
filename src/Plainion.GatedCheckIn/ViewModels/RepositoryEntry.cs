@@ -1,23 +1,24 @@
 ﻿using LibGit2Sharp;
 using Microsoft.Practices.Prism.Mvvm;
+using Plainion.GatedCheckIn.Services.SourceControl;
 
 namespace Plainion.GatedCheckIn.ViewModels
 {
     class RepositoryEntry : BindableBase
     {
-        private StatusEntry myEntry;
+        private Change myEntry;
         private bool myIsChecked;
 
-        public RepositoryEntry( StatusEntry entry )
+        public RepositoryEntry( Change entry )
         {
             Contract.RequiresNotNull( entry, "entry" );
 
             myEntry = entry;
         }
 
-        public string File { get { return myEntry.FilePath; } }
+        public string File { get { return myEntry.Path; } }
 
-        public FileStatus State { get { return myEntry.State; } }
+        public ChangeType State { get { return myEntry.ChangeType; } }
 
         public bool IsChecked
         {

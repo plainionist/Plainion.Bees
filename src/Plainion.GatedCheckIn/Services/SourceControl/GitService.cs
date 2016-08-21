@@ -16,17 +16,25 @@ namespace Plainion.GatedCheckIn.Services.SourceControl
     [Export( typeof( ISourceControl ) )]
     class GitService : ISourceControl
     {
-        public Task<IEnumerable<StatusEntry>> GetChangedAndNewFilesAsync( string workspaceRoot )
+        public Task<IEnumerable<Change>> GetPendingChangesAsync( string workspaceRoot )
         {
-            return Task<IEnumerable<StatusEntry>>.Run( () =>
+            return Task<IEnumerable<Change>>.Run( () =>
             {
                 using ( var repo = new Repository( workspaceRoot ) )
                 {
-                    return (IEnumerable<StatusEntry>)repo.RetrieveStatus()
+                    return (IEnumerable<Change>)repo.RetrieveStatus()
                         .Where( e => ( e.State & FileStatus.Ignored ) == 0 )
+                        .Select( e => new Change( e.FilePath, GetChangeType( e.State ) ) )
                         .ToList();
                 }
             } );
+        }
+
+        private ChangeType GetChangeType( FileStatus fileStatus )
+        {
+            if ( fileStatus == FileStatus.Untracked ) return ChangeType.Untracked;
+            if ( fileStatus == FileStatus.Missing ) return ChangeType.Missing;
+            return ChangeType.Modified;
         }
 
         public void Commit( string workspaceRoot, IEnumerable<string> files, string comment, string name, string email )
@@ -55,7 +63,7 @@ namespace Plainion.GatedCheckIn.Services.SourceControl
             }
         }
 
-        public void DiffToPrevious( string workspaceRoot, string file , string diffTool)
+        public void DiffToPrevious( string workspaceRoot, string file, string diffTool )
         {
             var headFile = GetHeadOf( workspaceRoot, file );
 

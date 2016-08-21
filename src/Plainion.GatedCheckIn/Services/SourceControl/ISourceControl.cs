@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using LibGit2Sharp;
 
 namespace Plainion.GatedCheckIn.Services.SourceControl
 {
     interface ISourceControl
     {
-        Task<IEnumerable<StatusEntry>> GetChangedAndNewFilesAsync( string workspaceRoot );
+        Task<IEnumerable<Change>> GetPendingChangesAsync( string workspaceRoot );
 
         void Commit( string workspaceRoot, IEnumerable<string> files, string comment, string name, string email );
 
