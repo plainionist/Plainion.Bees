@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using Plainion.GatedCheckIn.Model;
 using Plainion.GatedCheckIn.Services.SourceControl;
-using Plainion.Scripts.TestRunner;
 
 namespace Plainion.GatedCheckIn.Services
 {
@@ -26,9 +26,12 @@ namespace Plainion.GatedCheckIn.Services
             myDefinition = Objects.Clone( myDefinition );
             myRequest = Objects.Clone( myRequest );
 
+            var solution = Path.Combine( myDefinition.RepositoryRoot, myDefinition.Solution );
+            var builtInMsBuildScript = Path.Combine( Path.GetDirectoryName( GetType().Assembly.Location ), "Services", "Msbuild", "Plainion.GatedCheckIn.targets" );
+
             return Task<bool>.Run( () =>
-                Execute( "build", p => ExecuteMsbuildScript( Path.Combine( myDefinition.RepositoryRoot, myDefinition.Solution ), p ), progress )
-                && ( !myDefinition.RunTests || Execute( "test", RunTests, progress ) )
+                Execute( "build", ExecuteMsbuildScript( solution ), progress )
+                && ( !myDefinition.RunTests || RunTests( builtInMsBuildScript, progress ) )
                 && ( !myDefinition.CheckIn || Execute( "checkin", CheckIn, progress ) )
                 && ( !myDefinition.Push || Execute( "push", Push, progress ) ) );
         }
@@ -58,52 +61,37 @@ namespace Plainion.GatedCheckIn.Services
             }
         }
 
-        private bool ExecuteMsbuildScript( string script, IProgress<string> progress )
+        private Func<IProgress<string>, bool> ExecuteMsbuildScript( string script, params string[] args )
         {
-            var process = new UiShellCommand( @"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe", progress );
+            return p =>
+                {
+                    var process = new UiShellCommand( @"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe", p );
 
-            process.Execute(
-                "/m",
-                "/p:Configuration=" + myDefinition.Configuration,
-                "/p:Platform=\"" + myDefinition.Platform + "\"",
-                "/p:OutputPath=\"" + GetWorkingDirectory() + "\"",
-                script );
+                    var allArgs = new[]{
+                        "/m",
+                        "/p:Configuration=" + myDefinition.Configuration,
+                        "/p:Platform=\"" + myDefinition.Platform + "\"",
+                        "/p:OutputPath=\"" + Path.Combine( myDefinition.RepositoryRoot, "bin", "gc" ) + "\""
+                    }
+                    .Concat( args )
+                    .Concat( new[] { script } )
+                    .ToArray();
 
-            return process.ExitCode == 0;
+                    process.Execute( allArgs );
+
+                    return process.ExitCode == 0;
+                };
         }
 
-        private string GetWorkingDirectory()
+        private bool RunTests( string builtInMsBuildScript, IProgress<string> progress )
         {
-            return Path.Combine( myDefinition.RepositoryRoot, "bin", "gc" );
+            return Execute( "test", ExecuteMsbuildScript( builtInMsBuildScript,
+                "/t:Nunit",
+                "/p:NUnitConsole=" + myDefinition.TestRunnerExecutable,
+                "/p:AssembliesPattern=" + myDefinition.TestAssemblyPattern
+                ), progress );
         }
-
-        private bool RunTests( IProgress<string> progress )
-        {
-            Contract.Requires( File.Exists( myDefinition.TestRunnerExecutable ), "Runner executable not found: {0}", myDefinition.TestRunnerExecutable );
-
-            var runner = new TestRunner
-            {
-                Assemblies = myDefinition.TestAssemblyPattern,
-                WorkingDirectory = GetWorkingDirectory()
-            };
-
-            var nunitProject = runner.GenerateProject();
-
-            if ( nunitProject == null )
-            {
-                progress.Report( "!! NO TEST ASSEMBLIES FOUND (check build definition; change test assembly pattern or disable test execution) !!" );
-
-                return false;
-            }
-
-            var process = new UiShellCommand( myDefinition.TestRunnerExecutable, progress );
-
-            // shadowcopy is an issue if we load files during UT according to assembly location
-            process.Execute( "/noshadow " + nunitProject );
-
-            return process.ExitCode == 0;
-        }
-
+        
         private bool CheckIn( IProgress<string> progress )
         {
             if ( string.IsNullOrEmpty( myRequest.CheckInComment ) )

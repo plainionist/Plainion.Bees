@@ -24,6 +24,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\LibGit2Sharp.0.22.0-pre20150716071016\lib\net40\LibGit2Sharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Build.Framework" />
+    <Reference Include="Microsoft.Build.Utilities.v4.0" />
     <Reference Include="Microsoft.Practices.Prism.Mvvm">
       <HintPath>..\..\packages\Prism.Mvvm.1.1.1\lib\net45\Microsoft.Practices.Prism.Mvvm.dll</HintPath>
     </Reference>
@@ -77,6 +79,7 @@
     <Compile Include="SecureStringExtensions.cs" />
     <Compile Include="Services\BuildWorkflow.cs" />
     <Compile Include="Services\AbstractShellProcess.cs" />
+    <Compile Include="Services\Msbuild\NUnit.cs" />
     <Compile Include="Services\SourceControl\Change.cs" />
     <Compile Include="Services\SourceControl\ChangeType.cs" />
     <Compile Include="Services\SourceControl\ISourceControl.cs" />
@@ -139,12 +142,9 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Plainion.Scripts\Plainion.Scripts.csproj">
-      <Project>{99c54f80-3cbb-4990-8f9b-0904f3f2fa18}</Project>
-      <Name>Plainion.Scripts</Name>
-    </ProjectReference>
+    <Content Include="Services\Msbuild\Plainion.GatedCheckIn.targets">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
