@@ -80,7 +80,7 @@
     <Compile Include="Services\SourceControl\Change.cs" />
     <Compile Include="Services\SourceControl\ChangeType.cs" />
     <Compile Include="Services\SourceControl\ISourceControl.cs" />
-    <Compile Include="Services\PendingChangesObserver.cs" />
+    <Compile Include="Services\SourceControl\PendingChangesObserver.cs" />
     <Compile Include="Services\UiShellCommand.cs" />
     <Compile Include="ViewModels\BuildDefinitionViewModel.cs" />
     <Compile Include="ViewModels\RepositoryEntry.cs" />
