@@ -69,9 +69,9 @@ namespace Plainion.GatedCheckIn.Services
 
             if( nunitProject == null )
             {
-                progress.Report( ">>> NO TEST ASSEMBLIES FOUND -> test execution skipped" );
+                progress.Report( "!! NO TEST ASSEMBLIES FOUND (check build definition; change test assembly pattern or disable test execution)!!" );
 
-                return true;
+                return false;
             }
 
             var process = new UiShellCommand( myDefinition.TestRunnerExecutable, progress );

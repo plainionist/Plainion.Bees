@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Runtime.Serialization;
 using Plainion.Serialization;
 
 namespace Plainion.GatedCheckIn.Model
 {
     [Serializable]
-    [DataContract(Namespace = "http://github.com/ronin4net/plainion/GatedCheckIn", Name = "BuildDefinition")]
+    [DataContract( Namespace = "http://github.com/ronin4net/plainion/GatedCheckIn", Name = "BuildDefinition" )]
     class BuildDefinition : SerializableBindableBase
     {
         private string myRepositoryRoot;
@@ -24,21 +25,21 @@ namespace Plainion.GatedCheckIn.Model
         public string RepositoryRoot
         {
             get { return myRepositoryRoot; }
-            set { SetProperty(ref myRepositoryRoot, value); }
+            set { SetProperty( ref myRepositoryRoot, value != null ? Path.GetFullPath( value ) : null ); }
         }
 
         [DataMember]
         public string Solution
         {
             get { return mySolution; }
-            set { SetProperty(ref mySolution, value); }
+            set { SetProperty( ref mySolution, value ); }
         }
 
         [DataMember]
         public bool RunTests
         {
             get { return myRunTests; }
-            set { SetProperty(ref myRunTests, value); }
+            set { SetProperty( ref myRunTests, value ); }
         }
 
         [DataMember]
@@ -59,49 +60,49 @@ namespace Plainion.GatedCheckIn.Model
         public string Configuration
         {
             get { return myConfiguration; }
-            set { SetProperty(ref myConfiguration, value); }
+            set { SetProperty( ref myConfiguration, value ); }
         }
 
         [DataMember]
         public string Platform
         {
             get { return myPlatform; }
-            set { SetProperty(ref myPlatform, value); }
+            set { SetProperty( ref myPlatform, value ); }
         }
 
         [DataMember]
         public string TestRunnerExecutable
         {
             get { return myTestRunnerExecutable; }
-            set { SetProperty(ref myTestRunnerExecutable, value); }
+            set { SetProperty( ref myTestRunnerExecutable, value ); }
         }
 
         [DataMember]
         public string TestAssemblyPattern
         {
             get { return myTestAssemblyPattern; }
-            set { SetProperty(ref myTestAssemblyPattern, value); }
+            set { SetProperty( ref myTestAssemblyPattern, value ); }
         }
 
         [DataMember]
         public string UserName
         {
             get { return myUserName; }
-            set { SetProperty(ref myUserName, value); }
+            set { SetProperty( ref myUserName, value ); }
         }
 
         [DataMember]
         public string UserEMail
         {
             get { return myUserEMail; }
-            set { SetProperty(ref myUserEMail, value); }
+            set { SetProperty( ref myUserEMail, value ); }
         }
 
         [DataMember]
         public string DiffTool
         {
             get { return myDiffTool; }
-            set { SetProperty(ref myDiffTool, value); }
+            set { SetProperty( ref myDiffTool, value ); }
         }
     }
 }
