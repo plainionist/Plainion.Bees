@@ -60,7 +60,19 @@ namespace Plainion.GatedCheckIn.Services
             myWorkspaceChanged = false;
 
             myWorkspaceReaderTask = myGitService.GetChangedAndNewFilesAsync( myWorkspaceRoot )
-                .ContinueWith( t => Application.Current.Dispatcher.BeginInvoke( new Action( () => myOnPendingChangesChanged( t.Result ) ) ) )
+                .ContinueWith( t => 
+                    {
+                        // intentionally we ignore all exceptions here because if in parallel a checkin or push is running
+                        // we can easily run into race-conditions
+                        if( t.IsFaulted )
+                        {
+                            myWorkspaceChanged = true;
+                        }
+                        else
+                        {
+                            Application.Current.Dispatcher.BeginInvoke( new Action( () => myOnPendingChangesChanged( t.Result ) ) );
+                        }
+                    })
                 .ContinueWith( t =>
                     {
                         myWorkspaceReaderTask = null;

@@ -14,7 +14,9 @@ namespace Plainion.GatedCheckIn.Views
         private void PasswordBox_PasswordChanged( object sender, RoutedEventArgs e )
         {
             if( DataContext != null )
-            { ( ( dynamic )DataContext ).SecurePassword = ( ( PasswordBox )sender ).SecurePassword; }
+            {
+                { ( ( dynamic )DataContext ).SecurePassword = ( ( PasswordBox )sender ).SecurePassword; }
+            }
         }
     }
 }
