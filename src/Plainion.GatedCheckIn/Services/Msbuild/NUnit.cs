@@ -28,8 +28,8 @@ namespace Plainion.GatedCheckIn.Services.Msbuild
             var nunitProject = GenerateProject();
             if ( nunitProject == null )
             {
-                Log.LogWarning( "No test assemblies found" );
-                return true;
+                Log.LogError( "No test assemblies found" );
+                return false;
             }
 
             try
