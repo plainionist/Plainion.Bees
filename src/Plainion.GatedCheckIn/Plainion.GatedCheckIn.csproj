@@ -82,7 +82,6 @@
     <Compile Include="Model\BuildRequest.cs" />
     <Compile Include="Services\GitService.cs" />
     <Compile Include="Model\BuildDefinition.cs" />
-    <Compile Include="Services\ProducerConsumerStream.cs" />
     <Compile Include="Services\BuildService.cs" />
     <Compile Include="ShellViewModel.cs" />
     <Compile Include="Views\BuildDefinitionView.xaml.cs">

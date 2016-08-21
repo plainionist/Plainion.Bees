@@ -7,7 +7,6 @@ using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 using Plainion.AppFw.Shell.Forms;
-using Plainion.IO;
 using Plainion.Logging;
 
 namespace Plainion.Scripts.TestRunner
@@ -69,8 +68,7 @@ namespace Plainion.Scripts.TestRunner
             //File.Delete( nunitProject );
         }
 
-        /// <summary>
-        /// </summary>
+        /// <summary/>
         /// <returns>null if no test assemblies could be found</returns>
         public string GenerateProject()
         {
