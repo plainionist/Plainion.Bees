@@ -52,7 +52,7 @@ namespace Plainion.GatedCheckIn.Services
 
         private bool RunTests( IProgress<string> progress )
         {
-            if( !myDefinition.RunTests )
+            if ( !myDefinition.RunTests )
             {
                 return true;
             }
@@ -67,7 +67,7 @@ namespace Plainion.GatedCheckIn.Services
 
             var nunitProject = runner.GenerateProject();
 
-            if( nunitProject == null )
+            if ( nunitProject == null )
             {
                 progress.Report( "!! NO TEST ASSEMBLIES FOUND (check build definition; change test assembly pattern or disable test execution) !!" );
 
@@ -84,12 +84,12 @@ namespace Plainion.GatedCheckIn.Services
 
         private bool CheckIn( IProgress<string> progress )
         {
-            if( !myDefinition.CheckIn )
+            if ( !myDefinition.CheckIn )
             {
                 return true;
             }
 
-            if( string.IsNullOrEmpty( myRequest.CheckInComment ) )
+            if ( string.IsNullOrEmpty( myRequest.CheckInComment ) )
             {
                 progress.Report( "!! NO CHECKIN COMMENT PROVIDED !!" );
                 return false;
@@ -103,7 +103,7 @@ namespace Plainion.GatedCheckIn.Services
 
                 return true;
             }
-            catch( Exception ex )
+            catch ( Exception ex )
             {
                 progress.Report( "CHECKIN FAILED: " + ex.Message );
                 return false;
@@ -112,12 +112,12 @@ namespace Plainion.GatedCheckIn.Services
 
         private bool Push( IProgress<string> progress )
         {
-            if( !myDefinition.Push )
+            if ( !myDefinition.Push )
             {
                 return true;
             }
 
-            if( string.IsNullOrEmpty( myRequest.Password ) )
+            if ( myDefinition.UserPassword == null )
             {
                 progress.Report( "!! NO PASSWORD PROVIDED !!" );
                 return false;
@@ -125,13 +125,13 @@ namespace Plainion.GatedCheckIn.Services
 
             try
             {
-                myGitService.Push( myDefinition.RepositoryRoot, myDefinition.UserName, myRequest.Password );
+                myGitService.Push( myDefinition.RepositoryRoot, myDefinition.UserName, myDefinition.UserPassword.ToUnsecureString() );
 
                 progress.Report( "--- PUSH SUCCEEDED ---" );
 
                 return true;
             }
-            catch( Exception ex )
+            catch ( Exception ex )
             {
                 progress.Report( "PUSH FAILED: " + ex.Message );
                 return false;

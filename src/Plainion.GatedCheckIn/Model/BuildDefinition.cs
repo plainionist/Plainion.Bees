@@ -1,6 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Security;
+using System.Security.Cryptography;
+using System.Text;
 using Plainion.Serialization;
 
 namespace Plainion.GatedCheckIn.Model
@@ -20,7 +23,12 @@ namespace Plainion.GatedCheckIn.Model
         private string myTestAssemblyPattern;
         private string myUserName;
         private string myUserEMail;
+        [NonSerialized]
+        private SecureString myUserPassword;
         private string myDiffTool;
+
+        [DataMember( Name = "UserPassword" )]
+        private byte[] mySerializablePassword;
 
         public string RepositoryRoot
         {
@@ -98,11 +106,44 @@ namespace Plainion.GatedCheckIn.Model
             set { SetProperty( ref myUserEMail, value ); }
         }
 
+        public SecureString UserPassword
+        {
+            get { return myUserPassword; }
+            set
+            {
+                if ( SetProperty( ref myUserPassword, value ) )
+                {
+                    // we do serialization as "update-on-write" because we also want to support cloning at any time
+                    if ( myUserPassword == null )
+                    {
+                        mySerializablePassword = null;
+                    }
+                    else
+                    {
+                        var bytes = Encoding.UTF8.GetBytes( myUserPassword.ToUnsecureString() );
+
+                        mySerializablePassword = ProtectedData.Protect( bytes, null, DataProtectionScope.CurrentUser );
+                    }
+                }
+            }
+        }
+
         [DataMember]
         public string DiffTool
         {
             get { return myDiffTool; }
             set { SetProperty( ref myDiffTool, value ); }
+        }
+
+        [OnDeserialized]
+        private void OnDeserialized( StreamingContext context )
+        {
+            if ( mySerializablePassword != null )
+            {
+                var bytes = ProtectedData.Unprotect( mySerializablePassword, null, DataProtectionScope.CurrentUser );
+
+                myUserPassword = Encoding.UTF8.GetString( bytes ).ToSecureString();
+            }
         }
     }
 }

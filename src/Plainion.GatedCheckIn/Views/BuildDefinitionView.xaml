@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:l="clr-namespace:Plainion.GatedCheckIn.Views"
              mc:Ignorable="d" d:DesignWidth="700">
     <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
         <Grid>
@@ -73,7 +74,7 @@
                 </Grid>
             </GroupBox>
 
-            <GroupBox Header="CheckIn" Grid.Row="3">
+            <GroupBox Header="User" Grid.Row="3">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
@@ -82,13 +83,18 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="User" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="User name" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="0" Grid.Column="1" Margin="5,2,0,0" Text="{Binding BuildDefinition.UserName}" Width="150" HorizontalAlignment="Left"/>
 
-                    <TextBlock Grid.Row="1" Grid.Column="0" Text="EMail" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="E-Mail" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Margin="5,2,0,0" Text="{Binding BuildDefinition.UserEMail}" Width="200" HorizontalAlignment="Left"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="Password" VerticalAlignment="Center"/>
+                    <PasswordBox Grid.Row="2" Grid.Column="1" Margin="5,2,0,0" Width="200" HorizontalAlignment="Left" 
+                                 l:PasswordBinder.Attach="True" l:PasswordBinder.Password="{Binding BuildDefinition.UserPassword, Mode=TwoWay}" />
                 </Grid>
             </GroupBox>
 

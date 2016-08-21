@@ -74,7 +74,6 @@ namespace Plainion.GatedCheckIn
             var request = new BuildRequest
             {
                 CheckInComment = CheckInViewModel.CheckInComment,
-                Password = CheckInViewModel.SecurePassword.ToUnsecureString(),
                 Files = CheckInViewModel.Files
                     .Where( e => e.IsChecked )
                     .Select( e => e.File )

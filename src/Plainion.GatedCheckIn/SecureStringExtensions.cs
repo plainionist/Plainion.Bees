@@ -8,6 +8,11 @@ namespace Plainion.GatedCheckIn
     {
         public static string ToUnsecureString( this SecureString source )
         {
+            if ( source == null )
+            {
+                return null;
+            }
+
             var returnValue = IntPtr.Zero;
             try
             {
@@ -20,5 +25,23 @@ namespace Plainion.GatedCheckIn
             }
         }
 
+        public static SecureString ToSecureString( this string source )
+        {
+            if ( source == null )
+            {
+                return null;
+            }
+
+            var securePassword = new SecureString();
+
+            foreach ( char c in source )
+            {
+                securePassword.AppendChar( c );
+            }
+
+            securePassword.MakeReadOnly();
+
+            return securePassword;
+        }
     }
 }
