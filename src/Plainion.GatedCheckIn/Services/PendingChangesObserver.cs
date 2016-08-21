@@ -5,6 +5,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
 using LibGit2Sharp;
+using Plainion.GatedCheckIn.Services.SourceControl;
 
 namespace Plainion.GatedCheckIn.Services
 {

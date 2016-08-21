@@ -6,6 +6,7 @@ using Microsoft.Practices.Prism.Commands;
 using Microsoft.Practices.Prism.Mvvm;
 using Plainion.GatedCheckIn.Model;
 using Plainion.GatedCheckIn.Services;
+using Plainion.GatedCheckIn.Services.SourceControl;
 using Plainion.GatedCheckIn.ViewModels;
 using Plainion.Windows;
 

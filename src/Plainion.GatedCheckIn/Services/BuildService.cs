@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
 using Plainion.GatedCheckIn.Model;
+using Plainion.GatedCheckIn.Services.SourceControl;
 
 namespace Plainion.GatedCheckIn.Services
 {

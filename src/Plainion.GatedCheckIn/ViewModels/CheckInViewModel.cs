@@ -14,6 +14,7 @@ using Microsoft.Practices.Prism.Mvvm;
 using Plainion.Collections;
 using Plainion.GatedCheckIn.Model;
 using Plainion.GatedCheckIn.Services;
+using Plainion.GatedCheckIn.Services.SourceControl;
 
 namespace Plainion.GatedCheckIn.ViewModels
 {

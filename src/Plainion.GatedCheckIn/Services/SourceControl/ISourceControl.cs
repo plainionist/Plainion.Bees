@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using LibGit2Sharp;
 
-namespace Plainion.GatedCheckIn.Services
+namespace Plainion.GatedCheckIn.Services.SourceControl
 {
     interface ISourceControl
     {

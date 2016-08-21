@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Plainion.GatedCheckIn.Model;
+using Plainion.GatedCheckIn.Services.SourceControl;
 using Plainion.Scripts.TestRunner;
 
 namespace Plainion.GatedCheckIn.Services
