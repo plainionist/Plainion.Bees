@@ -22,16 +22,16 @@ namespace Plainion.GatedCheckIn.ViewModels
     class CheckInViewModel : BindableBase
     {
         private BuildService myBuildService;
-        private ISourceControl myGitService;
+        private ISourceControl mySourceControl;
         private RepositoryEntry mySelectedFile;
         private string myCheckInComment;
         private PendingChangesObserver myPendingChangesObserver;
 
         [ImportingConstructor]
-        public CheckInViewModel( BuildService buildService, ISourceControl gitService )
+        public CheckInViewModel( BuildService buildService, ISourceControl sourceControl )
         {
             myBuildService = buildService;
-            myGitService = gitService;
+            mySourceControl = sourceControl;
 
             Files = new ObservableCollection<RepositoryEntry>();
 
@@ -39,7 +39,7 @@ namespace Plainion.GatedCheckIn.ViewModels
             RevertCommand = new DelegateCommand<string>( OnRevert );
             DiffToPreviousCommand = new DelegateCommand( OnDiffToPrevious, CanDiffToPrevious );
 
-            myPendingChangesObserver = new PendingChangesObserver( myGitService, OnPendingChangesChanged );
+            myPendingChangesObserver = new PendingChangesObserver( mySourceControl, OnPendingChangesChanged );
 
             buildService.BuildDefinitionChanged += OnBuildDefinitionChanged;
             OnBuildDefinitionChanged();
@@ -129,7 +129,7 @@ namespace Plainion.GatedCheckIn.ViewModels
                 return;
             }
 
-            var pendingChanges = await myGitService.GetPendingChangesAsync( BuildDefinition.RepositoryRoot );
+            var pendingChanges = await mySourceControl.GetPendingChangesAsync( BuildDefinition.RepositoryRoot );
 
             OnPendingChangesChanged( pendingChanges );
         }
@@ -140,7 +140,7 @@ namespace Plainion.GatedCheckIn.ViewModels
         {
             Debug.WriteLine( "Reverting changes on '" + file + "'" );
 
-            myGitService.Revert( BuildDefinition.RepositoryRoot, file );
+            mySourceControl.Revert( BuildDefinition.RepositoryRoot, file );
         }
 
         public DelegateCommand DiffToPreviousCommand { get; private set; }
@@ -152,7 +152,7 @@ namespace Plainion.GatedCheckIn.ViewModels
 
         public void OnDiffToPrevious()
         {
-            myGitService.DiffToPrevious( BuildDefinition.RepositoryRoot, SelectedFile.File, BuildDefinition.DiffTool );
+            mySourceControl.DiffToPrevious( BuildDefinition.RepositoryRoot, SelectedFile.File, BuildDefinition.DiffTool );
         }
     }
 }

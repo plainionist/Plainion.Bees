@@ -12,12 +12,12 @@ namespace Plainion.GatedCheckIn.Services
     [Export]
     class BuildService : IDisposable
     {
-        private ISourceControl myGitService;
+        private ISourceControl mySourceControl;
 
         [ImportingConstructor]
-        public BuildService( ISourceControl gitService )
+        public BuildService( ISourceControl sourceControl )
         {
-            myGitService = gitService;
+            mySourceControl = sourceControl;
         }
 
         public void Dispose()
@@ -84,7 +84,7 @@ namespace Plainion.GatedCheckIn.Services
         {
             Contract.Invariant( BuildDefinition != null, "BuildDefinition not loaded" );
 
-            return new BuildWorkflow( myGitService, BuildDefinition, request )
+            return new BuildWorkflow( mySourceControl, BuildDefinition, request )
                 .ExecuteAsync( progress );
         }
     }

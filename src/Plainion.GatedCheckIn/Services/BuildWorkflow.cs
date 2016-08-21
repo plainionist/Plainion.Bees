@@ -9,13 +9,13 @@ namespace Plainion.GatedCheckIn.Services
 {
     internal class BuildWorkflow
     {
-        private ISourceControl myGitService;
+        private ISourceControl mySourceControl;
         private BuildDefinition myDefinition;
         private BuildRequest myRequest;
 
-        public BuildWorkflow( ISourceControl gitService, BuildDefinition definition, BuildRequest request )
+        public BuildWorkflow( ISourceControl sourceControl, BuildDefinition definition, BuildRequest request )
         {
-            myGitService = gitService;
+            mySourceControl = sourceControl;
             myDefinition = definition;
             myRequest = request;
         }
@@ -98,7 +98,7 @@ namespace Plainion.GatedCheckIn.Services
 
             try
             {
-                myGitService.Commit( myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.UserName, myDefinition.UserEMail );
+                mySourceControl.Commit( myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.UserName, myDefinition.UserEMail );
 
                 progress.Report( "--- CHECKIN SUCCEEDED ---" );
 
@@ -126,7 +126,7 @@ namespace Plainion.GatedCheckIn.Services
 
             try
             {
-                myGitService.Push( myDefinition.RepositoryRoot, myDefinition.UserName, myDefinition.UserPassword.ToUnsecureString() );
+                mySourceControl.Push( myDefinition.RepositoryRoot, myDefinition.UserName, myDefinition.UserPassword.ToUnsecureString() );
 
                 progress.Report( "--- PUSH SUCCEEDED ---" );
 

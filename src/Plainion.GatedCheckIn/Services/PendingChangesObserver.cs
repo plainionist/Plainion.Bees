@@ -10,16 +10,16 @@ namespace Plainion.GatedCheckIn.Services
 {
     class PendingChangesObserver
     {
-        private ISourceControl myGitService;
+        private ISourceControl mySourceControl;
         private Action<IEnumerable<Change>> myOnPendingChangesChanged;
         private FileSystemWatcher myPendingChangesWatcher;
         private string myWorkspaceRoot;
         private Task myWorkspaceReaderTask;
         private bool myWorkspaceChanged;
 
-        public PendingChangesObserver( ISourceControl gitService, Action<IEnumerable<Change>> onPendingChangesChanged )
+        public PendingChangesObserver( ISourceControl sourceControl, Action<IEnumerable<Change>> onPendingChangesChanged )
         {
-            myGitService = gitService;
+            mySourceControl = sourceControl;
             myOnPendingChangesChanged = onPendingChangesChanged;
         }
 
@@ -59,7 +59,7 @@ namespace Plainion.GatedCheckIn.Services
 
             myWorkspaceChanged = false;
 
-            myWorkspaceReaderTask = myGitService.GetPendingChangesAsync( myWorkspaceRoot )
+            myWorkspaceReaderTask = mySourceControl.GetPendingChangesAsync( myWorkspaceRoot )
                 .ContinueWith( t => 
                     {
                         // intentionally we ignore all exceptions here because if in parallel a checkin or push is running
