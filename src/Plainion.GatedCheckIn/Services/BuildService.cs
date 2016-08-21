@@ -11,10 +11,10 @@ namespace Plainion.GatedCheckIn.Services
     [Export]
     class BuildService : IDisposable
     {
-        private GitService myGitService;
+        private ISourceControl myGitService;
 
         [ImportingConstructor]
-        public BuildService( GitService gitService )
+        public BuildService( ISourceControl gitService )
         {
             myGitService = gitService;
         }

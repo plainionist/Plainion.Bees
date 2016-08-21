@@ -19,7 +19,7 @@ namespace Plainion.GatedCheckIn
         private bool myIsBusy;
 
         [ImportingConstructor]
-        public ShellViewModel( BuildService buildService, GitService gitService )
+        public ShellViewModel( BuildService buildService, ISourceControl gitService )
         {
             myBuildService = buildService;
 

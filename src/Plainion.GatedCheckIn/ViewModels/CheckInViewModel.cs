@@ -21,13 +21,13 @@ namespace Plainion.GatedCheckIn.ViewModels
     class CheckInViewModel : BindableBase
     {
         private BuildService myBuildService;
-        private GitService myGitService;
+        private ISourceControl myGitService;
         private RepositoryEntry mySelectedFile;
         private string myCheckInComment;
         private PendingChangesObserver myPendingChangesObserver;
 
         [ImportingConstructor]
-        public CheckInViewModel( BuildService buildService, GitService gitService )
+        public CheckInViewModel( BuildService buildService, ISourceControl gitService )
         {
             myBuildService = buildService;
             myGitService = gitService;

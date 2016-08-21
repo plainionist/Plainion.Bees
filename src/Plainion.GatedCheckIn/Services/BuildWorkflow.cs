@@ -8,11 +8,11 @@ namespace Plainion.GatedCheckIn.Services
 {
     internal class BuildWorkflow
     {
-        private GitService myGitService;
+        private ISourceControl myGitService;
         private BuildDefinition myDefinition;
         private BuildRequest myRequest;
 
-        public BuildWorkflow( GitService gitService, BuildDefinition definition, BuildRequest request )
+        public BuildWorkflow( ISourceControl gitService, BuildDefinition definition, BuildRequest request )
         {
             myGitService = gitService;
             myDefinition = definition;

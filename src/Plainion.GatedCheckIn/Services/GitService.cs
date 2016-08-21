@@ -11,8 +11,8 @@ namespace Plainion.GatedCheckIn.Services
     /// <summary>
     /// Thread-safe and re-entrent
     /// </summary>
-    [Export]
-    class GitService
+    [Export(typeof(ISourceControl))]
+    class GitService : ISourceControl
     {
         public Task<IEnumerable<StatusEntry>> GetChangedAndNewFilesAsync( string workspaceRoot )
         {

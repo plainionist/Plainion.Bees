@@ -10,14 +10,14 @@ namespace Plainion.GatedCheckIn.Services
 {
     class PendingChangesObserver
     {
-        private GitService myGitService;
+        private ISourceControl myGitService;
         private Action<IEnumerable<StatusEntry>> myOnPendingChangesChanged;
         private FileSystemWatcher myPendingChangesWatcher;
         private string myWorkspaceRoot;
         private Task myWorkspaceReaderTask;
         private bool myWorkspaceChanged;
 
-        public PendingChangesObserver( GitService gitService, Action<IEnumerable<StatusEntry>> onPendingChangesChanged )
+        public PendingChangesObserver( ISourceControl gitService, Action<IEnumerable<StatusEntry>> onPendingChangesChanged )
         {
             myGitService = gitService;
             myOnPendingChangesChanged = onPendingChangesChanged;

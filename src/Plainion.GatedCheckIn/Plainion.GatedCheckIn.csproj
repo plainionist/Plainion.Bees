@@ -77,6 +77,7 @@
     <Compile Include="SecureStringExtensions.cs" />
     <Compile Include="Services\BuildWorkflow.cs" />
     <Compile Include="Services\AbstractShellProcess.cs" />
+    <Compile Include="Services\ISourceControl.cs" />
     <Compile Include="Services\PendingChangesObserver.cs" />
     <Compile Include="Services\UiShellCommand.cs" />
     <Compile Include="ViewModels\BuildDefinitionViewModel.cs" />
