@@ -26,13 +26,39 @@ namespace Plainion.GatedCheckIn.Services
             myDefinition = Objects.Clone( myDefinition );
             myRequest = Objects.Clone( myRequest );
 
-            return Task<bool>.Run( () => BuildSolution( progress )
-                                        && RunTests( progress )
-                                        && CheckIn( progress )
-                                        && Push( progress ) );
+            return Task<bool>.Run( () =>
+                Execute( "build", p => ExecuteMsbuildScript( Path.Combine( myDefinition.RepositoryRoot, myDefinition.Solution ), p ), progress )
+                && ( !myDefinition.RunTests || Execute( "test", RunTests, progress ) )
+                && ( !myDefinition.CheckIn || Execute( "checkin", CheckIn, progress ) )
+                && ( !myDefinition.Push || Execute( "push", Push, progress ) ) );
         }
 
-        private bool BuildSolution( IProgress<string> progress )
+        private bool Execute( string activity, Func<IProgress<string>, bool> action, IProgress<string> progress )
+        {
+            try
+            {
+                var success = action( progress );
+
+                if ( success )
+                {
+                    progress.Report( "--- " + activity.ToUpper() + " SUCCEEDED ---" );
+                }
+                else
+                {
+                    progress.Report( "--- " + activity.ToUpper() + " FAILED ---" );
+                }
+
+                return success;
+            }
+            catch ( Exception ex )
+            {
+                progress.Report( "ERROR: " + ex.Message );
+                progress.Report( "--- " + activity.ToUpper() + " FAILED ---" );
+                return false;
+            }
+        }
+
+        private bool ExecuteMsbuildScript( string script, IProgress<string> progress )
         {
             var process = new UiShellCommand( @"C:\Program Files (x86)\MSBuild\12.0\Bin\MSBuild.exe", progress );
 
@@ -41,7 +67,7 @@ namespace Plainion.GatedCheckIn.Services
                 "/p:Configuration=" + myDefinition.Configuration,
                 "/p:Platform=\"" + myDefinition.Platform + "\"",
                 "/p:OutputPath=\"" + GetWorkingDirectory() + "\"",
-                Path.Combine( myDefinition.RepositoryRoot, myDefinition.Solution ) );
+                script );
 
             return process.ExitCode == 0;
         }
@@ -53,11 +79,6 @@ namespace Plainion.GatedCheckIn.Services
 
         private bool RunTests( IProgress<string> progress )
         {
-            if ( !myDefinition.RunTests )
-            {
-                return true;
-            }
-
             Contract.Requires( File.Exists( myDefinition.TestRunnerExecutable ), "Runner executable not found: {0}", myDefinition.TestRunnerExecutable );
 
             var runner = new TestRunner
@@ -85,58 +106,28 @@ namespace Plainion.GatedCheckIn.Services
 
         private bool CheckIn( IProgress<string> progress )
         {
-            if ( !myDefinition.CheckIn )
-            {
-                return true;
-            }
-
             if ( string.IsNullOrEmpty( myRequest.CheckInComment ) )
             {
                 progress.Report( "!! NO CHECKIN COMMENT PROVIDED !!" );
                 return false;
             }
 
-            try
-            {
-                mySourceControl.Commit( myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.UserName, myDefinition.UserEMail );
+            mySourceControl.Commit( myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.UserName, myDefinition.UserEMail );
 
-                progress.Report( "--- CHECKIN SUCCEEDED ---" );
-
-                return true;
-            }
-            catch ( Exception ex )
-            {
-                progress.Report( "CHECKIN FAILED: " + ex.Message );
-                return false;
-            }
+            return true;
         }
 
         private bool Push( IProgress<string> progress )
         {
-            if ( !myDefinition.Push )
-            {
-                return true;
-            }
-
             if ( myDefinition.UserPassword == null )
             {
                 progress.Report( "!! NO PASSWORD PROVIDED !!" );
                 return false;
             }
 
-            try
-            {
-                mySourceControl.Push( myDefinition.RepositoryRoot, myDefinition.UserName, myDefinition.UserPassword.ToUnsecureString() );
+            mySourceControl.Push( myDefinition.RepositoryRoot, myDefinition.UserName, myDefinition.UserPassword.ToUnsecureString() );
 
-                progress.Report( "--- PUSH SUCCEEDED ---" );
-
-                return true;
-            }
-            catch ( Exception ex )
-            {
-                progress.Report( "PUSH FAILED: " + ex.Message );
-                return false;
-            }
+            return true;
         }
     }
 }
