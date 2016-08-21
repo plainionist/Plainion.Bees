@@ -14,11 +14,11 @@ namespace Plainion.GatedCheckIn.Services
     [Export]
     class GitService
     {
-        public Task<IEnumerable<StatusEntry>> GetChangedAndNewFilesAsync( string repositoryRoot )
+        public Task<IEnumerable<StatusEntry>> GetChangedAndNewFilesAsync( string workspaceRoot )
         {
             return Task<IEnumerable<StatusEntry>>.Run( () =>
             {
-                using( var repo = new Repository( repositoryRoot ) )
+                using( var repo = new Repository( workspaceRoot ) )
                 {
                     return ( IEnumerable<StatusEntry> )repo.RetrieveStatus()
                         .Where( e => ( e.State & FileStatus.Ignored ) == 0 )
@@ -27,9 +27,9 @@ namespace Plainion.GatedCheckIn.Services
             } );
         }
 
-        public void Commit( string repositoryRoot, IEnumerable<string> files, string comment, string name, string email )
+        public void Commit( string workspaceRoot, IEnumerable<string> files, string comment, string name, string email )
         {
-            using( var repo = new Repository( repositoryRoot ) )
+            using( var repo = new Repository( workspaceRoot ) )
             {
                 foreach( var file in files )
                 {
@@ -42,9 +42,9 @@ namespace Plainion.GatedCheckIn.Services
             }
         }
 
-        public void Push( string repositoryRoot, string name, string password )
+        public void Push( string workspaceRoot, string name, string password )
         {
-            using( var repo = new Repository( repositoryRoot ) )
+            using( var repo = new Repository( workspaceRoot ) )
             {
                 var options = new PushOptions();
                 options.CredentialsProvider = ( url, usernameFromUrl, types ) => new UsernamePasswordCredentials { Username = name, Password = password };
@@ -57,9 +57,9 @@ namespace Plainion.GatedCheckIn.Services
         /// Returns path to a temp file which contains the HEAD version of the given file.
         /// The caller has to take care to delete the file.
         /// </summary>
-        public string GetHeadOf( string repositoryRoot, string relativePath )
+        public string GetHeadOf( string workspaceRoot, string relativePath )
         {
-            using( var repo = new Repository( repositoryRoot ) )
+            using( var repo = new Repository( workspaceRoot ) )
             {
                 var log = repo.Commits.QueryBy( relativePath );
                 if( log == null || !log.Any() )
@@ -86,6 +86,18 @@ namespace Plainion.GatedCheckIn.Services
                 }
 
                 return file;
+            }
+        }
+
+        public void Revert( string workspaceRoot, string file )
+        {
+            using( var repo = new Repository( workspaceRoot ) )
+            {
+                var options = new CheckoutOptions
+                {
+                    CheckoutModifiers = CheckoutModifiers.Force
+                };  
+                repo.CheckoutPaths( "HEAD", new[] { file }, options );
             }
         }
     }

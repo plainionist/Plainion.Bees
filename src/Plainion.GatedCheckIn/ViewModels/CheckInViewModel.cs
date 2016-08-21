@@ -35,6 +35,7 @@ namespace Plainion.GatedCheckIn.ViewModels
             Files = new ObservableCollection<RepositoryEntry>();
 
             RefreshCommand = new DelegateCommand( RefreshPendingChanges );
+            RevertCommand = new DelegateCommand<string>( OnRevert );
             DiffToPreviousCommand = new DelegateCommand( OnDiffToPrevious, CanDiffToPrevious );
 
             myPendingChangesObserver = new PendingChangesObserver( myGitService, OnPendingChangesChanged );
@@ -130,6 +131,15 @@ namespace Plainion.GatedCheckIn.ViewModels
             var pendingChanges = await myGitService.GetChangedAndNewFilesAsync( BuildDefinition.RepositoryRoot );
 
             OnPendingChangesChanged( pendingChanges );
+        }
+
+        public ICommand RevertCommand { get; private set; }
+
+        private void OnRevert( string file )
+        {
+            Debug.WriteLine( "Reverting changes on '" + file + "'" );
+
+            myGitService.Revert( BuildDefinition.RepositoryRoot, file );
         }
 
         public DelegateCommand DiffToPreviousCommand { get; private set; }
