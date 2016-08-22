@@ -9,7 +9,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedTab, Mode=TwoWay}">
+        <TabControl Grid.Row="0" SelectedIndex="{Binding SelectedTab, Mode=TwoWay}" >
             <TabItem Header="CheckIn" Content="{Binding CheckInViewModel}"/>
             <TabItem Header="Build Definition" Content="{Binding BuildDefinitionViewModel}"/>
             <TabItem Header="Build Log" Content="{Binding BuildLogViewModel}"/>

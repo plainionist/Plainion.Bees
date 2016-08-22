@@ -9,6 +9,7 @@ using Plainion.GatedCheckIn.Services;
 using Plainion.GatedCheckIn.Services.SourceControl;
 using Plainion.GatedCheckIn.ViewModels;
 using Plainion.Windows;
+using Plainion.Windows.Controls;
 
 namespace Plainion.GatedCheckIn
 {
@@ -54,7 +55,14 @@ namespace Plainion.GatedCheckIn
         public int SelectedTab
         {
             get { return mySelectedTab; }
-            set { SetProperty( ref mySelectedTab, value ); }
+            set
+            {
+                if( SetProperty( ref mySelectedTab, value ) )
+                {
+                    // force sync into view model before switching tab where view might get destroyed
+                    TextBoxBinding.ForceSourceUpdate();
+                }
+            }
         }
 
         public DelegateCommand GoCommand { get; private set; }
