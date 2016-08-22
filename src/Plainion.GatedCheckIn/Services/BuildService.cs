@@ -42,6 +42,22 @@ namespace Plainion.GatedCheckIn.Services
                     var serializer = new DataContractSerializer( typeof( BuildDefinition ) );
                     BuildDefinition = ( BuildDefinition )serializer.ReadObject( reader );
                 }
+
+                var userFile = buildDefinitionFile + "." + Environment.UserName;
+                if( File.Exists( userFile ) )
+                {
+                    using( var reader = XmlReader.Create( userFile ) )
+                    {
+                        var serializer = new DataContractSerializer( typeof( User ) );
+                        BuildDefinition.User = ( User )serializer.ReadObject( reader );
+                    }
+                }
+
+                // ctor is not called on deserialization - but there might no or empty user file exist
+                if( BuildDefinition.User == null )
+                {
+                    BuildDefinition.User = new User();
+                }
             }
 
             BuildDefinition.RepositoryRoot = Path.GetDirectoryName( buildDefinitionFile );
@@ -59,11 +75,18 @@ namespace Plainion.GatedCheckIn.Services
                 return;
             }
 
-            var file = Path.Combine( BuildDefinition.RepositoryRoot, Path.GetFileName( BuildDefinition.RepositoryRoot ) + ".gc" );
-            using( var writer = XmlWriter.Create( file ) )
+            var buildDefinitionFile = Path.Combine( BuildDefinition.RepositoryRoot, Path.GetFileName( BuildDefinition.RepositoryRoot ) + ".gc" );
+            using( var writer = XmlWriter.Create( buildDefinitionFile ) )
             {
                 var serializer = new DataContractSerializer( typeof( BuildDefinition ) );
                 serializer.WriteObject( writer, BuildDefinition );
+            }
+
+            var userFile = buildDefinitionFile + "." + Environment.UserName;
+            using( var writer = XmlWriter.Create( userFile ) )
+            {
+                var serializer = new DataContractSerializer( typeof( User ) );
+                serializer.WriteObject( writer, BuildDefinition.User );
             }
         }
 
@@ -76,7 +99,7 @@ namespace Plainion.GatedCheckIn.Services
                 Platform = "Any CPU",
                 RunTests = true,
                 TestAssemblyPattern = "*Tests.dll",
-                TestRunnerExecutable = @"\bin\NUnit\bin\nunit-console.exe"
+                TestRunnerExecutable = @"\bin\NUnit\bin\nunit-console.exe",
             };
         }
 

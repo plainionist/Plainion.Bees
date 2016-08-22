@@ -68,6 +68,7 @@ namespace Plainion.GatedCheckIn.ViewModels
             myPendingChangesObserver.Stop();
 
             BuildDefinition = myBuildService.BuildDefinition;
+            OnPropertyChanged( () => BuildDefinition );
 
             if( BuildDefinition != null )
             {
@@ -88,8 +89,6 @@ namespace Plainion.GatedCheckIn.ViewModels
             {
                 DiffToPreviousCommand.RaiseCanExecuteChanged();
             }
-
-            OnPropertyChanged( e.PropertyName );
         }
 
         private void OnRepositoryRootChanged()

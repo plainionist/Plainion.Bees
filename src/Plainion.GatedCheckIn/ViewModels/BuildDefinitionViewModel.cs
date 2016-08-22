@@ -34,6 +34,7 @@ namespace Plainion.GatedCheckIn.ViewModels
             }
 
             BuildDefinition = myBuildService.BuildDefinition;
+            OnPropertyChanged( () => BuildDefinition );
 
             if (BuildDefinition != null)
             {
@@ -48,8 +49,6 @@ namespace Plainion.GatedCheckIn.ViewModels
             {
                 OnRepositoryRootChanged();
             }
-
-            OnPropertyChanged(e.PropertyName);
         }
 
         private void OnRepositoryRootChanged()

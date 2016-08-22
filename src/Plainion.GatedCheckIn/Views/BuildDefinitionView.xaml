@@ -86,15 +86,15 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Grid.Row="0" Grid.Column="0" Text="User name" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5,2,0,0" Text="{Binding BuildDefinition.UserName}" Width="150" HorizontalAlignment="Left"/>
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="Name" VerticalAlignment="Center"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Margin="5,2,0,0" Text="{Binding BuildDefinition.User.Login}" Width="150" HorizontalAlignment="Left"/>
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="E-Mail" VerticalAlignment="Center"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Margin="5,2,0,0" Text="{Binding BuildDefinition.UserEMail}" Width="200" HorizontalAlignment="Left"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Margin="5,2,0,0" Text="{Binding BuildDefinition.User.EMail}" Width="200" HorizontalAlignment="Left"/>
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="Password" VerticalAlignment="Center"/>
                     <PasswordBox Grid.Row="2" Grid.Column="1" Margin="5,2,0,0" Width="200" HorizontalAlignment="Left" 
-                                 l:PasswordBinder.Attach="True" l:PasswordBinder.Password="{Binding BuildDefinition.UserPassword, Mode=TwoWay}" />
+                                 l:PasswordBinder.Attach="True" l:PasswordBinder.Password="{Binding BuildDefinition.User.Password, Mode=TwoWay}" />
                 </Grid>
             </GroupBox>
 

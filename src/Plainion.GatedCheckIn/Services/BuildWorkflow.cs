@@ -100,20 +100,20 @@ namespace Plainion.GatedCheckIn.Services
                 return false;
             }
 
-            mySourceControl.Commit( myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.UserName, myDefinition.UserEMail );
+            mySourceControl.Commit( myDefinition.RepositoryRoot, myRequest.Files, myRequest.CheckInComment, myDefinition.User.Login, myDefinition.User.EMail );
 
             return true;
         }
 
         private bool Push( IProgress<string> progress )
         {
-            if ( myDefinition.UserPassword == null )
+            if ( myDefinition.User.Password == null )
             {
                 progress.Report( "!! NO PASSWORD PROVIDED !!" );
                 return false;
             }
 
-            mySourceControl.Push( myDefinition.RepositoryRoot, myDefinition.UserName, myDefinition.UserPassword.ToUnsecureString() );
+            mySourceControl.Push( myDefinition.RepositoryRoot, myDefinition.User.Login, myDefinition.User.Password.ToUnsecureString() );
 
             return true;
         }
