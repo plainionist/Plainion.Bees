@@ -7,7 +7,7 @@ namespace Plainion.Scripts.Loc
 {
     public class FileStats
     {
-        public static readonly string[] Source_Ext = { ".cs", ".cpp", ".h", ".xaml" };
+        public static readonly string[] Source_Ext = { ".cs", ".cpp", ".h", ".xaml", ".aspx", ".fs" };
 
         public string Name
         {
