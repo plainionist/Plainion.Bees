@@ -1,17 +1,34 @@
 
-Beeyard of little tools and helpers
+Plainions Beeyard of all the bees making daily work easier.
+
+Just download the [latest release](https://github.com/plainionist/Plainion.Bees/releases), 
+unpack whereever you want and enjoy :)
 
 ## WhiteRabbit
 
-- simple time tracking tool
+Track your time in a very convenient and simple way
 
-## LoC
+![](doc/Screenshots/WhiteRabbit.Full.png)
 
-- simple lines of code counter
+
+![](doc/Screenshots/WhiteRabbit.Running.png)
 
 ## WpfBrushes
 
-- shows all default WPF brushes
+The standard color palette right at hand
+
+![](doc/Screenshots/WpfBrushes.png)
+
+
+## LoC
+
+Count your lines of code in a simple way
+
+
+
+```
+Plainion.Starter -D [location of the beeyard] -Loc
+```
 
 ## XamlEdit
 
