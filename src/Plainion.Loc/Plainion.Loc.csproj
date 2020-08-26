@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <OutputType>Exe</OutputType>
     <PackageTargetFallback>netstandard2.0</PackageTargetFallback>    <UseWindowsForms>true</UseWindowsForms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <NoWarn>1591</NoWarn>
