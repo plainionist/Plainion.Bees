@@ -1,6 +1,7 @@
 ## 2.0.0 - 2020-08-
 
 - Script "XamlEdit" removed
+- Script "TestRunner" removed
 
 ## 1.13.0 - 2017-02-17
 
