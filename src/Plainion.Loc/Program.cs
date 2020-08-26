@@ -27,7 +27,7 @@ namespace Plainion.Scripts.Loc
             var output = Path.Combine(source, "Loc.xml");
             var writer = XmlWriter.Create( output, settings );
 
-            tree.CollectedStats().ToXml().WriteTo( writer );
+            tree.ToXml().WriteTo( writer );
             writer.Close();
 
             Console.WriteLine($"Output written to: {output}");

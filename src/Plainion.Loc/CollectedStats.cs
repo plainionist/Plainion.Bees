@@ -70,27 +70,6 @@ namespace Plainion.Scripts.Loc
             TestEmptyLines += stats.TestEmptyLines;
         }
 
-        public XElement ToXml()
-        {
-            return new XElement( "loc-report", ToXml( this ) );
-        }
-
-        public XElement ToXml( CollectedStats collected )
-        {
-            return new XElement( "directory",
-                new XAttribute( "name", Directory ),
-                new XAttribute( "total", collected.ProductSourceLines + collected.ProductCommentLines +
-                    collected.ProductEmptyLines + collected.GeneratedLines +
-                    collected.TestSourceLines + collected.TestCommentLines + collected.TestEmptyLines ),
-                new XAttribute( "PSLOC", collected.ProductSourceLines ),
-                new XAttribute( "PCLOC", collected.ProductCommentLines ),
-                new XAttribute( "PELOC", collected.ProductEmptyLines ),
-                new XAttribute( "GLOC", collected.GeneratedLines ),
-                new XAttribute( "TSLOC", collected.TestSourceLines ),
-                new XAttribute( "TCLOC", collected.TestCommentLines ),
-                new XAttribute( "TELOC", collected.TestEmptyLines ) );
-        }
-
         public void Print()
         {
             Console.WriteLine( "{0,30} {1,7} {2,7} {3,7} {4,7} {5,7} {6,7} {7,7} {8,7}",

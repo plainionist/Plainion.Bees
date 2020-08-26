@@ -11,7 +11,7 @@ namespace Plainion.Scripts.Loc
 
         private bool myAreTests = false;
 
-        public DirStats( DirStats parent )
+        public DirStats(DirStats parent)
         {
             Parent = parent;
             Directories = new List<DirStats>();
@@ -23,29 +23,33 @@ namespace Plainion.Scripts.Loc
             get;
             private set;
         }
+
         public string Name
         {
             get;
             set;
         }
+
         public List<DirStats> Directories
         {
             get;
             set;
         }
+
         public List<FileStats> Files
         {
             get;
             set;
         }
+
         public bool AreTests
         {
             get
             {
                 DirStats ds = this;
-                while( ds != null )
+                while (ds != null)
                 {
-                    if( ds.myAreTests )
+                    if (ds.myAreTests)
                     {
                         return true;
                     }
@@ -61,42 +65,42 @@ namespace Plainion.Scripts.Loc
             }
         }
 
-        public static DirStats Create( DirStats parent, string dir )
+        public static DirStats Create(DirStats parent, string dir)
         {
-            DirStats stats = new DirStats( parent );
+            DirStats stats = new DirStats(parent);
             stats.Name = dir;
-            string filename = Path.GetFileName( dir );
+            string filename = Path.GetFileName(dir);
             stats.AreTests = filename == "test.u" || filename == "test.i" ||
-                filename.EndsWith( "_uTest" ) || filename.EndsWith( "_iTest" ) ||
-                filename.EndsWith( "Tests" );
+                filename.EndsWith("_uTest") || filename.EndsWith("_iTest") ||
+                filename.EndsWith("Tests");
 
             return stats;
         }
 
         public void Process()
         {
-            Console.WriteLine( "Processing: " + Name );
+            Console.WriteLine("Processing: " + Name);
 
-            string[] files = Directory.GetFileSystemEntries( Name );
-            foreach( string file in files )
+            string[] files = Directory.GetFileSystemEntries(Name);
+            foreach (string file in files)
             {
-                string name = Path.GetFileName( file );
-                if( Dir_Excludes.Contains( name ) )
+                string name = Path.GetFileName(file);
+                if (Dir_Excludes.Contains(name))
                 {
                     continue;
                 }
 
-                if( Directory.Exists( file ) )
+                if (Directory.Exists(file))
                 {
-                    DirStats stats = DirStats.Create( this, file );
-                    Directories.Add( stats );
+                    DirStats stats = DirStats.Create(this, file);
+                    Directories.Add(stats);
 
                     stats.Process();
                 }
                 else
                 {
-                    FileStats stats = FileStats.Create( file );
-                    Files.Add( stats );
+                    FileStats stats = FileStats.Create(file);
+                    Files.Add(stats);
 
                     stats.Process();
                 }
@@ -105,35 +109,35 @@ namespace Plainion.Scripts.Loc
 
         public TreeNode BuildTree()
         {
-            TreeNode root = new TreeNode( Name );
+            TreeNode root = new TreeNode(Name);
             root.Tag = this;
 
-            BuildTree( this, root );
-            root = root.Nodes[ 0 ];
+            BuildTree(this, root);
+            root = root.Nodes[0];
 
             return root;
         }
 
-        private CollectedStats BuildTree( DirStats stats, TreeNode root )
+        private CollectedStats BuildTree(DirStats stats, TreeNode root)
         {
-            TreeNode node = new TreeNode( Path.GetFileName( stats.Name ) );
-            root.Nodes.Add( node );
+            TreeNode node = new TreeNode(Path.GetFileName(stats.Name));
+            root.Nodes.Add(node);
 
-            CollectedStats collected = new CollectedStats( stats.Name );
-            foreach( DirStats child in stats.Directories )
+            CollectedStats collected = new CollectedStats(stats.Name);
+            foreach (DirStats child in stats.Directories)
             {
-                collected.Sum( BuildTree( child, node ) );
+                collected.Sum(BuildTree(child, node));
             }
 
-            foreach( FileStats child in stats.Files )
+            foreach (FileStats child in stats.Files)
             {
-                if( child.IsGenerated && !stats.AreTests )
+                if (child.IsGenerated && !stats.AreTests)
                 {
                     collected.GeneratedLines += child.CommentLines;
                     collected.GeneratedLines += child.EmptyLines;
                     collected.GeneratedLines += child.SourceLines;
                 }
-                else if( stats.AreTests )
+                else if (stats.AreTests)
                 {
                     collected.TestCommentLines += child.CommentLines;
                     collected.TestEmptyLines += child.EmptyLines;

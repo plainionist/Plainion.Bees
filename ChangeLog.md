@@ -3,6 +3,7 @@
 - Script "XamlEdit" removed
 - Script "TestRunner" removed
 - Script "LoC" converted into an independent app
+- Loc XML output contains collected data recursively
 
 ## 1.13.0 - 2017-02-17
 
