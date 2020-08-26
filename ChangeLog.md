@@ -1,3 +1,7 @@
+## 2.0.0 - 2020-08-
+
+- Script "XamlEdit" removed
+
 ## 1.13.0 - 2017-02-17
 
 - updated to Plainion.AppFW.Shell 1.3.2

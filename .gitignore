@@ -1,6 +1,6 @@
 **/bin/**
 **/obj/**
-/*.suo
+/.vs/**
 /packages/Plainion.Core.2.1.0.0/
 /packages/Plainion.Windows.1.4.0.0
 /packages/Plainion.Prism.1.4.0.0/
