@@ -1,120 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\build\Globals.msbuild" />
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
   <PropertyGroup>
-    <ProjectGuid>{17326B5F-B907-479D-BDDA-8D2736C7328D}</ProjectGuid>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageTargetFallback>netstandard2.0</PackageTargetFallback>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Plainion.WhiteRabbit</RootNamespace>
-    <AssemblyName>Plainion.WhiteRabbit</AssemblyName>
-    <ApplicationIcon>Picture1.ico</ApplicationIcon>
+    <UseWindowsForms>true</UseWindowsForms>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1591</NoWarn>
+    <WarningsNotAsErrors>CS0612,CS0618</WarningsNotAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Prefer32Bit>true</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="ColumnNames.cs" />
-    <Compile Include="DateTimeExtensions.cs" />
-    <Compile Include="Presentation\Channel.cs" />
-    <Compile Include="Model\DayEntry.cs" />
-    <Compile Include="Presentation\Reports\DayReport1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DayReport.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Presentation\Reports\WeekReport1.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>WeekReport.tt</DependentUpon>
-    </Compile>
-    <Compile Include="View\CategoriesForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\CategoriesForm.Designer.cs">
-      <DependentUpon>CategoriesForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Presentation\Controller.cs" />
-    <Compile Include="Model\Database.cs" />
-    <Compile Include="View\IView.cs" />
-    <Compile Include="View\MainUI.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\MainUI.Designer.cs">
-      <DependentUpon>MainUI.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="View\CategoriesForm.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>CategoriesForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\MainUI.resx">
-      <SubType>Designer</SubType>
-      <DependentUpon>MainUI.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <Compile Include="Presentation\Recorder.cs" />
-    <Compile Include="Utilities.cs" />
-    <Compile Include="View\ReportForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\ReportForm.Designer.cs">
-      <DependentUpon>ReportForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\SlimForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\SlimForm.Designer.cs">
-      <DependentUpon>SlimForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\SplitButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Picture1.ico" />
-    <EmbeddedResource Include="View\ReportForm.resx">
-      <DependentUpon>ReportForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\SlimForm.resx">
-      <DependentUpon>SlimForm.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Presentation\Reports\DayReport.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>DayReport1.cs</LastGenOutput>
-    </None>
-    <None Include="Presentation\Reports\WeekReport.tt">
-      <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>WeekReport1.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+
 </Project>

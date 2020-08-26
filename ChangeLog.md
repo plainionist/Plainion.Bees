@@ -4,6 +4,7 @@
 - Script "TestRunner" removed
 - Script "LoC" converted into an independent app
 - Loc XML output contains collected data recursively
+- Migrated to .Net Core
 
 ## 1.13.0 - 2017-02-17
 

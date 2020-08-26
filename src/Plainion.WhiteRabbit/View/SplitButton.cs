@@ -1,10 +1,8 @@
 using System;
-using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
-using System.Drawing;
-using System.ComponentModel;
 
 //Original: http://blogs.msdn.com/jfoscoding/articles/491523.aspx
 //Wyatt's fixes: http://wyday.com/blog/csharp-splitbutton
@@ -25,7 +23,6 @@ namespace InstantUpdate.Controls
         private bool isMouseOutside = false;
 
         private ContextMenuStrip m_SplitMenuStrip = null;
-        private ContextMenu m_SplitMenu = null;
 
         TextFormatFlags textFormatFlags = TextFormatFlags.Default;
 
@@ -34,8 +31,6 @@ namespace InstantUpdate.Controls
             this.AutoSize = true;
             State = PushButtonState.Normal;
         }
-
-        #region Properties
 
         [Browsable(false)]
         public override ContextMenuStrip ContextMenuStrip
@@ -47,31 +42,6 @@ namespace InstantUpdate.Controls
             set
             {
                 m_SplitMenuStrip = value;
-            }
-        }
-
-        [DefaultValue(null)]
-        public ContextMenu SplitMenu
-        {
-            get { return m_SplitMenu; }
-            set
-            {
-                //remove the event handlers for the old SplitMenu
-                if (m_SplitMenu != null)
-                {
-                    m_SplitMenu.Popup -= new EventHandler(SplitMenu_Popup);
-                }
-
-                //add the event handlers for the new SplitMenu
-                if (value != null)
-                {
-                    ShowSplit = true;
-                    value.Popup += new EventHandler(SplitMenu_Popup);
-                }
-                else
-                    ShowSplit = false;
-
-                m_SplitMenu = value;
             }
         }
 
@@ -138,8 +108,6 @@ namespace InstantUpdate.Controls
                 }
             }
         }
-
-        #endregion Properties
 
         protected override bool IsInputKey(Keys keyData)
         {
@@ -325,7 +293,7 @@ namespace InstantUpdate.Controls
             {
                 ShowContextMenuStrip();
             }
-            else if (m_SplitMenuStrip == null && m_SplitMenu == null || !isSplitMenuVisible)
+            else if (m_SplitMenuStrip == null || !isSplitMenuVisible)
             {
                 SetButtonDrawState();
 
@@ -809,11 +777,7 @@ namespace InstantUpdate.Controls
         {
             State = PushButtonState.Pressed;
 
-            if (m_SplitMenu != null)
-            {
-                m_SplitMenu.Show(this, new Point(0, Height - 1));
-            }
-            else if (m_SplitMenuStrip != null)
+            if (m_SplitMenuStrip != null)
             {
                 m_SplitMenuStrip.Show(this, new Point(0, Height - 1), ToolStripDropDownDirection.BelowRight);
             }
