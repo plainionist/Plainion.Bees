@@ -37,14 +37,12 @@ namespace Plainion.WhiteRabbit
             this.myBeginCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myEndCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myDurationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.myCategoryCol = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.myCommentCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myTableContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.myTableContextMenu_DeleteSelectedRow = new System.Windows.Forms.ToolStripMenuItem();
             this.myDateTime = new System.Windows.Forms.DateTimePicker();
             this.myPreferencesMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.categoriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.myPreferencesMenu_DeleteSelectedRow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
@@ -66,7 +64,6 @@ namespace Plainion.WhiteRabbit
             this.myBeginCol,
             this.myEndCol,
             this.myDurationCol,
-            this.myCategoryCol,
             this.myCommentCol});
             this.myTableView.Location = new System.Drawing.Point(3, 32);
             this.myTableView.Name = "myTableView";
@@ -106,12 +103,6 @@ namespace Plainion.WhiteRabbit
             this.myDurationCol.Name = "myDurationCol";
             this.myDurationCol.Width = 65;
             // 
-            // myCategoryCol
-            // 
-            this.myCategoryCol.HeaderText = "Category";
-            this.myCategoryCol.Name = "myCategoryCol";
-            this.myCategoryCol.Width = 120;
-            // 
             // myCommentCol
             // 
             this.myCommentCol.HeaderText = "Comment";
@@ -145,7 +136,6 @@ namespace Plainion.WhiteRabbit
             // 
             this.myPreferencesMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.selectDatabaseToolStripMenuItem,
-            this.categoriesToolStripMenuItem,
             this.toolStripSeparator2,
             this.myPreferencesMenu_DeleteSelectedRow,
             this.toolStripSeparator3,
@@ -159,13 +149,6 @@ namespace Plainion.WhiteRabbit
             this.selectDatabaseToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.selectDatabaseToolStripMenuItem.Text = "Select database ...";
             this.selectDatabaseToolStripMenuItem.Click += new System.EventHandler(this.selectDatabaseToolStripMenuItem_Click);
-            // 
-            // categoriesToolStripMenuItem
-            // 
-            this.categoriesToolStripMenuItem.Name = "categoriesToolStripMenuItem";
-            this.categoriesToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.categoriesToolStripMenuItem.Text = "Categories ...";
-            this.categoriesToolStripMenuItem.Click += new System.EventHandler(this.categoriesToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
@@ -259,7 +242,6 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.ContextMenuStrip myTableContextMenu;
         private System.Windows.Forms.ToolStripMenuItem myTableContextMenu_DeleteSelectedRow;
         private System.Windows.Forms.Button myRecordInitBtn;
-        private System.Windows.Forms.ToolStripMenuItem categoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.NotifyIcon myNotifyIcon;
         private InstantUpdate.Controls.SplitButton mySplitbutton;
@@ -269,7 +251,6 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.DataGridViewTextBoxColumn myBeginCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myEndCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myDurationCol;
-        private System.Windows.Forms.DataGridViewComboBoxColumn myCategoryCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myCommentCol;
     }
 }

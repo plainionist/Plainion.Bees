@@ -30,9 +30,6 @@ namespace Plainion.WhiteRabbit.View
             myChannel = new Channel();
             myChannel.OnTimeElapsedChanged = ( span ) => myTimeElapsed.Text = span.ToString();
 
-            myCategoryList.DisplayMember = "Name";
-            myCategoryList.DataSource = myController.Categories;
-
             Width = panel1.Width;
             StartPosition = FormStartPosition.Manual;
             Location = new Point( Screen.PrimaryScreen.WorkingArea.Width / 2 - Width / 2, 0 );
@@ -47,7 +44,6 @@ namespace Plainion.WhiteRabbit.View
             myStartRecordBtn.Visible = false;
             myStopRecordBtn.Enabled = true;
 
-            myCategoryList.SelectedIndex = entry.Category;
             myCommentTxt.Text = entry.Comment;
         }
 
@@ -90,7 +86,7 @@ namespace Plainion.WhiteRabbit.View
             myStartRecordBtn.Visible = true;
             myStopRecordBtn.Enabled = false;
 
-            myController.StopTimeMeasurement( myCategoryList.SelectedIndex, myCommentTxt.Text );
+            myController.StopTimeMeasurement( myCommentTxt.Text );
         }
     }
 }

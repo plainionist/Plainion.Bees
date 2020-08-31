@@ -12,7 +12,6 @@ namespace Plainion.WhiteRabbit
         private const string BEGIN_COLUMN_NAME = "myBeginCol";
         private const string END_COLUMN_NAME = "myEndCol";
         private const string DURATION_COLUMN_NAME = "myDurationCol";
-        private const string CATEGORY_COLUMN_NAME = "myCategoryCol";
         private const string COMMENT_COLUMN_NAME = "myCommentCol";
 
         private readonly BindingSource myBindingSource;
@@ -39,13 +38,9 @@ namespace Plainion.WhiteRabbit
             myTableView.Columns[BEGIN_COLUMN_NAME].DataPropertyName = ColumnNames.BEGIN;
             myTableView.Columns[END_COLUMN_NAME].DataPropertyName = ColumnNames.END;
             myTableView.Columns[DURATION_COLUMN_NAME].DataPropertyName = ColumnNames.DURATION;
-            myTableView.Columns[CATEGORY_COLUMN_NAME].DataPropertyName = ColumnNames.CATEGORY;
             myTableView.Columns[COMMENT_COLUMN_NAME].DataPropertyName = ColumnNames.COMMENT;
 
             myBindingSource.DataSource = myController.CurrentDayData;
-
-            myCategoryCol.DisplayMember = "Name";
-            myCategoryCol.DataSource = myController.Categories;
 
             mySplitbutton.ShowSplit = true;
         }
@@ -153,17 +148,6 @@ namespace Plainion.WhiteRabbit
         private void deleteSelectedRowMenuItem_Click( object sender, EventArgs e )
         {
             myController.DeleteDayEntry( myTableView.CurrentRow.Index );
-        }
-
-        private void categoriesToolStripMenuItem_Click( object sender, EventArgs e )
-        {
-            Form form = new CategoriesForm( myController );
-
-            form.ShowDialog( this );
-
-            // reload categories
-            myController.LoadCategories();
-            myCategoryCol.DataSource = myController.Categories;
         }
 
         private void myNotifyIcon_DoubleClick( object sender, EventArgs e )

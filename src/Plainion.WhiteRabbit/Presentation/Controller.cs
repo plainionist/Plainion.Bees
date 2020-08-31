@@ -24,8 +24,6 @@ namespace Plainion.WhiteRabbit.Presentation
 
             Database = new Database(Settings.Default.DBStore);
 
-            LoadCategories();
-
             MainView = Activator.CreateInstance(initialView, this) as IView;
         }
 
@@ -39,50 +37,6 @@ namespace Plainion.WhiteRabbit.Presentation
         {
             get;
             private set;
-        }
-
-        public DataTable Categories
-        {
-            get;
-            private set;
-        }
-
-        public void LoadCategories()
-        {
-            Categories = Database.LoadCategories();
-        }
-
-        public void RenameCategory(string oldName, string newName)
-        {
-            if (!RenameCategory(Categories.Rows, Categories.Columns[0], oldName, newName))
-            {
-                throw new Exception("Category not found: " + oldName);
-            }
-
-            Database.StoreCategories(Categories);
-
-            foreach (var day in Database.GetAllDays())
-            {
-                if (RenameCategory(day.Rows, day.Columns["Category"], oldName, newName))
-                {
-                    Database.StoreTable(day);
-                }
-            }
-        }
-
-        private bool RenameCategory(DataRowCollection rows, DataColumn col, string oldName, string newName)
-        {
-            var found = false;
-            foreach (DataRow row in rows)
-            {
-                if ((string)row[col] == oldName)
-                {
-                    row[col] = newName;
-                    found = true;
-                }
-            }
-
-            return found;
         }
 
         public DataTable CurrentDayData
@@ -129,7 +83,7 @@ namespace Plainion.WhiteRabbit.Presentation
             {
                 DataRow dr = CurrentDayData.Rows[CurrentDayData.Rows.Count - 1];
 
-                entry = DayEntry.Parse(dr, Categories);
+                entry = DayEntry.Parse(dr);
             }
             else
             {
@@ -164,7 +118,7 @@ namespace Plainion.WhiteRabbit.Presentation
             }
         }
 
-        public void StopTimeMeasurement(int category, string comment)
+        public void StopTimeMeasurement(string comment)
         {
             (TimerView as Form).Hide();
             (MainView as Form).Show();
@@ -183,10 +137,6 @@ namespace Plainion.WhiteRabbit.Presentation
             {
                 dr["End"] = myRecorder.StopTime.ToShortTimeString();
 
-                if (category != -1)
-                {
-                    dr["Category"] = Categories.Rows[category][0] as string;
-                }
                 dr[ColumnNames.COMMENT] = comment;
 
                 if (dr["Begin"].IsEmpty())
@@ -203,10 +153,6 @@ namespace Plainion.WhiteRabbit.Presentation
 
                 dr["Begin"] = myRecorder.StartTime.ToShortTimeString();
                 dr["End"] = myRecorder.StopTime.ToShortTimeString();
-                if (category != -1)
-                {
-                    dr["Category"] = Categories.Rows[category][0] as string;
-                }
                 dr[ColumnNames.COMMENT] = comment;
             }
 
@@ -224,7 +170,7 @@ namespace Plainion.WhiteRabbit.Presentation
             string file = Path.GetTempFileName();
 
             bool isComplete;
-            var data = GetDayDetails(day, out isComplete);
+            var data = GetDetails(day, out isComplete);
 
             // generate index.html
             var report = new DayReport();
@@ -256,7 +202,7 @@ namespace Plainion.WhiteRabbit.Presentation
             for (var date = begin; date <= end; date = date.AddDays(1))
             {
                 bool isComplete;
-                details[date] = GetDayOverview(date, out isComplete);
+                details[date] = GetDetails(date, out isComplete);
 
                 // handle overview
                 if (!isComplete)
@@ -288,45 +234,7 @@ namespace Plainion.WhiteRabbit.Presentation
             private set;
         }
 
-        private Dictionary<string, Dictionary<string, TimeSpan>> GetDayDetails(DateTime day, out bool isComplete)
-        {
-            var data = new Dictionary<string, Dictionary<string, TimeSpan>>();
-            data["unknown"] = new Dictionary<string, TimeSpan>();
-
-            isComplete = true;
-
-            DataTable table = Database.LoadTable(day);
-            foreach (DataRow row in table.Rows)
-            {
-                var entry = DayEntry.Parse(row, Categories);
-                var usedTime = entry.GetUsedTime();
-                if (usedTime == null)
-                {
-                    isComplete = false;
-                    continue;
-                }
-
-                string cat = (entry.CategoryString != null ? entry.CategoryString : "unknown");
-                if (!data.ContainsKey(cat))
-                {
-                    data[cat] = new Dictionary<string, TimeSpan>();
-                }
-
-                string Comment = (entry.Comment != null ? entry.Comment : "unknown");
-                if (!data[cat].ContainsKey(Comment))
-                {
-                    data[cat][Comment] = usedTime.Value;
-                }
-                else
-                {
-                    data[cat][Comment] += usedTime.Value;
-                }
-            }
-
-            return data;
-        }
-
-        private Dictionary<string, TimeSpan> GetDayOverview(DateTime day, out bool isComplete)
+        private Dictionary<string, TimeSpan> GetDetails(DateTime day, out bool isComplete)
         {
             var data = new Dictionary<string, TimeSpan>();
             data["unknown"] = new TimeSpan();
@@ -336,7 +244,7 @@ namespace Plainion.WhiteRabbit.Presentation
             DataTable table = Database.LoadTable(day);
             foreach (DataRow row in table.Rows)
             {
-                var entry = DayEntry.Parse(row, Categories);
+                var entry = DayEntry.Parse(row);
                 var usedTime = entry.GetUsedTime();
                 if (usedTime == null)
                 {
@@ -344,23 +252,23 @@ namespace Plainion.WhiteRabbit.Presentation
                     continue;
                 }
 
-                string cat = (entry.CategoryString != null ? entry.CategoryString : "unknown");
+                string comment = (entry.Comment != null ? entry.Comment : "unknown");
 
-                AddTimeSpan(data, cat, usedTime.Value);
+                AddTimeSpan(data, comment, usedTime.Value);
             }
 
             return data;
         }
 
-        private void AddTimeSpan(Dictionary<string, TimeSpan> data, string category, TimeSpan time)
+        private void AddTimeSpan(Dictionary<string, TimeSpan> data, string comment, TimeSpan time)
         {
-            if (!data.ContainsKey(category))
+            if (!data.ContainsKey(comment))
             {
-                data[category] = time;
+                data[comment] = time;
             }
             else
             {
-                data[category] += time;
+                data[comment] += time;
             }
         }
     }

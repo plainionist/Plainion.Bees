@@ -10,7 +10,6 @@ namespace Plainion.WhiteRabbit.Model
     public class Database
     {
         private readonly string myStorePath;
-        private readonly string myCategoriesFile;
 
         public Database( string storePath )
         {
@@ -20,7 +19,6 @@ namespace Plainion.WhiteRabbit.Model
             }
 
             myStorePath = storePath;
-            myCategoriesFile = Path.Combine( myStorePath, "categories.xml" );
         }
 
         /// <summary>
@@ -80,7 +78,6 @@ namespace Plainion.WhiteRabbit.Model
             DataTable table = new DataTable( tableName );
             table.Columns.Add( ColumnNames.BEGIN, typeof( string ) );
             table.Columns.Add( ColumnNames.END, typeof( string ) );
-            table.Columns.Add( ColumnNames.CATEGORY, typeof( string ) );
             table.Columns.Add( ColumnNames.COMMENT, typeof( string ) );
 
             // add an "duration" column which does not get serialized
@@ -90,44 +87,6 @@ namespace Plainion.WhiteRabbit.Model
             table.AcceptChanges();
 
             return table;
-        }
-
-        public DataTable LoadCategories()
-        {
-            if( !File.Exists( myCategoriesFile ) )
-            {
-                DataTable table = new DataTable( "Categories" );
-                table.Columns.Add( "Name", typeof( string ) );
-
-                DataRow row = table.NewRow();
-                row[ 0 ] = "<none>";
-                table.Rows.Add( row );
-
-                table.AcceptChanges();
-
-                return table;
-            }
-            else
-            {
-                DataTable table = new DataTable();
-                table.ReadXml( myCategoriesFile );
-
-                return table;
-            }
-        }
-
-        public void StoreCategories( DataTable table )
-        {
-            if( table == null )
-            {
-                throw new ArgumentNullException( "table" );
-            }
-
-            FileStream stream = new FileStream( myCategoriesFile, FileMode.Create );
-            using( XmlTextWriter xmlWriter = new XmlTextWriter( stream, Encoding.Unicode ) )
-            {
-                table.WriteXml( xmlWriter, XmlWriteMode.WriteSchema );
-            }
         }
 
         public IEnumerable<DataTable> GetAllDays()

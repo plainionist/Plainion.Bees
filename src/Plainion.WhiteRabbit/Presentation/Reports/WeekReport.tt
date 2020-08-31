@@ -22,7 +22,7 @@
     <table border="0" cellpadding="4" cellspacing="0">
         <tr>
             <th>
-                Category
+                Comment
             </th>
             <th>
                 Time
@@ -76,7 +76,7 @@ foreach ( string cat in Overview.Keys )
     
     <table cellpadding="4" cellspacing="0">
         <tr>
-            <th>Category</th>
+            <th>Comment</th>
             <#
             var sums = new Dictionary<DateTime, TimeSpan>();
             for ( var date = Begin; date <= End; date = date.AddDays( 1 ) )

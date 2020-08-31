@@ -10,11 +10,10 @@ namespace Plainion.WhiteRabbit.Model
         {
             Begin = null;
             End = null;
-            Category = -1;
             Comment = null;
         }
 
-        public static DayEntry Parse(DataRow row, DataTable categories)
+        public static DayEntry Parse(DataRow row)
         {
             DayEntry entry = new DayEntry();
             if (row == null)
@@ -30,22 +29,6 @@ namespace Plainion.WhiteRabbit.Model
             if (!row["End"].IsEmpty())
             {
                 entry.End = DateTime.Parse((string)row["End"]);
-            }
-
-            if (!row["Category"].IsEmpty())
-            {
-                int pos = 0;
-                foreach (DataRow r in categories.Rows)
-                {
-                    if ((string)r[0] == (string)row["Category"])
-                    {
-                        break;
-                    }
-                    ++pos;
-                }
-
-                entry.Category = pos;
-                entry.CategoryString = row["Category"].ToString();
             }
 
             if (row.Table.Columns.Contains("Comment") && !row["Comment"].IsEmpty())
@@ -89,14 +72,6 @@ namespace Plainion.WhiteRabbit.Model
 
         public DateTime? End { get; set; }
 
-        public int Category { get; set; }
-
-        /// <summary>(
-        /// Contains the string originally parsed from the data row.
-        /// </summary>
-        public string CategoryString { get; private set; }
-
         public string Comment { get; set; }
-
     }
 }

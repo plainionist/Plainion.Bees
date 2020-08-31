@@ -45,7 +45,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
             #line default
             #line hidden
             this.Write("\r\n        </h4>\r\n    </center>\r\n    <table border=\"0\" cellpadding=\"4\" cellspacing" +
-                    "=\"0\">\r\n        <tr>\r\n            <th>\r\n                Category\r\n            </t" +
+                    "=\"0\">\r\n        <tr>\r\n            <th>\r\n                Comment\r\n            </t" +
                     "h>\r\n            <th>\r\n                Time\r\n            </th>\r\n        </tr>\r\n  " +
                     "      ");
             
@@ -120,7 +120,7 @@ foreach ( string cat in Overview.Keys )
             #line default
             #line hidden
             this.Write("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    \r\n    <br />\r\n    \r\n    <ta" +
-                    "ble cellpadding=\"4\" cellspacing=\"0\">\r\n        <tr>\r\n            <th>Category</th" +
+                    "ble cellpadding=\"4\" cellspacing=\"0\">\r\n        <tr>\r\n            <th>Comment</th" +
                     ">\r\n            ");
             
             #line 80 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\WeekReport.tt"

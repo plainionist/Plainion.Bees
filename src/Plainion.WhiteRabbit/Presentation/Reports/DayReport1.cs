@@ -44,19 +44,14 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
             #line 28 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
 TimeSpan sum = new TimeSpan();
-foreach ( string cat in Data.Keys )
+foreach ( string comment in Data.Keys )
 {
-    if ( cat == "unknown" )
+    if (comment == "unknown" )
     {
         continue;
     }
     
-    var catSum = new TimeSpan();
-    foreach( string comment in Data[ cat ].Keys )
-    {
-        catSum += Data[ cat ][ comment ];  
-    }
-    sum += catSum;
+    sum += Data[comment];
     
         
             
@@ -65,46 +60,20 @@ foreach ( string cat in Data.Keys )
             this.Write("        <tr>\r\n            <td>");
             
             #line 46 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(cat));
-            
-            #line default
-            #line hidden
-            this.Write("</td>\r\n            <td align=\"right\">");
-            
-            #line 47 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(catSum.ToReportString()));
-            
-            #line default
-            #line hidden
-            this.Write("</td>\r\n        </tr>\r\n        ");
-            
-            #line 49 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-
-    foreach( string comment in Data[ cat ].Keys )
-    {
-        
-            
-            #line default
-            #line hidden
-            this.Write("        <tr>\r\n            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-            
-            #line 54 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(comment));
             
             #line default
             #line hidden
             this.Write("</td>\r\n            <td align=\"right\">");
             
-            #line 55 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Data[ cat ][ comment ].ToReportString()));
+            #line 47 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(sum.ToReportString()));
             
             #line default
             #line hidden
             this.Write("</td>\r\n        </tr>\r\n        ");
             
-            #line 57 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
- 
-    }
+            #line 49 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
 }
         
             
@@ -114,55 +83,24 @@ foreach ( string cat in Data.Keys )
             
             #line 62 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
-if ( Data["unknown"].Keys.Count > 0 ) 
+if ( Data["unknown"] != TimeSpan.Zero ) 
 {
-    var catSum = new TimeSpan();
-    foreach( string comment in Data[ "unknown" ].Keys )
-    {
-        catSum += Data[ "unknown" ][ comment ];  
-    }
-    sum += catSum;
-    
-        
-            
-            #line default
-            #line hidden
-            this.Write("        <tr>\r\n            <td>unknown</td>\r\n            <td align=\"right\">");
+        sum += Data["unknown"];
+
+
+
+#line default
+#line hidden
+                this.Write("        <tr>\r\n            <td>unknown</td>\r\n            <td align=\"right\">");
             
             #line 75 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(catSum.ToReportString()));
+            this.Write(this.ToStringHelper.ToStringWithCulture(sum.ToReportString()));
             
             #line default
             #line hidden
             this.Write("</td>\r\n        </tr>\r\n        ");
             
             #line 77 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-
-    foreach( string comment in Data[ "unknown" ].Keys )
-    {
-        
-            
-            #line default
-            #line hidden
-            this.Write("        <tr>\r\n            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
-            
-            #line 82 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(comment));
-            
-            #line default
-            #line hidden
-            this.Write("</td>\r\n            <td align=\"right\">");
-            
-            #line 83 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(Data[ "unknown" ][ comment ].ToReportString()));
-            
-            #line default
-            #line hidden
-            this.Write("</td>\r\n        </tr>\r\n        ");
-            
-            #line 85 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
- 
-    }
         
             
             #line default
@@ -207,7 +145,7 @@ if ( !IsComplete )
         #line 110 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
  
 public DateTime Day { get; set; }
-public Dictionary<string, Dictionary<string, TimeSpan>> Data { get; set; }
+public Dictionary<string, TimeSpan> Data { get; set; }
 public bool IsComplete { get; set; }
 
         

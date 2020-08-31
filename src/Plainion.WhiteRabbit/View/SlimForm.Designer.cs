@@ -30,7 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SlimForm));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.myCategoryList = new System.Windows.Forms.ComboBox();
             this.myTimeElapsed = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.myStartRecordBtn = new System.Windows.Forms.Button();
@@ -42,7 +41,6 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.myCategoryList);
             this.panel1.Controls.Add(this.myTimeElapsed);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.myStartRecordBtn);
@@ -53,15 +51,6 @@
             this.panel1.Size = new System.Drawing.Size(507, 31);
             this.panel1.TabIndex = 17;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            // 
-            // myCategoryList
-            // 
-            this.myCategoryList.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.myCategoryList.FormattingEnabled = true;
-            this.myCategoryList.Location = new System.Drawing.Point(61, 5);
-            this.myCategoryList.Name = "myCategoryList";
-            this.myCategoryList.Size = new System.Drawing.Size(117, 21);
-            this.myCategoryList.TabIndex = 25;
             // 
             // myTimeElapsed
             // 
@@ -136,7 +125,6 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ComboBox myCategoryList;
         private System.Windows.Forms.Label myTimeElapsed;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button myStartRecordBtn;
