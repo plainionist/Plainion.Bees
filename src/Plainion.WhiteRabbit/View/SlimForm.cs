@@ -41,7 +41,6 @@ namespace Plainion.WhiteRabbit.View
 
         public void Start( DayEntry entry )
         {
-            myStartRecordBtn.Visible = false;
             myStopRecordBtn.Enabled = true;
 
             myCommentTxt.Text = entry.Comment;
@@ -58,7 +57,7 @@ namespace Plainion.WhiteRabbit.View
         [SecuritySafeCritical]
         private void SlimForm_MouseDown( object sender, MouseEventArgs e )
         {
-            if( e.Button == MouseButtons.Left ) // Allow moving without ALT key && Control.ModifierKeys == Keys.Alt )
+            if (e.Button == MouseButtons.Left && Control.ModifierKeys == Keys.Alt)
             {
                 ReleaseCapture();
                 SendMessage( Handle, WM_NCLBUTTONDOWN, HT_CAPTION, 0 );
@@ -75,15 +74,8 @@ namespace Plainion.WhiteRabbit.View
             }
         }
 
-        private void myStartRecordBtn_Click( object sender, EventArgs e )
-        {
-            myStartRecordBtn.Visible = false;
-            myStopRecordBtn.Enabled = true;
-        }
-
         private void myStopRecordBtn_Click( object sender, EventArgs e )
         {
-            myStartRecordBtn.Visible = true;
             myStopRecordBtn.Enabled = false;
 
             myController.StopTimeMeasurement( myCommentTxt.Text );

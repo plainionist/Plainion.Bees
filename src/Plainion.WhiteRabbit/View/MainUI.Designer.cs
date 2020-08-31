@@ -108,7 +108,7 @@ namespace Plainion.WhiteRabbit
             this.myCommentCol.HeaderText = "Comment";
             this.myCommentCol.Name = "myCommentCol";
             this.myCommentCol.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.myCommentCol.Width = 203;
+            this.myCommentCol.Width = 300;
             // 
             // myTableContextMenu
             // 
