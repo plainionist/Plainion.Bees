@@ -30,14 +30,11 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SlimForm));
             this.panel1 = new System.Windows.Forms.Panel();
-            this.myJitterElapsed = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.myCategoryList = new System.Windows.Forms.ComboBox();
             this.myTimeElapsed = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.myStartRecordBtn = new System.Windows.Forms.Button();
             this.myStopRecordBtn = new System.Windows.Forms.Button();
-            this.myPauseRecordBtn = new System.Windows.Forms.Button();
             this.myTaskTxt = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -45,40 +42,17 @@
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel1.Controls.Add(this.myJitterElapsed);
-            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.myCategoryList);
             this.panel1.Controls.Add(this.myTimeElapsed);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.myStartRecordBtn);
             this.panel1.Controls.Add(this.myStopRecordBtn);
-            this.panel1.Controls.Add(this.myPauseRecordBtn);
             this.panel1.Controls.Add(this.myTaskTxt);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(507, 31);
             this.panel1.TabIndex = 17;
             this.panel1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseDown);
-            // 
-            // myJitterElapsed
-            // 
-            this.myJitterElapsed.AutoSize = true;
-            this.myJitterElapsed.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.myJitterElapsed.Location = new System.Drawing.Point(449, 8);
-            this.myJitterElapsed.Name = "myJitterElapsed";
-            this.myJitterElapsed.Size = new System.Drawing.Size(51, 15);
-            this.myJitterElapsed.TabIndex = 22;
-            this.myJitterElapsed.Text = "00:00:00";
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(417, 9);
-            this.label3.Margin = new System.Windows.Forms.Padding(0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(29, 13);
-            this.label3.TabIndex = 23;
-            this.label3.Text = "Jitter";
             // 
             // myCategoryList
             // 
@@ -132,17 +106,6 @@
             this.myStopRecordBtn.UseVisualStyleBackColor = true;
             this.myStopRecordBtn.Click += new System.EventHandler(this.myStopRecordBtn_Click);
             // 
-            // myPauseRecordBtn
-            // 
-            this.myPauseRecordBtn.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.myPauseRecordBtn.Image = ((System.Drawing.Image)(resources.GetObject("myPauseRecordBtn.Image")));
-            this.myPauseRecordBtn.Location = new System.Drawing.Point(3, 3);
-            this.myPauseRecordBtn.Name = "myPauseRecordBtn";
-            this.myPauseRecordBtn.Size = new System.Drawing.Size(23, 23);
-            this.myPauseRecordBtn.TabIndex = 19;
-            this.myPauseRecordBtn.UseVisualStyleBackColor = true;
-            this.myPauseRecordBtn.Click += new System.EventHandler(this.myPauseRecordBtn_Click);
-            // 
             // myTaskTxt
             // 
             this.myTaskTxt.Location = new System.Drawing.Point(184, 6);
@@ -173,14 +136,11 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label myJitterElapsed;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox myCategoryList;
         private System.Windows.Forms.Label myTimeElapsed;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button myStartRecordBtn;
         private System.Windows.Forms.Button myStopRecordBtn;
-        private System.Windows.Forms.Button myPauseRecordBtn;
         private System.Windows.Forms.TextBox myTaskTxt;
 
     }

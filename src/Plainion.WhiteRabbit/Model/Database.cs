@@ -80,7 +80,6 @@ namespace Plainion.WhiteRabbit.Model
             DataTable table = new DataTable( tableName );
             table.Columns.Add( ColumnNames.BEGIN, typeof( string ) );
             table.Columns.Add( ColumnNames.END, typeof( string ) );
-            table.Columns.Add( ColumnNames.JITTER, typeof( string ) );
             table.Columns.Add( ColumnNames.CATEGORY, typeof( string ) );
             table.Columns.Add( ColumnNames.TASK, typeof( string ) );
 

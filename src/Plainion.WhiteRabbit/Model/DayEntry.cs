@@ -12,7 +12,6 @@ namespace Plainion.WhiteRabbit.Model
         {
             Begin = null;
             End = null;
-            Jitter = TimeSpan.Zero;
             Category = -1;
             Task = null;
         }
@@ -33,11 +32,6 @@ namespace Plainion.WhiteRabbit.Model
             if( !row[ "End" ].IsEmpty() )
             {
                 entry.End = DateTime.Parse( ( string )row[ "End" ] );
-            }
-
-            if( !row[ "Jitter" ].IsEmpty() )
-            {
-                entry.Jitter = TimeSpan.Parse( ( string )row[ "Jitter" ] );
             }
 
             if( !row[ "Category" ].IsEmpty() )
@@ -64,9 +58,6 @@ namespace Plainion.WhiteRabbit.Model
             return entry;
         }
 
-        /// <summary>
-        /// Returns the used time without jitter
-        /// </summary>
         public TimeSpan? GetUsedTime()
         {
             if( Begin == null || End == null )
@@ -74,7 +65,7 @@ namespace Plainion.WhiteRabbit.Model
                 return null;
             }
 
-            return GetDuration( Begin.Value, End.Value ) - ( Jitter == null ? TimeSpan.Zero : Jitter.Value );
+            return GetDuration( Begin.Value, End.Value );
         }
 
         public static TimeSpan GetDuration( DateTime begin, DateTime end )
@@ -94,8 +85,6 @@ namespace Plainion.WhiteRabbit.Model
         public DateTime? Begin { get; set; }
 
         public DateTime? End { get; set; }
-
-        public TimeSpan? Jitter { get; set; }
 
         public int Category { get; set; }
 

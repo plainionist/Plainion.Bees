@@ -12,12 +12,5 @@ namespace Plainion.WhiteRabbit.Presentation
             get;
             set;
         }
-
-        public Action<TimeSpan> OnJitterChanged
-        {
-            get;
-            set;
-        }
-
     }
 }

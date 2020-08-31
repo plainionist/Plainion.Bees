@@ -36,14 +36,11 @@ namespace Plainion.WhiteRabbit
             this.myTableView = new System.Windows.Forms.DataGridView();
             this.myBeginCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myEndCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.myJitterCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myDurationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myCategoryCol = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.myTaskCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myTableContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.myTableContextMenu_DeleteSelectedRow = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.JitterSum = new System.Windows.Forms.ToolStripMenuItem();
             this.myDateTime = new System.Windows.Forms.DateTimePicker();
             this.myPreferencesMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.selectDatabaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,7 +65,6 @@ namespace Plainion.WhiteRabbit
             this.myTableView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.myBeginCol,
             this.myEndCol,
-            this.myJitterCol,
             this.myDurationCol,
             this.myCategoryCol,
             this.myTaskCol});
@@ -103,16 +99,6 @@ namespace Plainion.WhiteRabbit
             this.myEndCol.Name = "myEndCol";
             this.myEndCol.Width = 40;
             // 
-            // myJitterCol
-            // 
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
-            dataGridViewCellStyle3.Format = "t";
-            dataGridViewCellStyle3.NullValue = null;
-            this.myJitterCol.DefaultCellStyle = dataGridViewCellStyle3;
-            this.myJitterCol.HeaderText = "Jitter";
-            this.myJitterCol.Name = "myJitterCol";
-            this.myJitterCol.Width = 40;
-            // 
             // myDurationCol
             // 
             this.myDurationCol.HeaderText = "Duration";
@@ -136,12 +122,9 @@ namespace Plainion.WhiteRabbit
             // myTableContextMenu
             // 
             this.myTableContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.myTableContextMenu_DeleteSelectedRow,
-            this.toolStripSeparator1,
-            this.JitterSum});
+            this.myTableContextMenu_DeleteSelectedRow});
             this.myTableContextMenu.Name = "myTableContextMenu";
             this.myTableContextMenu.Size = new System.Drawing.Size(177, 54);
-            this.myTableContextMenu.VisibleChanged += new System.EventHandler(this.myTableContextMenu_VisibleChanged);
             // 
             // myTableContextMenu_DeleteSelectedRow
             // 
@@ -149,17 +132,6 @@ namespace Plainion.WhiteRabbit
             this.myTableContextMenu_DeleteSelectedRow.Size = new System.Drawing.Size(176, 22);
             this.myTableContextMenu_DeleteSelectedRow.Text = "Delete selected row";
             this.myTableContextMenu_DeleteSelectedRow.Click += new System.EventHandler(this.deleteSelectedRowMenuItem_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(173, 6);
-            // 
-            // JitterSum
-            // 
-            this.JitterSum.Name = "JitterSum";
-            this.JitterSum.Size = new System.Drawing.Size(176, 22);
-            this.JitterSum.Text = "Sum jitter:";
             // 
             // myDateTime
             // 
@@ -286,8 +258,6 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.ToolStripMenuItem myPreferencesMenu_DeleteSelectedRow;
         private System.Windows.Forms.ContextMenuStrip myTableContextMenu;
         private System.Windows.Forms.ToolStripMenuItem myTableContextMenu_DeleteSelectedRow;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-        private System.Windows.Forms.ToolStripMenuItem JitterSum;
         private System.Windows.Forms.Button myRecordInitBtn;
         private System.Windows.Forms.ToolStripMenuItem categoriesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -298,7 +268,6 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.ToolStripMenuItem dayReportToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn myBeginCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myEndCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn myJitterCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myDurationCol;
         private System.Windows.Forms.DataGridViewComboBoxColumn myCategoryCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myTaskCol;

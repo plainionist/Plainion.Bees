@@ -11,7 +11,6 @@ namespace Plainion.WhiteRabbit
     {
         private const string BEGIN_COLUMN_NAME = "myBeginCol";
         private const string END_COLUMN_NAME = "myEndCol";
-        private const string JITTER_COLUMN_NAME = "myJitterCol";
         private const string DURATION_COLUMN_NAME = "myDurationCol";
         private const string CATEGORY_COLUMN_NAME = "myCategoryCol";
         private const string TASK_COLUMN_NAME = "myTaskCol";
@@ -39,7 +38,6 @@ namespace Plainion.WhiteRabbit
             myTableView.AutoGenerateColumns = false;
             myTableView.Columns[BEGIN_COLUMN_NAME].DataPropertyName = ColumnNames.BEGIN;
             myTableView.Columns[END_COLUMN_NAME].DataPropertyName = ColumnNames.END;
-            myTableView.Columns[JITTER_COLUMN_NAME].DataPropertyName = ColumnNames.JITTER;
             myTableView.Columns[DURATION_COLUMN_NAME].DataPropertyName = ColumnNames.DURATION;
             myTableView.Columns[CATEGORY_COLUMN_NAME].DataPropertyName = ColumnNames.CATEGORY;
             myTableView.Columns[TASK_COLUMN_NAME].DataPropertyName = ColumnNames.TASK;
@@ -155,12 +153,6 @@ namespace Plainion.WhiteRabbit
         private void deleteSelectedRowMenuItem_Click( object sender, EventArgs e )
         {
             myController.DeleteDayEntry( myTableView.CurrentRow.Index );
-        }
-
-        private void myTableContextMenu_VisibleChanged( object sender, EventArgs e )
-        {
-            var allJitter = myController.GetJitterSum();
-            myTableContextMenu.Items[2].Text = "Jitter sum: " + allJitter.Hours + ":" + allJitter.Minutes;
         }
 
         private void categoriesToolStripMenuItem_Click( object sender, EventArgs e )

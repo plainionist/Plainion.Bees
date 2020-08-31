@@ -122,26 +122,6 @@ namespace Plainion.WhiteRabbit.Presentation
             return table;
         }
 
-        public TimeSpan GetJitterSum()
-        {
-            TimeSpan allJitter = new TimeSpan();
-
-            foreach ( DataRow row in CurrentDayData.Rows )
-            {
-                string s = row[ 2 ] as string;
-                if ( !s.IsNullOrTrimmedEmpty() )
-                {
-                    TimeSpan result;
-                    if ( TimeSpan.TryParse( s.Trim(), out result ) )
-                    {
-                        allJitter += result;
-                    }
-                }
-            }
-
-            return allJitter;
-        }
-
         public void StartTimeMeasurement()
         {
             DayEntry entry = null;
@@ -175,20 +155,8 @@ namespace Plainion.WhiteRabbit.Presentation
                 }
                 else
                 {
-                    myRecorder.Start( entry.Begin.Value, entry.Jitter );
+                    myRecorder.Start( entry.Begin.Value );
                 }
-            }
-            else
-            {
-                myRecorder.Start();
-            }
-        }
-
-        public void PauseTimeMeasurement( bool on )
-        {
-            if ( on )
-            {
-                myRecorder.Pause();
             }
             else
             {
@@ -214,7 +182,6 @@ namespace Plainion.WhiteRabbit.Presentation
             if ( dr != null && dr[ "End" ].IsEmpty() )
             {
                 dr[ "End" ] = myRecorder.StopTime.ToShortTimeString();
-                dr[ "Jitter" ] = "" + myRecorder.Jitter.Hours + ":" + myRecorder.Jitter.Minutes;
 
                 if ( category != -1 )
                 {
@@ -236,7 +203,6 @@ namespace Plainion.WhiteRabbit.Presentation
 
                 dr[ "Begin" ] = myRecorder.StartTime.ToShortTimeString();
                 dr[ "End" ] = myRecorder.StopTime.ToShortTimeString();
-                dr[ "Jitter" ] = "" + myRecorder.Jitter.Hours + ":" + myRecorder.Jitter.Minutes;
                 if ( category != -1 )
                 {
                     dr[ "Category" ] = Categories.Rows[ category ][ 0 ] as string;

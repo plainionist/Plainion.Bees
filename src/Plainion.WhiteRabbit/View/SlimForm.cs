@@ -29,7 +29,6 @@ namespace Plainion.WhiteRabbit.View
 
             myChannel = new Channel();
             myChannel.OnTimeElapsedChanged = ( span ) => myTimeElapsed.Text = span.ToString();
-            myChannel.OnJitterChanged = ( span ) => myJitterElapsed.Text = span.ToString();
 
             myCategoryList.DisplayMember = "Name";
             myCategoryList.DataSource = myController.Categories;
@@ -46,14 +45,11 @@ namespace Plainion.WhiteRabbit.View
         public void Start( DayEntry entry )
         {
             myStartRecordBtn.Visible = false;
-            myPauseRecordBtn.Visible = true;
             myStopRecordBtn.Enabled = true;
 
             myCategoryList.SelectedIndex = entry.Category;
             myTaskTxt.Text = entry.Task;
         }
-
-        #region Channel API
 
         public Channel Channel
         {
@@ -62,8 +58,6 @@ namespace Plainion.WhiteRabbit.View
                 return myChannel;
             }
         }
-
-        #endregion
 
         [SecuritySafeCritical]
         private void SlimForm_MouseDown( object sender, MouseEventArgs e )
@@ -87,26 +81,13 @@ namespace Plainion.WhiteRabbit.View
 
         private void myStartRecordBtn_Click( object sender, EventArgs e )
         {
-            myController.PauseTimeMeasurement( false );
-
             myStartRecordBtn.Visible = false;
-            myPauseRecordBtn.Visible = true;
-            myStopRecordBtn.Enabled = true;
-        }
-
-        private void myPauseRecordBtn_Click( object sender, EventArgs e )
-        {
-            myController.PauseTimeMeasurement( true );
-
-            myStartRecordBtn.Visible = true;
-            myPauseRecordBtn.Visible = false;
             myStopRecordBtn.Enabled = true;
         }
 
         private void myStopRecordBtn_Click( object sender, EventArgs e )
         {
             myStartRecordBtn.Visible = true;
-            myPauseRecordBtn.Visible = false;
             myStopRecordBtn.Enabled = false;
 
             myController.StopTimeMeasurement( myCategoryList.SelectedIndex, myTaskTxt.Text );
