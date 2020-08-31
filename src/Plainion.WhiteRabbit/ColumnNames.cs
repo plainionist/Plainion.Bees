@@ -6,6 +6,6 @@
         public static readonly string END = "End";
         public static readonly string DURATION = "Duration";
         public static readonly string CATEGORY = "Category";
-        public static readonly string TASK = "Task";
+        public static readonly string COMMENT = "Task";
     }
 }

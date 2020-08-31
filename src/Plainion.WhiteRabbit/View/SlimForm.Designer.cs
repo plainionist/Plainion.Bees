@@ -35,7 +35,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.myStartRecordBtn = new System.Windows.Forms.Button();
             this.myStopRecordBtn = new System.Windows.Forms.Button();
-            this.myTaskTxt = new System.Windows.Forms.TextBox();
+            this.myCommentTxt = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +47,7 @@
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.myStartRecordBtn);
             this.panel1.Controls.Add(this.myStopRecordBtn);
-            this.panel1.Controls.Add(this.myTaskTxt);
+            this.panel1.Controls.Add(this.myCommentTxt);
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(507, 31);
@@ -106,12 +106,12 @@
             this.myStopRecordBtn.UseVisualStyleBackColor = true;
             this.myStopRecordBtn.Click += new System.EventHandler(this.myStopRecordBtn_Click);
             // 
-            // myTaskTxt
+            // myCommentTxt
             // 
-            this.myTaskTxt.Location = new System.Drawing.Point(184, 6);
-            this.myTaskTxt.Name = "myTaskTxt";
-            this.myTaskTxt.Size = new System.Drawing.Size(128, 20);
-            this.myTaskTxt.TabIndex = 21;
+            this.myCommentTxt.Location = new System.Drawing.Point(184, 6);
+            this.myCommentTxt.Name = "myCommentTxt";
+            this.myCommentTxt.Size = new System.Drawing.Size(128, 20);
+            this.myCommentTxt.TabIndex = 21;
             // 
             // SlimForm
             // 
@@ -141,7 +141,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button myStartRecordBtn;
         private System.Windows.Forms.Button myStopRecordBtn;
-        private System.Windows.Forms.TextBox myTaskTxt;
+        private System.Windows.Forms.TextBox myCommentTxt;
 
     }
 }

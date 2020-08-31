@@ -81,7 +81,7 @@ namespace Plainion.WhiteRabbit.Model
             table.Columns.Add( ColumnNames.BEGIN, typeof( string ) );
             table.Columns.Add( ColumnNames.END, typeof( string ) );
             table.Columns.Add( ColumnNames.CATEGORY, typeof( string ) );
-            table.Columns.Add( ColumnNames.TASK, typeof( string ) );
+            table.Columns.Add( ColumnNames.COMMENT, typeof( string ) );
 
             // add an "duration" column which does not get serialized
             DataColumn durationCol = new DataColumn( ColumnNames.DURATION, typeof( string ) ) { ColumnMapping = MappingType.Hidden };

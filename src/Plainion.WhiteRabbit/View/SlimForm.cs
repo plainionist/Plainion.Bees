@@ -48,7 +48,7 @@ namespace Plainion.WhiteRabbit.View
             myStopRecordBtn.Enabled = true;
 
             myCategoryList.SelectedIndex = entry.Category;
-            myTaskTxt.Text = entry.Task;
+            myCommentTxt.Text = entry.Comment;
         }
 
         public Channel Channel
@@ -90,7 +90,7 @@ namespace Plainion.WhiteRabbit.View
             myStartRecordBtn.Visible = true;
             myStopRecordBtn.Enabled = false;
 
-            myController.StopTimeMeasurement( myCategoryList.SelectedIndex, myTaskTxt.Text );
+            myController.StopTimeMeasurement( myCategoryList.SelectedIndex, myCommentTxt.Text );
         }
     }
 }

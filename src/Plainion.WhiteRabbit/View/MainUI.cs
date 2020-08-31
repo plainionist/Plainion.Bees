@@ -13,7 +13,7 @@ namespace Plainion.WhiteRabbit
         private const string END_COLUMN_NAME = "myEndCol";
         private const string DURATION_COLUMN_NAME = "myDurationCol";
         private const string CATEGORY_COLUMN_NAME = "myCategoryCol";
-        private const string TASK_COLUMN_NAME = "myTaskCol";
+        private const string COMMENT_COLUMN_NAME = "myCommentCol";
 
         private readonly BindingSource myBindingSource;
         private readonly Controller myController;
@@ -40,7 +40,7 @@ namespace Plainion.WhiteRabbit
             myTableView.Columns[END_COLUMN_NAME].DataPropertyName = ColumnNames.END;
             myTableView.Columns[DURATION_COLUMN_NAME].DataPropertyName = ColumnNames.DURATION;
             myTableView.Columns[CATEGORY_COLUMN_NAME].DataPropertyName = ColumnNames.CATEGORY;
-            myTableView.Columns[TASK_COLUMN_NAME].DataPropertyName = ColumnNames.TASK;
+            myTableView.Columns[COMMENT_COLUMN_NAME].DataPropertyName = ColumnNames.COMMENT;
 
             myBindingSource.DataSource = myController.CurrentDayData;
 

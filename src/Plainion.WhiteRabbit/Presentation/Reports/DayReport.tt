@@ -21,7 +21,7 @@
     <table border="0" cellpadding="4" cellspacing="0">
         <tr>
             <th>
-                Category/Task
+                Comment
             </th>
             <th style="width:75px;">Time</th>
         </tr>
@@ -35,9 +35,9 @@ foreach ( string cat in Data.Keys )
     }
     
     var catSum = new TimeSpan();
-    foreach( string task in Data[ cat ].Keys )
+    foreach( string comment in Data[ cat ].Keys )
     {
-        catSum += Data[ cat ][ task ];  
+        catSum += Data[ cat ][ comment ];  
     }
     sum += catSum;
     
@@ -47,12 +47,12 @@ foreach ( string cat in Data.Keys )
             <td align="right"><#= catSum.ToReportString() #></td>
         </tr>
         <#
-    foreach( string task in Data[ cat ].Keys )
+    foreach( string comment in Data[ cat ].Keys )
     {
         #>
         <tr>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#= task #></td>
-            <td align="right"><#= Data[ cat ][ task ].ToReportString() #></td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#= comment #></td>
+            <td align="right"><#= Data[ cat ][ comment ].ToReportString() #></td>
         </tr>
         <# 
     }
@@ -63,9 +63,9 @@ foreach ( string cat in Data.Keys )
 if ( Data["unknown"].Keys.Count > 0 ) 
 {
     var catSum = new TimeSpan();
-    foreach( string task in Data[ "unknown" ].Keys )
+    foreach( string comment in Data[ "unknown" ].Keys )
     {
-        catSum += Data[ "unknown" ][ task ];  
+        catSum += Data[ "unknown" ][ comment ];  
     }
     sum += catSum;
     
@@ -75,12 +75,12 @@ if ( Data["unknown"].Keys.Count > 0 )
             <td align="right"><#= catSum.ToReportString() #></td>
         </tr>
         <#
-    foreach( string task in Data[ "unknown" ].Keys )
+    foreach( string comment in Data[ "unknown" ].Keys )
     {
         #>
         <tr>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#= task #></td>
-            <td align="right"><#= Data[ "unknown" ][ task ].ToReportString() #></td>
+            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#= comment #></td>
+            <td align="right"><#= Data[ "unknown" ][ comment ].ToReportString() #></td>
         </tr>
         <# 
     }

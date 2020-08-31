@@ -14,19 +14,19 @@ namespace Plainion.WhiteRabbit.Presentation
     {
         private Recorder myRecorder = null;
 
-        public Controller( Type initialView )
+        public Controller(Type initialView)
         {
-            if ( Settings.Default.DBStore.IsNullOrTrimmedEmpty() )
+            if (Settings.Default.DBStore.IsNullOrTrimmedEmpty())
             {
-                Settings.Default.DBStore = Path.Combine( Environment.GetFolderPath( Environment.SpecialFolder.Personal ), "WhiteRabbit" );
+                Settings.Default.DBStore = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "WhiteRabbit");
                 Settings.Default.Save();
             }
 
-            Database = new Database( Settings.Default.DBStore );
+            Database = new Database(Settings.Default.DBStore);
 
             LoadCategories();
 
-            MainView = Activator.CreateInstance( initialView, this ) as IView;
+            MainView = Activator.CreateInstance(initialView, this) as IView;
         }
 
         public IView MainView
@@ -52,32 +52,32 @@ namespace Plainion.WhiteRabbit.Presentation
             Categories = Database.LoadCategories();
         }
 
-        public void RenameCategory( string oldName, string newName )
+        public void RenameCategory(string oldName, string newName)
         {
-            if ( !RenameCategory( Categories.Rows, Categories.Columns[ 0 ], oldName, newName ) )
+            if (!RenameCategory(Categories.Rows, Categories.Columns[0], oldName, newName))
             {
-                throw new Exception( "Category not found: " + oldName );
+                throw new Exception("Category not found: " + oldName);
             }
 
-            Database.StoreCategories( Categories );
+            Database.StoreCategories(Categories);
 
-            foreach ( var day in Database.GetAllDays() )
+            foreach (var day in Database.GetAllDays())
             {
-                if ( RenameCategory( day.Rows, day.Columns[ "Category" ], oldName, newName ) )
+                if (RenameCategory(day.Rows, day.Columns["Category"], oldName, newName))
                 {
-                    Database.StoreTable( day );
+                    Database.StoreTable(day);
                 }
             }
         }
 
-        private bool RenameCategory( DataRowCollection rows, DataColumn col, string oldName, string newName )
+        private bool RenameCategory(DataRowCollection rows, DataColumn col, string oldName, string newName)
         {
             var found = false;
-            foreach ( DataRow row in rows )
+            foreach (DataRow row in rows)
             {
-                if ( (string)row[ col ] == oldName )
+                if ((string)row[col] == oldName)
                 {
-                    row[ col ] = newName;
+                    row[col] = newName;
                     found = true;
                 }
             }
@@ -97,26 +97,26 @@ namespace Plainion.WhiteRabbit.Presentation
             private set;
         }
 
-        public void ChangeDay( DateTime day )
+        public void ChangeDay(DateTime day)
         {
             CurrentDay = day;
-            CurrentDayData = GetTableByDay( day );
+            CurrentDayData = GetTableByDay(day);
         }
 
-        public void DeleteDayEntry( int idx )
+        public void DeleteDayEntry(int idx)
         {
-            CurrentDayData.Rows.RemoveAt( idx );
+            CurrentDayData.Rows.RemoveAt(idx);
             CurrentDayData.AcceptChanges();
 
-            Database.StoreTable( CurrentDayData );
+            Database.StoreTable(CurrentDayData);
         }
 
-        public DataTable GetTableByDay( DateTime day )
+        public DataTable GetTableByDay(DateTime day)
         {
-            var table = Database.LoadTable( day );
-            if ( table == null )
+            var table = Database.LoadTable(day);
+            if (table == null)
             {
-                table = Database.CreateTable( day );
+                table = Database.CreateTable(day);
             }
 
             return table;
@@ -125,37 +125,37 @@ namespace Plainion.WhiteRabbit.Presentation
         public void StartTimeMeasurement()
         {
             DayEntry entry = null;
-            if ( CurrentDayData.Rows.Count > 0 )
+            if (CurrentDayData.Rows.Count > 0)
             {
-                DataRow dr = CurrentDayData.Rows[ CurrentDayData.Rows.Count - 1 ];
+                DataRow dr = CurrentDayData.Rows[CurrentDayData.Rows.Count - 1];
 
-                entry = DayEntry.Parse( dr, Categories );
+                entry = DayEntry.Parse(dr, Categories);
             }
             else
             {
                 entry = new DayEntry();
             }
 
-            ( MainView as Form ).Hide();
+            (MainView as Form).Hide();
 
-            if ( TimerView == null )
+            if (TimerView == null)
             {
-                TimerView = new SlimForm( this );
+                TimerView = new SlimForm(this);
             }
-            ( TimerView as SlimForm ).Show();
-            ( TimerView as SlimForm ).Start( entry );
+            (TimerView as SlimForm).Show();
+            (TimerView as SlimForm).Start(entry);
 
-            myRecorder = new Recorder( TimerView.Channel );
+            myRecorder = new Recorder(TimerView.Channel);
 
-            if ( entry.End == null )
+            if (entry.End == null)
             {
-                if ( null == entry.Begin )
+                if (null == entry.Begin)
                 {
                     myRecorder.Start();
                 }
                 else
                 {
-                    myRecorder.Start( entry.Begin.Value );
+                    myRecorder.Start(entry.Begin.Value);
                 }
             }
             else
@@ -164,53 +164,53 @@ namespace Plainion.WhiteRabbit.Presentation
             }
         }
 
-        public void StopTimeMeasurement( int category, string task )
+        public void StopTimeMeasurement(int category, string comment)
         {
-            ( TimerView as Form ).Hide();
-            ( MainView as Form ).Show();
+            (TimerView as Form).Hide();
+            (MainView as Form).Show();
 
             myRecorder.Stop();
 
             // if last record is not yet completed
             // -> complete this one
             DataRow dr = null;
-            if ( CurrentDayData.Rows.Count > 0 )
+            if (CurrentDayData.Rows.Count > 0)
             {
-                dr = CurrentDayData.Rows[ CurrentDayData.Rows.Count - 1 ];
+                dr = CurrentDayData.Rows[CurrentDayData.Rows.Count - 1];
             }
 
-            if ( dr != null && dr[ "End" ].IsEmpty() )
+            if (dr != null && dr["End"].IsEmpty())
             {
-                dr[ "End" ] = myRecorder.StopTime.ToShortTimeString();
+                dr["End"] = myRecorder.StopTime.ToShortTimeString();
 
-                if ( category != -1 )
+                if (category != -1)
                 {
-                    dr[ "Category" ] = Categories.Rows[ category ][ 0 ] as string;
+                    dr["Category"] = Categories.Rows[category][0] as string;
                 }
-                dr[ "Task" ] = task;
+                dr[ColumnNames.COMMENT] = comment;
 
-                if ( dr[ "Begin" ].IsEmpty() )
+                if (dr["Begin"].IsEmpty())
                 {
-                    dr[ "Begin" ] = myRecorder.StartTime.ToShortTimeString();
+                    dr["Begin"] = myRecorder.StartTime.ToShortTimeString();
                 }
             }
             else
             {
                 // add recorded data to table
                 dr = CurrentDayData.NewRow();
-                CurrentDayData.Rows.Add( dr );
+                CurrentDayData.Rows.Add(dr);
                 CurrentDayData.AcceptChanges();
 
-                dr[ "Begin" ] = myRecorder.StartTime.ToShortTimeString();
-                dr[ "End" ] = myRecorder.StopTime.ToShortTimeString();
-                if ( category != -1 )
+                dr["Begin"] = myRecorder.StartTime.ToShortTimeString();
+                dr["End"] = myRecorder.StopTime.ToShortTimeString();
+                if (category != -1)
                 {
-                    dr[ "Category" ] = Categories.Rows[ category ][ 0 ] as string;
+                    dr["Category"] = Categories.Rows[category][0] as string;
                 }
-                dr[ "Task" ] = task;
+                dr[ColumnNames.COMMENT] = comment;
             }
 
-            Database.StoreTable( CurrentDayData );
+            Database.StoreTable(CurrentDayData);
 
             myRecorder = null;
         }
@@ -219,19 +219,19 @@ namespace Plainion.WhiteRabbit.Presentation
         /// Generates the report for the given day and returns the
         /// URL to the generated report.
         /// </summary>
-        public string GenerateDayReport( DateTime day )
+        public string GenerateDayReport(DateTime day)
         {
             string file = Path.GetTempFileName();
 
             bool isComplete;
-            var data = GetDayDetails( day, out isComplete );
+            var data = GetDayDetails(day, out isComplete);
 
             // generate index.html
             var report = new DayReport();
-            report.Day= day;
-            report.Data=data;
+            report.Day = day;
+            report.Data = data;
             report.IsComplete = isComplete;
-            File.WriteAllText( file, report.TransformText() );
+            File.WriteAllText(file, report.TransformText());
 
             return file;
         }
@@ -240,12 +240,12 @@ namespace Plainion.WhiteRabbit.Presentation
         /// Generates the report for the week specified by the day and returns the
         /// URL to the generated report.
         /// </summary>
-        public string GenerateWeekReport( DateTime day )
+        public string GenerateWeekReport(DateTime day)
         {
             string file = Path.GetTempFileName();
 
             var overview = new Dictionary<string, TimeSpan>();
-            overview[ "unknown" ] = new TimeSpan();
+            overview["unknown"] = new TimeSpan();
 
             var details = new Dictionary<DateTime, Dictionary<string, TimeSpan>>();
 
@@ -253,20 +253,20 @@ namespace Plainion.WhiteRabbit.Presentation
 
             var begin = day.GetBeginOfWeek();
             var end = day.GetEndOfWeek();
-            for ( var date = begin; date <= end; date = date.AddDays( 1 ) )
+            for (var date = begin; date <= end; date = date.AddDays(1))
             {
                 bool isComplete;
-                details[ date ] = GetDayOverview( date, out isComplete );
+                details[date] = GetDayOverview(date, out isComplete);
 
                 // handle overview
-                if ( !isComplete )
+                if (!isComplete)
                 {
                     isAllComplete = false;
                 }
 
-                foreach ( var entry in details[ date ] )
+                foreach (var entry in details[date])
                 {
-                    AddTimeSpan( overview, entry.Key, entry.Value );
+                    AddTimeSpan(overview, entry.Key, entry.Value);
                 }
             }
 
@@ -277,7 +277,7 @@ namespace Plainion.WhiteRabbit.Presentation
             report.Overview = overview;
             report.Details = details;
             report.IsComplete = isAllComplete;
-            File.WriteAllText( file, report.TransformText() );
+            File.WriteAllText(file, report.TransformText());
 
             return file;
         }
@@ -288,79 +288,79 @@ namespace Plainion.WhiteRabbit.Presentation
             private set;
         }
 
-        private Dictionary<string, Dictionary<string, TimeSpan>> GetDayDetails( DateTime day, out bool isComplete )
+        private Dictionary<string, Dictionary<string, TimeSpan>> GetDayDetails(DateTime day, out bool isComplete)
         {
             var data = new Dictionary<string, Dictionary<string, TimeSpan>>();
-            data[ "unknown" ] = new Dictionary<string, TimeSpan>();
+            data["unknown"] = new Dictionary<string, TimeSpan>();
 
             isComplete = true;
 
-            DataTable table = Database.LoadTable( day );
-            foreach ( DataRow row in table.Rows )
+            DataTable table = Database.LoadTable(day);
+            foreach (DataRow row in table.Rows)
             {
-                var entry = DayEntry.Parse( row, Categories );
+                var entry = DayEntry.Parse(row, Categories);
                 var usedTime = entry.GetUsedTime();
-                if ( usedTime == null )
+                if (usedTime == null)
                 {
                     isComplete = false;
                     continue;
                 }
 
-                string cat = ( entry.CategoryString != null ? entry.CategoryString : "unknown" );
-                if ( !data.ContainsKey( cat ) )
+                string cat = (entry.CategoryString != null ? entry.CategoryString : "unknown");
+                if (!data.ContainsKey(cat))
                 {
-                    data[ cat ] = new Dictionary<string, TimeSpan>();
+                    data[cat] = new Dictionary<string, TimeSpan>();
                 }
 
-                string task = ( entry.Task != null ? entry.Task : "unknown" );
-                if ( !data[ cat ].ContainsKey( task ) )
+                string Comment = (entry.Comment != null ? entry.Comment : "unknown");
+                if (!data[cat].ContainsKey(Comment))
                 {
-                    data[ cat ][ task ] = usedTime.Value;
+                    data[cat][Comment] = usedTime.Value;
                 }
                 else
                 {
-                    data[ cat ][ task ] += usedTime.Value;
+                    data[cat][Comment] += usedTime.Value;
                 }
             }
 
             return data;
         }
 
-        private Dictionary<string, TimeSpan> GetDayOverview( DateTime day, out bool isComplete )
+        private Dictionary<string, TimeSpan> GetDayOverview(DateTime day, out bool isComplete)
         {
             var data = new Dictionary<string, TimeSpan>();
-            data[ "unknown" ] = new TimeSpan();
+            data["unknown"] = new TimeSpan();
 
             isComplete = true;
 
-            DataTable table = Database.LoadTable( day );
-            foreach ( DataRow row in table.Rows )
+            DataTable table = Database.LoadTable(day);
+            foreach (DataRow row in table.Rows)
             {
-                var entry = DayEntry.Parse( row, Categories );
+                var entry = DayEntry.Parse(row, Categories);
                 var usedTime = entry.GetUsedTime();
-                if ( usedTime == null )
+                if (usedTime == null)
                 {
                     isComplete = false;
                     continue;
                 }
 
-                string cat = ( entry.CategoryString != null ? entry.CategoryString : "unknown" );
+                string cat = (entry.CategoryString != null ? entry.CategoryString : "unknown");
 
-                AddTimeSpan( data, cat, usedTime.Value );
+                AddTimeSpan(data, cat, usedTime.Value);
             }
 
             return data;
         }
 
-        private void AddTimeSpan( Dictionary<string, TimeSpan> data, string category, TimeSpan time )
+        private void AddTimeSpan(Dictionary<string, TimeSpan> data, string category, TimeSpan time)
         {
-            if ( !data.ContainsKey( category ) )
+            if (!data.ContainsKey(category))
             {
-                data[ category ] = time;
+                data[category] = time;
             }
             else
             {
-                data[ category ] += time;
+                data[category] += time;
             }
         }
     }

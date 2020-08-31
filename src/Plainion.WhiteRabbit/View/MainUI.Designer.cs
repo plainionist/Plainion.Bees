@@ -38,7 +38,7 @@ namespace Plainion.WhiteRabbit
             this.myEndCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myDurationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myCategoryCol = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.myTaskCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.myCommentCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.myTableContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.myTableContextMenu_DeleteSelectedRow = new System.Windows.Forms.ToolStripMenuItem();
             this.myDateTime = new System.Windows.Forms.DateTimePicker();
@@ -67,7 +67,7 @@ namespace Plainion.WhiteRabbit
             this.myEndCol,
             this.myDurationCol,
             this.myCategoryCol,
-            this.myTaskCol});
+            this.myCommentCol});
             this.myTableView.Location = new System.Drawing.Point(3, 32);
             this.myTableView.Name = "myTableView";
             this.myTableView.RowHeadersVisible = false;
@@ -112,12 +112,12 @@ namespace Plainion.WhiteRabbit
             this.myCategoryCol.Name = "myCategoryCol";
             this.myCategoryCol.Width = 120;
             // 
-            // myTaskCol
+            // myCommentCol
             // 
-            this.myTaskCol.HeaderText = "Task";
-            this.myTaskCol.Name = "myTaskCol";
-            this.myTaskCol.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.myTaskCol.Width = 203;
+            this.myCommentCol.HeaderText = "Comment";
+            this.myCommentCol.Name = "myCommentCol";
+            this.myCommentCol.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.myCommentCol.Width = 203;
             // 
             // myTableContextMenu
             // 
@@ -270,7 +270,7 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.DataGridViewTextBoxColumn myEndCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myDurationCol;
         private System.Windows.Forms.DataGridViewComboBoxColumn myCategoryCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn myTaskCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn myCommentCol;
     }
 }
 
