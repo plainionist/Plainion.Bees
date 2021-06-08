@@ -27,64 +27,33 @@
         </tr>
         <# 
 TimeSpan sum = new TimeSpan();
-foreach ( string cat in Data.Keys )
+foreach ( string comment in Data.Keys )
 {
-    if ( cat == "unknown" )
+    if ( comment == "unknown" )
     {
         continue;
     }
     
-    var catSum = new TimeSpan();
-    foreach( string comment in Data[ cat ].Keys )
-    {
-        catSum += Data[ cat ][ comment ];  
-    }
-    sum += catSum;
+    sum += Data[comment];
     
         #>
         <tr>
-            <td><#= cat #></td>
-            <td align="right"><#= catSum.ToReportString() #></td>
+            <td><#= comment #></td>
+            <td align="right"><#= Data[comment].ToReportString() #></td>
         </tr>
         <#
-    foreach( string comment in Data[ cat ].Keys )
-    {
-        #>
-        <tr>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#= comment #></td>
-            <td align="right"><#= Data[ cat ][ comment ].ToReportString() #></td>
-        </tr>
-        <# 
-    }
 }
         #>
         
         <# 
-if ( Data["unknown"].Keys.Count > 0 ) 
+if ( Data["unknown"] != TimeSpan.Zero ) 
 {
-    var catSum = new TimeSpan();
-    foreach( string comment in Data[ "unknown" ].Keys )
-    {
-        catSum += Data[ "unknown" ][ comment ];  
-    }
-    sum += catSum;
-    
+    sum += Data["unknown"];
         #>
         <tr>
             <td>unknown</td>
-            <td align="right"><#= catSum.ToReportString() #></td>
+            <td align="right"><#= Data["unknown"].ToReportString() #></td>
         </tr>
-        <#
-    foreach( string comment in Data[ "unknown" ].Keys )
-    {
-        #>
-        <tr>
-            <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#= comment #></td>
-            <td align="right"><#= Data[ "unknown" ][ comment ].ToReportString() #></td>
-        </tr>
-        <# 
-    }
-        #>
 <# }#>
         <tr>
             <td style="border-top:solid 2px #060">
@@ -109,6 +78,6 @@ if ( !IsComplete )
 
 <#+ 
 public DateTime Day { get; set; }
-public Dictionary<string, Dictionary<string, TimeSpan>> Data { get; set; }
+public Dictionary<string, TimeSpan> Data { get; set; }
 public bool IsComplete { get; set; }
 #>

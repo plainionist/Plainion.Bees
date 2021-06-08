@@ -252,7 +252,7 @@ namespace Plainion.WhiteRabbit.Presentation
                     continue;
                 }
 
-                string comment = (entry.Comment != null ? entry.Comment : "unknown");
+                var comment = entry.Comment ?? "unknown";
 
                 AddTimeSpan(data, comment, usedTime.Value);
             }

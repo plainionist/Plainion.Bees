@@ -67,7 +67,7 @@ foreach ( string comment in Data.Keys )
             this.Write("</td>\r\n            <td align=\"right\">");
             
             #line 47 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(sum.ToReportString()));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Data[comment].ToReportString()));
             
             #line default
             #line hidden
@@ -94,7 +94,7 @@ if ( Data["unknown"] != TimeSpan.Zero )
                 this.Write("        <tr>\r\n            <td>unknown</td>\r\n            <td align=\"right\">");
             
             #line 75 "D:\seb\workspace\Plainion\Plainion.Bees\src\Plainion.WhiteRabbit\Presentation\Reports\DayReport.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(sum.ToReportString()));
+            this.Write(this.ToStringHelper.ToStringWithCulture(Data["unknown"].ToReportString()));
             
             #line default
             #line hidden
