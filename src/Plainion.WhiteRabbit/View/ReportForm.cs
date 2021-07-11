@@ -4,44 +4,36 @@ using Plainion.WhiteRabbit.Presentation;
 
 namespace Plainion.WhiteRabbit.View
 {
+    public enum ReportScope
+    {
+        Day,
+        Week,
+        Month
+    }
+
     public partial class ReportForm : Form
     {
-        private class Report
-        {
-            public Report( string name, Func<string> generator )
-            {
-                Name = name;
-                Generator = generator;
-            }
-
-            public string Name { get; private set; }
-            public Func<string> Generator { get; private set; }
-
-            public override string ToString()
-            {
-                return Name;
-            }
-        }
-
-        public ReportForm( Controller controller )
+        public ReportForm(Controller controller, ReportScope scope)
         {
             InitializeComponent();
 
-            myReports.Items.Add( new Report( "Selected day", () => controller.GenerateDayReport( controller.CurrentDay ) ) );
-            myReports.Items.Add( new Report( "Selected week", () => controller.GenerateWeekReport( controller.CurrentDay ) ) );
-
-            myReports.SelectedIndex = 0;
-            comboBox1_SelectionChangeCommitted( this, null );
+            if (scope == ReportScope.Day)
+            {
+                myBrowser.Navigate(controller.GenerateDayReport(controller.CurrentDay));
+            }
+            else if (scope == ReportScope.Week)
+            {
+                myBrowser.Navigate(controller.GenerateWeekReport(controller.CurrentDay));
+            }
+            else if (scope == ReportScope.Month)
+            {
+                myBrowser.Navigate(controller.GenerateMonthReport(controller.CurrentDay));
+            }
         }
 
-        private void myOkBtn_Click( object sender, EventArgs e )
+        private void myOkBtn_Click(object sender, EventArgs e)
         {
             Close();
-        }
-
-        private void comboBox1_SelectionChangeCommitted( object sender, EventArgs e )
-        {
-            myBrowser.Navigate( ( (Report)myReports.SelectedItem ).Generator() );
         }
     }
 }

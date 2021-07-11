@@ -4,7 +4,7 @@ using System.IO;
 
 namespace Plainion.WhiteRabbit.Presentation.Reports
 {
-    public partial class WeekReport 
+    public partial class RangeReport 
     {
         public DateTime Begin { get; set; }
         public DateTime End { get; set; }

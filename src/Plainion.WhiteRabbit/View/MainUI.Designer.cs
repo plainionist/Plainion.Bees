@@ -47,6 +47,8 @@ namespace Plainion.WhiteRabbit
             this.myPreferencesMenu_DeleteSelectedRow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.dayReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.weekReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.monthReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.myRecordInitBtn = new System.Windows.Forms.Button();
             this.myNotifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.myToolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -139,7 +141,9 @@ namespace Plainion.WhiteRabbit
             this.toolStripSeparator2,
             this.myPreferencesMenu_DeleteSelectedRow,
             this.toolStripSeparator3,
-            this.dayReportToolStripMenuItem});
+            this.dayReportToolStripMenuItem,
+            this.weekReportToolStripMenuItem,
+            this.monthReportToolStripMenuItem});
             this.myPreferencesMenu.Name = "myPreferencesMenu";
             this.myPreferencesMenu.Size = new System.Drawing.Size(177, 104);
             // 
@@ -171,8 +175,22 @@ namespace Plainion.WhiteRabbit
             // 
             this.dayReportToolStripMenuItem.Name = "dayReportToolStripMenuItem";
             this.dayReportToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.dayReportToolStripMenuItem.Text = "Reports ...";
-            this.dayReportToolStripMenuItem.Click += new System.EventHandler(this.dayReportToolStripMenuItem_Click);
+            this.dayReportToolStripMenuItem.Text = "Report day ...";
+            this.dayReportToolStripMenuItem.Click += new System.EventHandler(this.OnReportToday);
+            // 
+            // weekReportToolStripMenuItem
+            // 
+            this.weekReportToolStripMenuItem.Name = "weekReportToolStripMenuItem";
+            this.weekReportToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.weekReportToolStripMenuItem.Text = "Report week ...";
+            this.weekReportToolStripMenuItem.Click += new System.EventHandler(this.OnReportWeek);
+            // 
+            // monthReportToolStripMenuItem
+            // 
+            this.monthReportToolStripMenuItem.Name = "monthReportToolStripMenuItem";
+            this.monthReportToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.monthReportToolStripMenuItem.Text = "Report month  ...";
+            this.monthReportToolStripMenuItem.Click += new System.EventHandler(this.OnReportMonth);
             // 
             // myRecordInitBtn
             // 
@@ -248,6 +266,8 @@ namespace Plainion.WhiteRabbit
         private System.Windows.Forms.ToolTip myToolTip;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripMenuItem dayReportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem weekReportToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem monthReportToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn myBeginCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myEndCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn myDurationCol;

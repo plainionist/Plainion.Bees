@@ -18,7 +18,7 @@ namespace Plainion.WhiteRabbit
         private readonly Controller myController;
         private readonly Channel myChannel;
 
-        public MainUI( Controller controller )
+        public MainUI(Controller controller)
         {
             InitializeComponent();
 
@@ -32,7 +32,7 @@ namespace Plainion.WhiteRabbit
             myTableView.DataSource = myBindingSource;
 
             // select the DataTable related to the current data
-            myController.ChangeDay( myDateTime.Value );
+            myController.ChangeDay(myDateTime.Value);
 
             myTableView.AutoGenerateColumns = false;
             myTableView.Columns[BEGIN_COLUMN_NAME].DataPropertyName = ColumnNames.BEGIN;
@@ -54,7 +54,7 @@ namespace Plainion.WhiteRabbit
 
         #endregion
 
-        private void selectDatabaseToolStripMenuItem_Click( object sender, EventArgs e )
+        private void selectDatabaseToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
 
@@ -62,39 +62,39 @@ namespace Plainion.WhiteRabbit
             dlg.ShowNewFolderButton = true;
             dlg.Description = "Select database store";
 
-            if( dlg.ShowDialog( this ) != DialogResult.OK )
+            if (dlg.ShowDialog(this) != DialogResult.OK)
             {
                 return;
             }
 
-            if( dlg.SelectedPath != Settings.Default.DBStore )
+            if (dlg.SelectedPath != Settings.Default.DBStore)
             {
                 Settings.Default.DBStore = dlg.SelectedPath;
                 Settings.Default.Save();
             }
         }
 
-        private void myTableView_CellEndEdit( object sender, DataGridViewCellEventArgs e )
+        private void myTableView_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
             myBindingSource.EndEdit();
 
-            myController.Database.StoreTable( myController.CurrentDayData );
+            myController.Database.StoreTable(myController.CurrentDayData);
         }
 
-        private void myDateTime_ValueChanged( object sender, EventArgs e )
+        private void myDateTime_ValueChanged(object sender, EventArgs e)
         {
-            myController.ChangeDay( myDateTime.Value );
+            myController.ChangeDay(myDateTime.Value);
             myBindingSource.DataSource = myController.CurrentDayData;
         }
 
-        private void myTableView_CellValidating( object sender, DataGridViewCellValidatingEventArgs e )
+        private void myTableView_CellValidating(object sender, DataGridViewCellValidatingEventArgs e)
         {
-            if( e.ColumnIndex >= 0 && e.ColumnIndex < 3 )
+            if (e.ColumnIndex >= 0 && e.ColumnIndex < 3)
             {
                 DataGridViewCell cell = myTableView[e.ColumnIndex, e.RowIndex];
 
-                string value = ( (string) cell.EditedFormattedValue ).Trim();
-                if( value.EndsWith( ":" ) )
+                string value = ((string)cell.EditedFormattedValue).Trim();
+                if (value.EndsWith(":"))
                 {
                     value += "00";
                     cell.Value = value;
@@ -103,7 +103,7 @@ namespace Plainion.WhiteRabbit
                 }
 
                 DateTime result;
-                if( !DateTime.TryParse( value, out result ) )
+                if (!DateTime.TryParse(value, out result))
                 {
                     cell.Style.ForeColor = Color.Red;
                     //DataGridViewAdvancedBorderStyle style = new DataGridViewAdvancedBorderStyle();
@@ -117,40 +117,40 @@ namespace Plainion.WhiteRabbit
             }
         }
 
-        private void myRecordInitBtn_Click( object sender, EventArgs e )
+        private void myRecordInitBtn_Click(object sender, EventArgs e)
         {
-            myStartRecordBtn_Click( sender, e );
+            myStartRecordBtn_Click(sender, e);
         }
 
-        private void myStartRecordBtn_Click( object sender, EventArgs e )
+        private void myStartRecordBtn_Click(object sender, EventArgs e)
         {
             myController.StartTimeMeasurement();
         }
 
-        private void myTableView_KeyUp( object sender, KeyEventArgs e )
+        private void myTableView_KeyUp(object sender, KeyEventArgs e)
         {
-            if( e.Control && e.KeyCode == Keys.C )
+            if (e.Control && e.KeyCode == Keys.C)
             {
                 DataObject d = myTableView.GetClipboardContent();
-                Clipboard.SetDataObject( d );
+                Clipboard.SetDataObject(d);
                 e.Handled = true;
             }
-            else if( e.Control && e.KeyCode == Keys.V )
+            else if (e.Control && e.KeyCode == Keys.V)
             {
                 myTableView.CurrentCell.Value = Clipboard.GetText();
             }
-            else if( e.KeyCode == Keys.Delete )
+            else if (e.KeyCode == Keys.Delete)
             {
                 myTableView.CurrentCell.Value = string.Empty;
             }
         }
 
-        private void deleteSelectedRowMenuItem_Click( object sender, EventArgs e )
+        private void deleteSelectedRowMenuItem_Click(object sender, EventArgs e)
         {
-            myController.DeleteDayEntry( myTableView.CurrentRow.Index );
+            myController.DeleteDayEntry(myTableView.CurrentRow.Index);
         }
 
-        private void myNotifyIcon_DoubleClick( object sender, EventArgs e )
+        private void myNotifyIcon_DoubleClick(object sender, EventArgs e)
         {
             Visible = true;
             Activate();
@@ -158,13 +158,13 @@ namespace Plainion.WhiteRabbit
             myNotifyIcon.Visible = false;
         }
 
-        private void myTableView_MouseDown( object sender, MouseEventArgs e )
+        private void myTableView_MouseDown(object sender, MouseEventArgs e)
         {
-            if( e.Button == MouseButtons.Right )
+            if (e.Button == MouseButtons.Right)
             {
-                DataGridView.HitTestInfo aHTI = myTableView.HitTest( e.X, e.Y );
-                bool isCellValid = IsValidCell( aHTI.ColumnIndex, aHTI.RowIndex );
-                if( isCellValid )
+                DataGridView.HitTestInfo aHTI = myTableView.HitTest(e.X, e.Y);
+                bool isCellValid = IsValidCell(aHTI.ColumnIndex, aHTI.RowIndex);
+                if (isCellValid)
                 {
                     myTableView.ClearSelection();
                     myTableView.CurrentCell = myTableView[aHTI.ColumnIndex, aHTI.RowIndex];
@@ -172,31 +172,39 @@ namespace Plainion.WhiteRabbit
             }
         }
 
-        private void myTableView_MouseUp( object sender, MouseEventArgs e )
+        private void myTableView_MouseUp(object sender, MouseEventArgs e)
         {
-            if( e.Button == MouseButtons.Right )
+            if (e.Button == MouseButtons.Right)
             {
-                DataGridView.HitTestInfo aHTI = myTableView.HitTest( e.X, e.Y );
-                bool isCellValid = IsValidCell( aHTI.ColumnIndex, aHTI.RowIndex );
+                DataGridView.HitTestInfo aHTI = myTableView.HitTest(e.X, e.Y);
+                bool isCellValid = IsValidCell(aHTI.ColumnIndex, aHTI.RowIndex);
 
-                if( isCellValid )
+                if (isCellValid)
                 {
-                    myTableContextMenu.Show( (Control) sender, e.X, e.Y );
+                    myTableContextMenu.Show((Control)sender, e.X, e.Y);
                 }
             }
         }
 
 
-        private bool IsValidCell( int col, int row )
+        private bool IsValidCell(int col, int row)
         {
-            return ( ( -1 != col && -1 != row ) &&
-                     !( myTableView[col, row].Value is DBNull ) &&
-                     null != myTableView[col, row].Value );
+            return ((-1 != col && -1 != row) &&
+                     !(myTableView[col, row].Value is DBNull) &&
+                     null != myTableView[col, row].Value);
         }
 
-        private void dayReportToolStripMenuItem_Click( object sender, EventArgs e )
+        private void OnReportToday(object sender, EventArgs e)
         {
-            new ReportForm( myController ).ShowDialog( this );
+            new ReportForm(myController, ReportScope.Day) { }.ShowDialog(this);
+        }
+        private void OnReportWeek(object sender, EventArgs e)
+        {
+            new ReportForm(myController, ReportScope.Week).ShowDialog(this);
+        }
+        private void OnReportMonth(object sender, EventArgs e)
+        {
+            new ReportForm(myController, ReportScope.Month).ShowDialog(this);
         }
     }
 }

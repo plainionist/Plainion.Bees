@@ -191,6 +191,20 @@ namespace Plainion.WhiteRabbit.Presentation
         /// </summary>
         public string GenerateWeekReport(DateTime day)
         {
+            var begin = day.GetBeginOfWeek();
+            var end = day.GetEndOfWeek();
+            return GenerateRangeReport(begin, end);
+        }
+
+        public string GenerateMonthReport(DateTime day)
+        {
+            var begin = new DateTime(day.Year, day.Month, 1);
+            var end = new DateTime(day.Year, day.Month + 1, 1).AddDays(-1.0);
+            return GenerateRangeReport(begin, end);
+        }
+
+        public string GenerateRangeReport(DateTime begin, DateTime end)
+        {
             string file = Path.GetTempFileName();
 
             var overview = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase);
@@ -200,8 +214,6 @@ namespace Plainion.WhiteRabbit.Presentation
 
             bool isAllComplete = true;
 
-            var begin = day.GetBeginOfWeek();
-            var end = day.GetEndOfWeek();
             for (var date = begin; date <= end; date = date.AddDays(1))
             {
                 bool isComplete;
@@ -221,7 +233,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
             using (var writer = new StreamWriter(file))
             {
-                var report = new WeekReport
+                var report = new RangeReport
                 {
                     Begin = begin,
                     End = end,
