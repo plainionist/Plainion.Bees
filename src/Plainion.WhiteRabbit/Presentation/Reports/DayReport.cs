@@ -19,7 +19,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
             writer.WriteLine($"  <table border='0' cellpadding='4' cellspacing='0'>");
             writer.WriteLine($"    <tr>");
             writer.WriteLine($"      <th>Comment</th>");
-            writer.WriteLine($"      <th style='width:75px;'>Time</th>");
+            writer.WriteLine($"      <th style='width:75px;' align='right'>Time</th>");
             writer.WriteLine($"    </tr>");
 
 

@@ -32,8 +32,7 @@ namespace Plainion.WhiteRabbit
                 return "-";
             }
 
-            return string.Format(CultureInfo.InvariantCulture, "{0}:{1} / {2:#0.00}", span.Hours, span.Minutes,
-                                 span.Hours + span.Minutes/60.0d);
+            return string.Format(CultureInfo.InvariantCulture, "{0}:{1,2:00}", span.Hours, span.Minutes);
         }
     }
 }
