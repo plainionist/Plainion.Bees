@@ -5,7 +5,7 @@ namespace Plainion.WhiteRabbit
 {
     public static class DateTimeExtensions
     {
-        public static DateTime GetBeginOfWeek(this DateTime date)
+        public static DateTime GetBeginOfWeek(this DateTime date) 
         {
             while (date.DayOfWeek != DayOfWeek.Monday)
             {

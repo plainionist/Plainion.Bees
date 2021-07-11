@@ -169,15 +169,16 @@ namespace Plainion.WhiteRabbit.Presentation
         {
             string file = Path.GetTempFileName();
 
-            bool isComplete;
-            var data = GetDetails(day, out isComplete);
+            var data = GetDetails(day, out bool isComplete);
 
             using (var writer = new StreamWriter(file))
             {
-                var report = new DayReport();
-                report.Day = day;
-                report.Data = data;
-                report.IsComplete = isComplete;
+                var report = new DayReport
+                {
+                    Day = day,
+                    Data = data,
+                    IsComplete = isComplete
+                };
                 report.Generate(writer);
             }
 
@@ -192,7 +193,7 @@ namespace Plainion.WhiteRabbit.Presentation
         {
             string file = Path.GetTempFileName();
 
-            var overview = new Dictionary<string, TimeSpan>();
+            var overview = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase);
             overview["unknown"] = new TimeSpan();
 
             var details = new Dictionary<DateTime, Dictionary<string, TimeSpan>>();
@@ -220,12 +221,14 @@ namespace Plainion.WhiteRabbit.Presentation
 
             using (var writer = new StreamWriter(file))
             {
-                var report = new WeekReport();
-                report.Begin = begin;
-                report.End = end;
-                report.Overview = overview;
-                report.Details = details;
-                report.IsComplete = isAllComplete;
+                var report = new WeekReport
+                {
+                    Begin = begin,
+                    End = end,
+                    Overview = overview,
+                    Details = details,
+                    IsComplete = isAllComplete
+                };
                 report.Generate(writer);
             }
 
@@ -240,7 +243,7 @@ namespace Plainion.WhiteRabbit.Presentation
 
         private Dictionary<string, TimeSpan> GetDetails(DateTime day, out bool isComplete)
         {
-            var data = new Dictionary<string, TimeSpan>();
+            var data = new Dictionary<string, TimeSpan>(StringComparer.OrdinalIgnoreCase);
             data["unknown"] = new TimeSpan();
 
             isComplete = true;
