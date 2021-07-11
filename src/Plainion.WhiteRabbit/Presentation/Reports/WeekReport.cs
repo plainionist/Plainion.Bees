@@ -15,12 +15,11 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
         public void Generate(TextWriter writer)
         {
             writer.Write("\r\n\r\n<html>\r\n<head>\r\n    <title>WhiteRabbit</title>\r\n</head>\r\n<body>\r\n    <center>" +
-                    "\r\n        <h2>\r\n            WhiteRabbit</h2>\r\n    </center>\r\n    <center>\r\n     " +
-                    "   <h4>\r\n            ");
+                    "   <h2>\r\n            ");
             writer.Write(Begin.Date.ToShortDateString());
             writer.Write(" - ");
             writer.Write(End.Date.ToShortDateString());
-            writer.Write("\r\n        </h4>\r\n    </center>\r\n    <table border=\"0\" cellpadding=\"4\" cellspacing" +
+            writer.Write("\r\n        </h2>\r\n    </center>\r\n    <table border=\"0\" cellpadding=\"4\" cellspacing" +
                     "=\"0\">\r\n        <tr>\r\n            <th>\r\n                Comment\r\n            </t" +
                     "h>\r\n            <th>\r\n                Time\r\n            </th>\r\n        </tr>\r\n  " +
                     "      ");

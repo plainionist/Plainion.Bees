@@ -178,6 +178,7 @@ namespace Plainion.WhiteRabbit.Presentation
                 report.Day = day;
                 report.Data = data;
                 report.IsComplete = isComplete;
+                report.Generate(writer);
             }
 
             return file;
@@ -225,6 +226,7 @@ namespace Plainion.WhiteRabbit.Presentation
                 report.Overview = overview;
                 report.Details = details;
                 report.IsComplete = isAllComplete;
+                report.Generate(writer);
             }
 
             return file;
