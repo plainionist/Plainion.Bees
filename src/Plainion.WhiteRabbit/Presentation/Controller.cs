@@ -172,12 +172,13 @@ namespace Plainion.WhiteRabbit.Presentation
             bool isComplete;
             var data = GetDetails(day, out isComplete);
 
-            // generate index.html
-            var report = new DayReport();
-            report.Day = day;
-            report.Data = data;
-            report.IsComplete = isComplete;
-            File.WriteAllText(file, report.TransformText());
+            using (var writer = new StreamWriter(file))
+            {
+                var report = new DayReport();
+                report.Day = day;
+                report.Data = data;
+                report.IsComplete = isComplete;
+            }
 
             return file;
         }
@@ -216,14 +217,15 @@ namespace Plainion.WhiteRabbit.Presentation
                 }
             }
 
-            // generate index.html
-            var report = new WeekReport();
-            report.Begin = begin;
-            report.End = end;
-            report.Overview = overview;
-            report.Details = details;
-            report.IsComplete = isAllComplete;
-            File.WriteAllText(file, report.TransformText());
+            using (var writer = new StreamWriter(file))
+            {
+                var report = new WeekReport();
+                report.Begin = begin;
+                report.End = end;
+                report.Overview = overview;
+                report.Details = details;
+                report.IsComplete = isAllComplete;
+            }
 
             return file;
         }

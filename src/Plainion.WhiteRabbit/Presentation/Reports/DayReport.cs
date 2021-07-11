@@ -1,23 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Plainion.WhiteRabbit.Presentation.Reports
 {
-    public partial class DayReport : ReportBase
+    public partial class DayReport 
     {
         public DateTime Day { get; set; }
         public Dictionary<string, TimeSpan> Data { get; set; }
         public bool IsComplete { get; set; }
 
-        public virtual string TransformText()
+        public void Generate(TextWriter writer)
         {
-            Write("\r\n\r\n<html>\r\n<head>\r\n    <title>WhiteRabbit</title>\r\n</head>\r\n<body>\r\n    <center>" +
+            writer.Write("\r\n\r\n<html>\r\n<head>\r\n    <title>WhiteRabbit</title>\r\n</head>\r\n<body>\r\n    <center>" +
                     "\r\n        <h2>\r\n            WhiteRabbit</h2>\r\n    </center>\r\n    <center>\r\n     " +
                     "   <h4>\r\n            ");
 
-            Write(Day.Date.ToShortDateString());
+            writer.Write(Day.Date.ToShortDateString());
 
-            Write("</h4>\r\n    </center>\r\n    <table border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\r\n   " +
+            writer.Write("</h4>\r\n    </center>\r\n    <table border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\r\n   " +
                     "     <tr>\r\n            <th>\r\n                Comment\r\n            </th>\r\n " +
                     "           <th style=\"width:75px;\">Time</th>\r\n        </tr>\r\n        ");
 
@@ -32,40 +33,39 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
 
                 sum += Data[comment];
 
-                Write("        <tr>\r\n            <td>");
-                Write(comment);
-                Write("</td>\r\n            <td align=\"right\">");
-                Write(Data[comment].ToReportString());
-                Write("</td>\r\n        </tr>\r\n        ");
+                writer.Write("        <tr>\r\n            <td>");
+                writer.Write(comment);
+                writer.Write("</td>\r\n            <td align=\"right\">");
+                writer.Write(Data[comment].ToReportString());
+                writer.Write("</td>\r\n        </tr>\r\n        ");
             }
 
-            Write("        \r\n        ");
+            writer.Write("        \r\n        ");
 
             if (Data["unknown"] != TimeSpan.Zero)
             {
                 sum += Data["unknown"];
 
-                Write("        <tr>\r\n            <td>unknown</td>\r\n            <td align=\"right\">");
-                Write(Data["unknown"].ToReportString());
-                Write("</td>\r\n        </tr>\r\n        ");
+                writer.Write("        <tr>\r\n            <td>unknown</td>\r\n            <td align=\"right\">");
+                writer.Write(Data["unknown"].ToReportString());
+                writer.Write("</td>\r\n        </tr>\r\n        ");
             }
 
-            Write("        <tr>\r\n            <td style=\"border-top:solid 2px #060\">\r\n               " +
+            writer.Write("        <tr>\r\n            <td style=\"border-top:solid 2px #060\">\r\n               " +
                     " <b>Sum</b>\r\n            </td>\r\n            <td  align=\"right\" style=\"border-top" +
                     ":solid 2px #060\">\r\n                ");
 
-            Write(sum.ToReportString());
+            writer.Write(sum.ToReportString());
 
-            Write("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    \r\n    <br />\r\n    \r\n    ");
+            writer.Write("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    \r\n    <br />\r\n    \r\n    ");
 
             if (!IsComplete)
             {
-                Write("    <font color=\"red\">The report is not complete because the data of the day is n" +
+                writer.Write("    <font color=\"red\">The report is not complete because the data of the day is n" +
                         "ot complete.</font>\r\n");
             }
 
-            Write("</body>\r\n</html>\r\n\r\n");
-            return GenerationEnvironment.ToString();
+            writer.Write("</body>\r\n</html>\r\n\r\n");
         }
     }
 }
