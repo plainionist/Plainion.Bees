@@ -16,9 +16,9 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
             Write("\r\n\r\n<html>\r\n<head>\r\n    <title>WhiteRabbit</title>\r\n</head>\r\n<body>\r\n    <center>" +
                     "\r\n        <h2>\r\n            WhiteRabbit</h2>\r\n    </center>\r\n    <center>\r\n     " +
                     "   <h4>\r\n            ");
-            Write(ToStringWithCulture(Begin.Date.ToShortDateString()));
+            Write(Begin.Date.ToShortDateString());
             Write(" - ");
-            Write(ToStringWithCulture(End.Date.ToShortDateString()));
+            Write(End.Date.ToShortDateString());
             Write("\r\n        </h4>\r\n    </center>\r\n    <table border=\"0\" cellpadding=\"4\" cellspacing" +
                     "=\"0\">\r\n        <tr>\r\n            <th>\r\n                Comment\r\n            </t" +
                     "h>\r\n            <th>\r\n                Time\r\n            </th>\r\n        </tr>\r\n  " +
@@ -33,9 +33,9 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                 }
 
                 Write("        <tr>\r\n            <td>\r\n                ");
-                Write(ToStringWithCulture(cat));
+                Write(cat);
                 Write("\r\n            </td>\r\n            <td>\r\n                ");
-                Write(ToStringWithCulture(Overview[cat].ToReportString()));
+                Write(Overview[cat].ToReportString());
                 Write("\r\n            </td>\r\n        </tr>\r\n        ");
 
                 sum += Overview[cat];
@@ -48,7 +48,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                 Write("        <tr>\r\n            <td>\r\n                <b>Unassigned</b>\r\n            </" +
                         "td>\r\n            <td>\r\n                ");
 
-                Write(ToStringWithCulture(Overview["unknown"].ToReportString()));
+                Write(Overview["unknown"].ToReportString());
 
                 Write("\r\n            </td>\r\n        </tr>\r\n        ");
             }
@@ -57,7 +57,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                     " <b>Sum</b>\r\n            </td>\r\n            <td style=\"border-top:solid 2px #060" +
                     "\">\r\n                ");
 
-            Write(ToStringWithCulture(sum.ToReportString()));
+            Write(sum.ToReportString());
 
             Write("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    \r\n    <br />\r\n    \r\n    <ta" +
                     "ble cellpadding=\"4\" cellspacing=\"0\">\r\n        <tr>\r\n            <th>Comment</th" +
@@ -69,9 +69,9 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                 sums[date] = TimeSpan.Zero;
 
                 Write("            <th>");
-                Write(ToStringWithCulture(date.Day));
+                Write(date.Day.ToString());
                 Write(".");
-                Write(ToStringWithCulture(date.Month));
+                Write(date.Month.ToString());
                 Write(".</th>\r\n            ");
             }
 
@@ -80,7 +80,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
             foreach (var cat in Overview.Keys)
             {
                 Write("            <tr>\r\n                <td>");
-                Write(ToStringWithCulture(cat));
+                Write(cat);
                 Write("</td>\r\n        ");
 
                 for (var date = Begin; date <= End; date = date.AddDays(1))
@@ -90,7 +90,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                         sums[date] += Details[date][cat];
 
                         Write("                <td align=\"center\">");
-                        Write(ToStringWithCulture(Details[date][cat].ToReportString()));
+                        Write(Details[date][cat].ToReportString());
                         Write("</td>\r\n        ");
                     }
                     else
@@ -111,7 +111,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
             {
                 Write("            <td align=\"center\" style=\"border-top:solid 2px #060\">\r\n              " +
                         "  ");
-                Write(ToStringWithCulture(sums[date].ToReportString()));
+                Write(sums[date].ToReportString());
                 Write("\r\n            </td>\r\n        ");
             }
 

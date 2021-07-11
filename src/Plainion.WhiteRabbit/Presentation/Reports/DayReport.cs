@@ -15,7 +15,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                     "\r\n        <h2>\r\n            WhiteRabbit</h2>\r\n    </center>\r\n    <center>\r\n     " +
                     "   <h4>\r\n            ");
 
-            Write(ToStringWithCulture(Day.Date.ToShortDateString()));
+            Write(Day.Date.ToShortDateString());
 
             Write("</h4>\r\n    </center>\r\n    <table border=\"0\" cellpadding=\"4\" cellspacing=\"0\">\r\n   " +
                     "     <tr>\r\n            <th>\r\n                Comment\r\n            </th>\r\n " +
@@ -33,9 +33,9 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                 sum += Data[comment];
 
                 Write("        <tr>\r\n            <td>");
-                Write(ToStringWithCulture(comment));
+                Write(comment);
                 Write("</td>\r\n            <td align=\"right\">");
-                Write(ToStringWithCulture(Data[comment].ToReportString()));
+                Write(Data[comment].ToReportString());
                 Write("</td>\r\n        </tr>\r\n        ");
             }
 
@@ -46,7 +46,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                 sum += Data["unknown"];
 
                 Write("        <tr>\r\n            <td>unknown</td>\r\n            <td align=\"right\">");
-                Write(ToStringWithCulture(Data["unknown"].ToReportString()));
+                Write(Data["unknown"].ToReportString());
                 Write("</td>\r\n        </tr>\r\n        ");
             }
 
@@ -54,7 +54,7 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                     " <b>Sum</b>\r\n            </td>\r\n            <td  align=\"right\" style=\"border-top" +
                     ":solid 2px #060\">\r\n                ");
 
-            Write(ToStringWithCulture(sum.ToReportString()));
+            Write(sum.ToReportString());
 
             Write("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    \r\n    <br />\r\n    \r\n    ");
 
