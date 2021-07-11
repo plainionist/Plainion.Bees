@@ -14,17 +14,17 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
 
         public void Generate(TextWriter writer)
         {
-            writer.Write("\r\n\r\n<html>\r\n<head>\r\n    <title>WhiteRabbit</title>\r\n</head>\r\n<body>\r\n    <center>" +
-                    "   <h2>\r\n            ");
-            writer.Write(Begin.Date.ToShortDateString());
-            writer.Write(" - ");
-            writer.Write(End.Date.ToShortDateString());
-            writer.Write("\r\n        </h2>\r\n    </center>\r\n    <table border=\"0\" cellpadding=\"4\" cellspacing" +
-                    "=\"0\">\r\n        <tr>\r\n            <th>\r\n                Comment\r\n            </t" +
-                    "h>\r\n            <th>\r\n                Time\r\n            </th>\r\n        </tr>\r\n  " +
-                    "      ");
+            writer.WriteLine($"<html><head><title>WhiteRabbit</title></head>");
+            writer.WriteLine($"<body>");
+            writer.WriteLine($"  <center><h2>{Begin.Date.ToShortDateString()} - {End.Date.ToShortDateString()}</h2></center>");
 
-            TimeSpan sum = new TimeSpan();
+            writer.WriteLine($"  <table border='0' cellpadding='4' cellspacing='0'>");
+            writer.WriteLine($"    <tr>");
+            writer.WriteLine($"      <th>Comment</th>");
+            writer.WriteLine($"      <th style='width:75px;' align='right'>Time</th>");
+            writer.WriteLine($"    </tr>");
+
+            var sum = new TimeSpan();
             foreach (string cat in Overview.Keys)
             {
                 if (cat == "unknown")
@@ -32,56 +32,48 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                     continue;
                 }
 
-                writer.Write("        <tr>\r\n            <td>\r\n                ");
-                writer.Write(cat);
-                writer.Write("\r\n            </td>\r\n            <td>\r\n                ");
-                writer.Write(Overview[cat].ToReportString());
-                writer.Write("\r\n            </td>\r\n        </tr>\r\n        ");
+                writer.WriteLine($"    <tr>");
+                writer.WriteLine($"      <td>{cat}</td>");
+                writer.WriteLine($"      <td align='right'>{Overview[cat].ToReportString()}</td>");
+                writer.WriteLine($"    </tr>");
 
                 sum += Overview[cat];
             }
 
-            writer.Write("        \r\n        ");
-
             if (Overview["unknown"] != TimeSpan.Zero)
             {
-                writer.Write("        <tr>\r\n            <td>\r\n                <b>Unassigned</b>\r\n            </" +
-                        "td>\r\n            <td>\r\n                ");
-
-                writer.Write(Overview["unknown"].ToReportString());
-
-                writer.Write("\r\n            </td>\r\n        </tr>\r\n        ");
+                writer.WriteLine($"    <tr>");
+                writer.WriteLine($"      <td><b>Unassigned</b></td>");
+                writer.WriteLine($"      <td>{Overview["unknown"].ToReportString()}</td>");
+                writer.WriteLine($"    </tr>");
             }
 
-            writer.Write("        <tr>\r\n            <td style=\"border-top:solid 2px #060\">\r\n               " +
-                    " <b>Sum</b>\r\n            </td>\r\n            <td style=\"border-top:solid 2px #060" +
-                    "\">\r\n                ");
+            writer.WriteLine($"    <tr>");
+            writer.WriteLine($"      <td style='border-top:solid 2px #060'><b>Sum</b></td>");
+            writer.WriteLine($"      <td style='border-top:solid 2px #060'>{sum.ToReportString()}</td>");
+            writer.WriteLine($"    </tr>");
+            writer.WriteLine($"  </table>");
 
-            writer.Write(sum.ToReportString());
+            writer.WriteLine($"  <br/>");
 
-            writer.Write("\r\n            </td>\r\n        </tr>\r\n    </table>\r\n    \r\n    <br />\r\n    \r\n    <ta" +
-                    "ble cellpadding=\"4\" cellspacing=\"0\">\r\n        <tr>\r\n            <th>Comment</th" +
-                    ">\r\n            ");
+            writer.WriteLine($"  <table cellpadding='4' cellspacing='0'>");
+            writer.WriteLine($"    <tr>");
+            writer.WriteLine($"      <th>Comment</th>");
 
             var sums = new Dictionary<DateTime, TimeSpan>();
             for (var date = Begin; date <= End; date = date.AddDays(1))
             {
                 sums[date] = TimeSpan.Zero;
 
-                writer.Write("            <th>");
-                writer.Write(date.Day.ToString());
-                writer.Write(".");
-                writer.Write(date.Month.ToString());
-                writer.Write(".</th>\r\n            ");
+                writer.WriteLine($"      <th>{date.Day}.{date.Month}.</th>");
             }
 
-            writer.Write("        </tr>\r\n        ");
+            writer.WriteLine($"    </tr>");
 
             foreach (var cat in Overview.Keys)
             {
-                writer.Write("            <tr>\r\n                <td>");
-                writer.Write(cat);
-                writer.Write("</td>\r\n        ");
+                writer.WriteLine($"    <tr>");
+                writer.WriteLine($"      <td>{cat}</td>");
 
                 for (var date = Begin; date <= End; date = date.AddDays(1))
                 {
@@ -89,41 +81,34 @@ namespace Plainion.WhiteRabbit.Presentation.Reports
                     {
                         sums[date] += Details[date][cat];
 
-                        writer.Write("                <td align=\"center\">");
-                        writer.Write(Details[date][cat].ToReportString());
-                        writer.Write("</td>\r\n        ");
+                        writer.WriteLine($"      <td align='center'>{Details[date][cat].ToReportString()}</td>");
                     }
                     else
                     {
-                        writer.Write("               <td align=\"center\">-</td>\r\n        ");
+                        writer.WriteLine($"      <td align='center'>-</td>");
                     }
-
-                    writer.Write("                    \r\n        ");
                 }
 
-                writer.Write("            </tr>\r\n        ");
+                writer.WriteLine($"    </tr>");
             }
 
-            writer.Write("        \r\n        <tr>\r\n            <td style=\"border-top:solid 2px #060\">\r\n     " +
-                    "           <b>Sum</b>\r\n            </td>\r\n        ");
+            writer.WriteLine($"    <tr>");
+            writer.WriteLine($"      <td style='border-top:solid 2px #060'><b>Sum</b></td>");
 
             for (var date = Begin; date <= End; date = date.AddDays(1))
             {
-                writer.Write("            <td align=\"center\" style=\"border-top:solid 2px #060\">\r\n              " +
-                        "  ");
-                writer.Write(sums[date].ToReportString());
-                writer.Write("\r\n            </td>\r\n        ");
+                writer.WriteLine($"      <td align='center' style='border-top:solid 2px #060'>{sums[date].ToReportString()}</td>");
             }
 
-            writer.Write("        </tr>\r\n    </table>\r\n    \r\n    <br />\r\n    \r\n    ");
+            writer.WriteLine($"    </tr>");
+            writer.WriteLine($"  </table>");
 
             if (!IsComplete)
             {
-                writer.Write("    <font color=\"red\">The report is not complete because the data of the day is n" +
-                        "ot complete.</font>\r\n    ");
+                writer.WriteLine($"  <font color='red'>The report is not complete because the data of the day is not complete.</font>");
             }
 
-            writer.Write("</body>\r\n</html>\r\n\r\n");
+            writer.WriteLine($"</body></html>");
         }
     }
 }
