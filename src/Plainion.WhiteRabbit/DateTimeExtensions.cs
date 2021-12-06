@@ -5,7 +5,7 @@ namespace Plainion.WhiteRabbit
 {
     public static class DateTimeExtensions
     {
-        public static DateTime GetBeginOfWeek(this DateTime date) 
+        public static DateTime GetBeginOfWeek(this DateTime date)
         {
             while (date.DayOfWeek != DayOfWeek.Monday)
             {
@@ -32,7 +32,7 @@ namespace Plainion.WhiteRabbit
                 return "-";
             }
 
-            return string.Format(CultureInfo.InvariantCulture, "{0}:{1,2:00}", span.Hours, span.Minutes);
+            return string.Format(CultureInfo.InvariantCulture, "{0,2:00}:{1,2:00}", span.TotalHours, span.Minutes);
         }
     }
 }

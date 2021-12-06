@@ -199,7 +199,7 @@ namespace Plainion.WhiteRabbit.Presentation
         public string GenerateMonthReport(DateTime day)
         {
             var begin = new DateTime(day.Year, day.Month, 1);
-            var end = new DateTime(day.Year, day.Month + 1, 1).AddDays(-1.0);
+            var end = new DateTime(day.Year, day.Month, DateTime.DaysInMonth(day.Year, day.Month));
             return GenerateRangeReport(begin, end);
         }
 
