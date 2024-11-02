@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>1591</NoWarn>
+    <NoWarn>1591,CA1416</NoWarn>
     <WarningsNotAsErrors>CS0612,CS0618</WarningsNotAsErrors>
     <WarningLevel>4</WarningLevel>
     <OutputPath>..\..\bin\$(Configuration)\</OutputPath>
