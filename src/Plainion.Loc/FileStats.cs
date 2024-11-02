@@ -1,11 +1,12 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 
 namespace Plainion.Scripts.Loc
 {
     public class FileStats
     {
-        public static readonly string[] Source_Ext = { ".cs", ".cpp", ".h", ".xaml", ".aspx", ".fs" };
+        public static readonly string[] Source_Ext = { ".cs", ".cpp", ".h", ".xaml", ".aspx", ".fs", ".js", ".vue", ".feature" };
 
         public string Name { get; set; }
 
@@ -35,6 +36,8 @@ namespace Plainion.Scripts.Loc
             {
                 return;
             }
+
+            Console.WriteLine("Processing: " + Name);
 
             using (StreamReader reader = new StreamReader(Name))
             {

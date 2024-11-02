@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 
 namespace Plainion.Scripts.Loc
 {
     public class DirStats
     {
-        public static readonly string[] Dir_Excludes = { "CVS", "obj", "bin", "Properties", "lost+found", ".hg" };
+        public static List<string> DirectoryExcludes { get; } = new List<string> {
+            "CVS", "obj", "bin", "Properties", "lost+found", ".hg", ".git", "node_modules" ,"dist", ".vs", ".vscode",
+            ".local-chromium"
+        };
 
         private bool myAreTests = false;
 
@@ -72,20 +74,23 @@ namespace Plainion.Scripts.Loc
             string filename = Path.GetFileName(dir);
             stats.AreTests = filename == "test.u" || filename == "test.i" ||
                 filename.EndsWith("_uTest") || filename.EndsWith("_iTest") ||
-                filename.EndsWith("Tests");
+                filename.EndsWith("Tests") || filename.EndsWith(".Specs");
 
             return stats;
         }
 
         public void Process()
         {
-            Console.WriteLine("Processing: " + Name);
-
             string[] files = Directory.GetFileSystemEntries(Name);
             foreach (string file in files)
             {
                 string name = Path.GetFileName(file);
-                if (Dir_Excludes.Contains(name))
+                if (DirectoryExcludes.Contains(name))
+                {
+                    continue;
+                }
+
+                if (DirectoryExcludes.Contains(file))
                 {
                     continue;
                 }
